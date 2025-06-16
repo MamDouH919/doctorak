@@ -38,6 +38,8 @@ export async function PUT(req: NextRequest, { params }: Params) {
                 active,
                 endDate,
                 userId,
+                social,
+                videos,
             } = await req.json();
 
             if (title) account.title = title;
@@ -55,13 +57,13 @@ export async function PUT(req: NextRequest, { params }: Params) {
             if (active !== undefined) account.active = active;
             if (endDate) account.endDate = endDate;
             if (userId) account.userId = userId;
+            if (social) account.social = social;
+            if (videos) account.videos = videos;
 
             // Optional: Reset these fields if required
             account.faqs = [];
             account.articles = [];
             account.testimonials = [];
-            account.videos = [];
-            account.social = [];
 
             await account.save();
 

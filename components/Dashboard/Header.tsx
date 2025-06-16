@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import useDashboard from '@/hooks/useDashboard';
 import LogoutDialog from '../dialogs/LogoutDialog';
+import SiteLogo from '../SiteLogo';
 // import LogoutDialog from '../dialogs/LogoutDialog';
 // import SiteLogo from '../SiteLogo';
 
@@ -48,8 +49,8 @@ const Header = () => {
                     <Menu />
                 </IconButton>
                 <Stack direction={"row"} justifyContent={"space-between"} alignItems={"center"} width={"100%"}>
-                    <Stack component={Link} href={"/"} mx={2}>
-                        {/* <SiteLogo /> */}
+                    <Stack component={Link} href={"/"} mx={2} sx={{ textDecoration: 'none' }}>
+                        <SiteLogo />
                     </Stack>
                     <Stack direction={"row"} alignItems={"center"}>
                         <Stack p={1}>

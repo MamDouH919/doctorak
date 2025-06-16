@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
 import Faqs from '@/models/Faqs';
 import { withAuth } from '@/lib/withAuth';
+import '@/models/Accounts';
+import '@/models/Users';
 
 export async function GET(req: NextRequest) {
   return withAuth(req, async (req, user) => {
@@ -14,21 +16,31 @@ export async function GET(req: NextRequest) {
       const limit = parseInt(searchParams.get('limit') || '20', 10);
       const skip = (page - 1) * limit;
 
-      // 👇 Build query condition
+      // Build base query
       const query: any = {};
-
-      // if not admin, filter by user's account ID (or user ID)
       if (user.role !== 'admin') {
-        console.log('user.role', user.accountId);
-        
         if (!user.accountId) {
           return NextResponse.json({ message: 'Missing account ID in token' }, { status: 400 });
         }
         query.account = user.accountId;
       }
 
+      // Base find query
+      let faqsQuery = Faqs.find(query).skip(skip).limit(limit);
+
+      // Apply population only for admins
+      if (user.role === 'admin') {
+        faqsQuery = faqsQuery
+          .populate({
+            path: 'account',
+            populate: {
+              path: 'user',
+            },
+          });
+      }
+
       const [faqs, total] = await Promise.all([
-        Faqs.find(query).skip(skip).limit(limit),
+        faqsQuery,
         Faqs.countDocuments(query),
       ]);
 
@@ -47,6 +59,6 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
     }
   }, {
-    allowRoles: ['admin', 'user'], // ✅ allow both roles
+    allowRoles: ['admin', 'user'],
   });
 }

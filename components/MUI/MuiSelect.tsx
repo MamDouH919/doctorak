@@ -13,16 +13,17 @@ import type {
 } from "@mui/material";
 import { useController } from "react-hook-form";
 import type { FieldError } from "react-hook-form";
+import get from "lodash/get";
 
 interface MUIselectProps extends Omit<TextFieldProps, 'name' | 'control'> {
     control: any;
-    data: { value: string | number; key: string }[];
+    data: { value: string | number; key: string, disabled?: boolean }[];
     name: string;
     disabled?: boolean;
     margin?: "none" | "dense" | "normal";
     label: string;
     onChanges?: (_event: SelectChangeEvent<string | number>) => void;
-    rules?: any; // You can type this more strictly based on your validation rules
+    rules?: any;
     readOnly?: boolean;
     defaultValue?: string | number;
 }
@@ -54,12 +55,9 @@ const MUIselect: React.FC<MUIselectProps> = (props) => {
         defaultValue: data && defaultValue ? defaultValue : "",
     });
 
-    const errorName = name.includes(".") && name.split(".");
-    const fieldError: FieldError | undefined = errorName
-        ? (errors?.[errorName[0]] as any)?.[errorName[1]]
-        : (errors?.[name] as FieldError | undefined);
+    const fieldError = get(errors, name) as FieldError | undefined;
 
-    const isRequired = (rules && rules.required) || (rules && rules.validate);
+    const isRequired = rules?.required || rules?.validate;
 
     return (
         <FormControl margin={margin} fullWidth size="small">
@@ -68,14 +66,11 @@ const MUIselect: React.FC<MUIselectProps> = (props) => {
             <Select
                 {...fieldProps}
                 variant="outlined"
-                inputProps={{
-                    readOnly: readOnly,
-                }}
-                label={label}
                 inputRef={ref}
+                inputProps={{ readOnly }}
+                label={label}
                 error={Boolean(fieldError)}
                 value={val}
-                defaultValue={data && defaultValue ? defaultValue : ""}
                 disabled={disabled}
                 onChange={(e) => {
                     fieldChange(e.target.value);
@@ -84,9 +79,9 @@ const MUIselect: React.FC<MUIselectProps> = (props) => {
                     }
                 }}
             >
-                {data?.map((items, index) => (
-                    <MenuItem key={index} value={items.value} dir={dir}>
-                        {items.key}
+                {data?.map((item, index) => (
+                    <MenuItem key={index} value={item.value} dir={dir} disabled={item.disabled}>
+                        {item.key}
                     </MenuItem>
                 ))}
             </Select>

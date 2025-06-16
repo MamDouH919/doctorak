@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import dbConnect from '@/lib/dbConnect';
 import Users from '@/models/Users';
+import '@/models/Accounts';
 
 export async function GET(req: Request) {
   try {
@@ -27,7 +28,7 @@ export async function GET(req: Request) {
     }
 
     const userId = decoded.id; // assuming the token payload has `id`
-    
+
 
     await dbConnect();
 

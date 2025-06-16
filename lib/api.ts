@@ -1,4 +1,5 @@
 // import { handleLogout } from "@/actions/cookies";
+import { removeToken } from "@/action/token";
 import axios from "axios";
 import { toast } from "sonner";
 
@@ -27,7 +28,7 @@ api.interceptors.response.use(
     (error) => {
         if (error.response?.status === 401) {
             toast.error("Session expired. You've been logged out.");
-            // handleLogout()
+            removeToken()
         }
 
         // Always return the error so it can be caught in catch()

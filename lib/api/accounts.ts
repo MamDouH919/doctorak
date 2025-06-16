@@ -1,6 +1,7 @@
 import { getToken } from "@/action/token";
 import api from "../api";
 import { PaginatorInfo } from "@/types";
+import { CreateAccount } from "@/types/account";
 
 interface FetchAccountsParams {
     page?: number;
@@ -35,6 +36,31 @@ export const fetchAccount = async (id?: string): Promise<{ data: any }> => {
     console.log(id)
     const token = await getToken();
     const response = await api.get('/api/accounts/' + id, {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        },
+    })
+
+    return response.data;
+};
+
+
+// get all accounts
+export const listServicesDropDown = async () => {
+    const token = await getToken();
+    const response = await api.get('/api/dropdown/accounts', {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        },
+    })
+
+    return response.data;
+};
+
+export const updateAccount = async (id: string, data: CreateAccount) => {
+    const token = await getToken();
+
+    const response = await api.put('/api/accounts/update/' + id, data, {
         headers: {
             'Authorization': `Bearer ${token}`,
         },

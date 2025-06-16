@@ -7,13 +7,22 @@ import { fetchListAccounts } from '@/lib/api/accounts';
 import { useQuery } from '@tanstack/react-query';
 import { fetchListFaqs } from '@/lib/api/faqs';
 import useDashboard from '@/hooks/useDashboard';
-import { Add } from '@mui/icons-material';
-import { Button, Stack } from '@mui/material';
+import { Add, Delete, Edit } from '@mui/icons-material';
+import { Button, IconButton, Stack } from '@mui/material';
 import FormDialog from './_formDialog';
+import { ColumnDef } from '@tanstack/react-table';
+import DeleteDialog from './_deleteDialog';
 
 export default function ListFaqs() {
   const context = useDashboard()
-  const [open, setOpen] = React.useState(false)
+  const [createState, setCreateState] = React.useState<{ open: boolean, data: any }>({
+    open: false,
+    data: null
+  })
+  const [deleteState, setDeleteState] = React.useState({
+    open: false,
+    id: null
+  })
   const { data, isLoading } = useQuery({
     queryKey: ['faqs'],
     queryFn: () => fetchListFaqs(),
@@ -25,7 +34,12 @@ export default function ListFaqs() {
       payload: {
         pageActions:
           <Stack direction={"row"} spacing={1}>
-            <Button variant="contained" color="primary" size="small" onClick={() => setOpen(true)}>
+            <Button
+              variant="contained"
+              color="primary"
+              size="small"
+              onClick={() => setCreateState({ open: true, data: null })}
+            >
               <Add />
             </Button>
           </Stack>,
@@ -39,7 +53,20 @@ export default function ListFaqs() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const columns = [
+  const columns: ColumnDef<any>[] = [
+    ...(context?.state?.user?.role === 'admin' ? [
+      {
+        accessorKey: "account",
+        header: "الحساب",
+        cell: ({ row }: { row: any }) => {
+          return (
+            <Stack direction={"row"} spacing={0.5}>
+              {row.original.account.user.name}
+            </Stack>
+          );
+        }
+      },
+    ] : []),
     {
       accessorKey: "question",
       header: "السؤال",
@@ -48,14 +75,52 @@ export default function ListFaqs() {
       accessorKey: "answer",
       header: "الجواب",
     },
+    {
+      header: "-",
+      cell: ({ row }) => {
+        return (
+          <Stack direction={"row"} spacing={0.5}>
+            <IconButton size='small'>
+              <Edit
+                color='info'
+                fontSize='small'
+                onClick={() => setCreateState({
+                  open: true, data: {
+                    id: row.original._id,
+                    question: row.original.question,
+                    answer: row.original.answer,
+                    accountId: row.original.account._id
+                  }
+                })}
+              />
+            </IconButton>
+            <IconButton size='small'>
+              <Delete color='error' fontSize='small' onClick={() => setDeleteState({
+                open: true,
+                id: row.original._id
+              })} />
+            </IconButton>
+          </Stack>
+        );
+      }
+    }
   ];
 
   return (
     <>
-      <FormDialog 
-        open={open}
-        handleClose={() => setOpen(false)}
-      />
+      {createState.open &&
+        <FormDialog
+          open={createState.open}
+          handleClose={() => setCreateState({ open: false, data: null })}
+          oldData={createState.data}
+        />
+      }
+      {deleteState.id && <DeleteDialog
+        open={deleteState.open}
+        handleClose={() => setDeleteState({ open: false, id: null })}
+        id={deleteState.id}
+      />}
+
       <TankStackTable
         columns={columns}
         data={data?.data ?? [] as any}

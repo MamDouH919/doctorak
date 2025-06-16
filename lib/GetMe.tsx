@@ -1,40 +1,26 @@
-import { getToken, removeToken } from '@/action/token';
 import useDashboard from '@/hooks/useDashboard';
-import { useRouter } from 'next/navigation';
+import { useQuery } from '@tanstack/react-query';
 import React, { useEffect } from 'react'
-import { toast } from 'sonner';
+import { getMe } from './api/auth';
 
 const GetMe = ({ children }: { children: React.ReactNode }) => {
+    const { data, isLoading, isError } = useQuery({
+        queryKey: ['me'],
+        queryFn: () => getMe(),
+    });
     const context = useDashboard()
 
-    const router = useRouter();
-
-    const GetUser = async () => {
-        const token = await getToken()
-        const response = await fetch('/api/auth/me', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-        });
-        const data = await response.json();
-        if (!data.user) {
-            toast.error("الرجاء تسجيل الدخول للمتابعة")
-            await removeToken()
-            router.push('/login')
+    useEffect(() => {
+        if (data) {
+            context?.dispatch({ type: "UPDATE_STATE", payload: { user: data.user } });
         }
+        return () => { }
+    }, [data])
 
-        context?.dispatch({ type: "UPDATE_STATE", payload: { user: data.user } });
+    if (isLoading) {
+        return <div>loading...</div>
     }
 
-    useEffect(() => {
-        if (!context?.state.user) {
-            GetUser()
-        }
-
-        return () => { }
-    }, [])
     return children
 }
 

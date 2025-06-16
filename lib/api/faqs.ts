@@ -18,6 +18,9 @@ export const fetchListFaqs = async (
 }> => {
     const token = await getToken();
 
+    console.log(token)
+    
+
     const queryParams = new URLSearchParams();
     if (params.page) queryParams.append('page', String(params.page));
     if (params.limit) queryParams.append('limit', String(params.limit));
@@ -31,25 +34,46 @@ export const fetchListFaqs = async (
     return response.data;
 };
 
-// export const fetchAccount = async (id?: string): Promise<{ data: any }> => {
-//     const token = await getToken();
-//     const response = await api.get('/api/accounts/' + id, {
-//         headers: {
-//             'Authorization': `Bearer ${token}`,
-//         },
-//     })
-
-//     return response.data;
-// };
-
-export const createFaq = async (data: any) => {
+export const createFaq = async (data: {
+    question: string,
+    answer: string,
+    account: string
+}) => {
     const token = await getToken();
 
-    const response = await api.post('/api/faqs/create', {
+    const response = await api.post('/api/faqs/create', data, {
         headers: {
             'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify(data),
+    })
+
+    return response.data;
+};
+
+export const updateFaq = async (data: {
+    id: string,
+    question: string,
+    answer: string,
+    account: string
+}) => {
+    const token = await getToken();
+
+    const response = await api.put('/api/faqs/update', data, {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        },
+    })
+
+    return response.data;
+};
+
+export const deleteFaq = async (id: string) => {
+    const token = await getToken();
+
+    const response = await api.delete('/api/faqs/delete/' + id, {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        },
     })
 
     return response.data;

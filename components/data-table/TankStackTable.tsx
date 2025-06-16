@@ -24,6 +24,7 @@ import { TablePaginationComponent } from "./TablePaginationComponent";
 import { TableSkeleton } from "./TableSkeleton";
 import { TbDeviceDesktopSearch } from "react-icons/tb";
 import { PaginatorInfo } from "@/types";
+import { FixedTableCell } from "./FixedTableCell";
 // import EmptyTablePlaceHolderMessage from "./EmptyTablePlaceHolderMessage";
 // import ColumnSelector from "../dialogs/ColumnSelector";
 
@@ -163,24 +164,24 @@ const TankStackTable = <T,>({
             {"لا توجد بيانات"}
           </Typography>
         </Stack> :
-        <Table stickyHeader size="small">
-          <TableHead>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <TableCell key={header.id} colSpan={header.colSpan}>
-                    {!header.isPlaceholder &&
-                      flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableHead>
-          <TableBody>
-            {/* {table.getRowModel().rows.length === 0 ? (
+          <Table stickyHeader size="small">
+            <TableHead>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => (
+                    <TableCell key={header.id} colSpan={header.colSpan}>
+                      {!header.isPlaceholder &&
+                        flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </TableHead>
+            <TableBody>
+              {/* {table.getRowModel().rows.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={extendedColumns.length} sx={{ borderBottom: "none" }}>
                   
@@ -188,43 +189,43 @@ const TankStackTable = <T,>({
               </TableRow>
             ) : (
             )} */}
-            {table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                style={{
-                  ...(showCheckbox && {
-                    backgroundColor: row.getIsSelected()
-                      ? "#5f3e3f"
-                      : "transparent",
-                  }),
-                }}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(
-                      cell.column.columnDef.cell,
-                      cell.getContext()
-                    )}
-                    {/* {[null, undefined, ""].includes(cell.getValue() as any) && <span>ــــ</span>} */}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-            {sumValues && table.getRowModel().rows.length > 0 && (
-              <TableRow>
-                {table.getVisibleLeafColumns().map((col) => (
-                  <TableCell key={col.id}>
-                    {sumValues[col.id] ??
-                      (typeof (col.columnDef as any).accessorKey === "string"
-                        ? sumValues[(col.columnDef as any).accessorKey]
-                        : null) ??
-                      null}
-                  </TableCell>
-                ))}
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>}
+              {table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  style={{
+                    ...(showCheckbox && {
+                      backgroundColor: row.getIsSelected()
+                        ? "#5f3e3f"
+                        : "transparent",
+                    }),
+                  }}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <FixedTableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                      {/* {[null, undefined, ""].includes(cell.getValue() as any) && <span>ــــ</span>} */}
+                    </FixedTableCell>
+                  ))}
+                </TableRow>
+              ))}
+              {sumValues && table.getRowModel().rows.length > 0 && (
+                <TableRow>
+                  {table.getVisibleLeafColumns().map((col) => (
+                    <TableCell key={col.id}>
+                      {sumValues[col.id] ??
+                        (typeof (col.columnDef as any).accessorKey === "string"
+                          ? sumValues[(col.columnDef as any).accessorKey]
+                          : null) ??
+                        null}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>}
       </Box>
 
       {/* Sticky pagination */}

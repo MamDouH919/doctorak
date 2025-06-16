@@ -1,5 +1,15 @@
 import mongoose from "mongoose";
 
+const SocialSchema = new mongoose.Schema({
+  type: { type: String, required: true, enum: ["facebook", "instagram", "tikTok", "twitter", "snapChat", "youtube", "group", "Share", "website"] },
+  link: { type: String, required: true },
+});
+
+const VideosSchema = new mongoose.Schema({
+  link: { type: String, required: true },
+  type: { type: String, required: true, enum: ["facebook", "instagram", "tikTok", "youtube"] },
+});
+
 const AccountsSchema = new mongoose.Schema({
   title: { type: String, },
   phone: { type: String, },
@@ -18,8 +28,8 @@ const AccountsSchema = new mongoose.Schema({
   articles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Article' }],
   testimonials: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Testimonial' }],
   expertise: { type: mongoose.Schema.Types.ObjectId, ref: 'Expertise' },
-  videos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Video' }],
-  social: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Social' }],
+  videos: [VideosSchema], // Array of video URLs
+  social: [SocialSchema], // Array of video URLs
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'Users', required: true, unique: true },
 }, {
   timestamps: true,

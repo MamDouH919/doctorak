@@ -52,7 +52,6 @@ export const useLinksList = () => {
         {
             primary: "البيانات",
             collapse: "data",
-
             children: [
                 {
                     pathname: "/dashboard/faqs",
@@ -65,12 +64,6 @@ export const useLinksList = () => {
                     primary: "المقالات",
                     icon: Inventory2Outlined,
                     regex: /\/articles(\/|$)/,
-                },
-                {
-                    pathname: "/dashboard/social-media",
-                    primary: "سوشيل ميديا",
-                    icon: Inventory2Outlined,
-                    regex: /\/social-media(\/|$)/,
                 },
             ]
         },

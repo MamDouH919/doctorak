@@ -21,7 +21,7 @@ async function handler(req: NextRequest, user: any) {
         await dbConnect();
 
         // Check if account exists and belongs to user
-        const accountDoc = await Accounts.findOne({ _id: account, userId: user.id });
+        const accountDoc = await Accounts.findOne({ _id: account });
         if (!accountDoc) {
             return NextResponse.json({
                 message: 'Account not found or unauthorized',

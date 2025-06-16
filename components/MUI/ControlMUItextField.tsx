@@ -4,6 +4,7 @@ import type { TextFieldProps } from "@mui/material";
 import { useController } from "react-hook-form";
 import type { Control, FieldError, FieldValues, Path } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import get from "lodash/get";
 
 interface ControlMUITextFieldProps<T extends FieldValues> extends Omit<TextFieldProps, 'name' | 'control'> {
   name: Path<T>;
@@ -61,12 +62,9 @@ const ControlMUITextField = <T extends FieldValues>(props: ControlMUITextFieldPr
     defaultValue: defaultValue ?? "",
   });
 
-  const errorName = name.includes(".") && name.split(".");
-  const serverError = errorName ? errorName[1] : name;
-
-  const fieldError = errorName
-    ? (errors?.[errorName[0]] as Record<string, FieldError | undefined>)?.[errorName[1]]
-    : (errors?.[name] as FieldError);
+  const fieldError = get(errors, name) as FieldError | undefined;
+  const serverErrorKey = name.split(".").pop()!;
+  const serverErrorMessage = serverValidation?.[serverErrorKey]?.[0];
 
   const isRequired =
     rules?.required ||
@@ -85,14 +83,10 @@ const ControlMUITextField = <T extends FieldValues>(props: ControlMUITextFieldPr
       variant={variant || "outlined"}
       fullWidth
       multiline={!!props.rows}
-      error={Boolean(fieldError || serverValidation?.[serverError])}
-      helperText={
-        fieldError?.message ||
-        (serverValidation && serverValidation?.[serverError]?.[0]) ||
-        null
-      }
+      error={Boolean(fieldError || serverErrorMessage)}
+      helperText={fieldError?.message || serverErrorMessage || null}
       inputProps={{
-        readOnly: readOnly,
+        readOnly,
         ...inputProps,
       }}
       onChange={(e) => {
