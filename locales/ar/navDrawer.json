@@ -1,0 +1,18 @@
+{
+    "dailyOperations": "العمليات اليومية",
+    "customers": "العملاء",
+    "products": "المنتجات",
+    "categories": "الأصناف",
+    "subCategories": "الأصناف الفرعية",
+    "orders": "الطلبات",
+    "dashboard": "لوحة التحكم",
+    "basicConfiguration": "التعريفات الأساسية",
+    "security": "الأمان",
+    "productsManagement": "إدارة المنتجات",
+    "promotions": "الترويجات",
+    "settings": "الإعدادات",
+    "appointments": "المواعيد",
+    "branches": "الفروع",
+    "users": "المستخدمين",
+    "campaigns": "الحملات الدعائية"
+}

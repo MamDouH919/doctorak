@@ -1,0 +1,18 @@
+{
+    "dailyOperations": "daily operations",
+    "customers": "customers",
+    "products": "products",
+    "categories": "categories",
+    "subCategories": "sub categories",
+    "orders": "orders",
+    "dashboard": "dashboard",
+    "basicConfiguration": "basic configuration",
+    "security": "security",
+    "productsManagement": "products management",
+    "promotions": "promotions",
+    "settings": "settings",
+    "appointments": "appointments",
+    "branches": "branches",
+    "users": "users",
+    "campaigns": "campaigns"
+}

@@ -1,0 +1,27 @@
+{
+    "facebook": "facebook",
+    "instagram": "instagram",
+    "twitter": "twitter",
+    "linkedin": "linkedin",
+    "website": "website",
+    "features": {
+        "fastDelivery": {
+            "title": "Fast Delivery",
+            "description": "We take care of the set-up process, aggregating all your existing online."
+        },
+        "onlineSupport": {
+            "title": "24/7 Online Support",
+            "description": "Respond and resolve your customer queries instantly by implementing live chat."
+        },
+        "ratings": {
+            "title": "4.9 Ratings",
+            "description": "Here's to the people who leave online reviews! So you can take your decision."
+        },
+        "yearsServices": {
+            "title": "10 Years Services",
+            "description": "Check out our years of service awards, program tips, and strategies to celebrate."
+        }
+    },
+    "ShopNow": "Shop Now",
+    "WhyChooseUs": "Why choose us"
+}
