@@ -1,16 +1,14 @@
 // app/api/faqs/delete/[id]/route.ts
+
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
 import FAQ from '@/models/Faqs';
 import { withAuth } from '@/lib/withAuth';
 
-// Delete handler
-async function handler(
-  req: NextRequest,
-  context: { params: { id: string } }
-) {
+async function handler(req: NextRequest) {
   try {
-    const { id } = context.params;
+    const url = new URL(req.url);
+    const id = url.pathname.split('/').pop(); // manually extract id from path
 
     if (!id) {
       return NextResponse.json({ message: 'ID is required' }, { status: 400 });
@@ -18,14 +16,12 @@ async function handler(
 
     await dbConnect();
 
-    // Find FAQ by ID
-    const faq = await FAQ.findOne({ _id: id });
+    const faq = await FAQ.findById(id);
 
     if (!faq) {
       return NextResponse.json({ message: 'FAQ not found' }, { status: 404 });
     }
 
-    // Delete the FAQ
     await faq.deleteOne();
 
     return NextResponse.json({ message: 'FAQ deleted successfully' }, { status: 200 });
@@ -35,8 +31,7 @@ async function handler(
   }
 }
 
-// Make sure to pass context.params into the handler
-export const DELETE = (
-  req: NextRequest,
-  context: { params: { id: string } }
-) => withAuth(req, (req, user) => handler(req, context), { allowRoles: ['admin', 'user'] });
+export const DELETE = (req: NextRequest) =>
+  withAuth(req, (req, user) => handler(req), {
+    allowRoles: ['admin', 'user'],
+  });

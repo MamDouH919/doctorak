@@ -1,18 +1,23 @@
 // app/api/accounts/[id]/route.ts
 
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
 import Accounts from '@/models/Accounts';
 
-export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
-  const { id } = await params; // ✅ no await needed here
-
-
+export async function GET(request: NextRequest) {
   try {
     await dbConnect();
+
+    // Extract id from URL
+    const url = new URL(request.url);
+    const id = url.pathname.split('/').pop(); // gets the last segment in path (i.e. the [id])
+
+    if (!id) {
+      return NextResponse.json(
+        { message: 'Missing account ID', type: 'error' },
+        { status: 400 }
+      );
+    }
 
     const account = await Accounts.findById(id);
 
@@ -27,7 +32,6 @@ export async function GET(
       type: 'success',
       data: account,
     });
-
   } catch (error) {
     console.error('Get Account Error:', error);
     return NextResponse.json(
