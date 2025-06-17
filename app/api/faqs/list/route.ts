@@ -33,8 +33,10 @@ export async function GET(req: NextRequest) {
         faqsQuery = faqsQuery
           .populate({
             path: 'account',
+            select: '_id',
             populate: {
               path: 'user',
+              select: '_id name',
             },
           });
       }

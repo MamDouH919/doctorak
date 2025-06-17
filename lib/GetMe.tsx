@@ -2,6 +2,7 @@ import useDashboard from '@/hooks/useDashboard';
 import { useQuery } from '@tanstack/react-query';
 import React, { useEffect } from 'react'
 import { getMe } from './api/auth';
+import { CircularProgress, Stack } from '@mui/material';
 
 const GetMe = ({ children }: { children: React.ReactNode }) => {
     const { data, isLoading, isError } = useQuery({
@@ -18,7 +19,9 @@ const GetMe = ({ children }: { children: React.ReactNode }) => {
     }, [data])
 
     if (isLoading) {
-        return <div>loading...</div>
+        return <Stack height={"100vh"} width={"100vw"} alignItems={"center"} justifyContent={"center"}>
+            <CircularProgress />
+        </Stack>
     }
 
     return children

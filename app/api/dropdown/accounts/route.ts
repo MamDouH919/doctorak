@@ -15,7 +15,11 @@ async function handler(req: NextRequest, user: any) {
             return NextResponse.json({ message: 'Unauthorized' }, { status: 403 });
         }
 
-        const accounts = await Accounts.find({}).populate('user'); // Fetch all accounts
+        const accounts = await Accounts.find({}, '_id') // only get _id from Accounts
+            .populate({
+                path: 'user',
+                select: '_id name', // only _id and name from User
+            });
 
         return NextResponse.json({
             type: 'success',

@@ -17,19 +17,18 @@ const AccountsSchema = new mongoose.Schema({
   description: { type: String, },
   image: { type: String, },
   color: { type: String, },
-  lang: { type: String, enum: ["ar", "en"] }, // Restrict to specific languages if needed
+  lang: { type: String, enum: ["ar", "en"] },
   about: { type: String, },
   domain: { type: String, unique: true },
   active: { type: Boolean, default: true },
   endDate: { type: String, },
 
-  // Relationships
   faqs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'FAQ' }],
   articles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Article' }],
   testimonials: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Testimonial' }],
   expertise: { type: mongoose.Schema.Types.ObjectId, ref: 'Expertise' },
-  videos: [VideosSchema], // Array of video URLs
-  social: [SocialSchema], // Array of video URLs
+  videos: [VideosSchema],
+  social: [SocialSchema],
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'Users', required: true, unique: true },
 }, {
   timestamps: true,

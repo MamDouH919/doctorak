@@ -20,23 +20,23 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <DashboardProvider>
-      <Box sx={{ display: "flex", minHeight: "100dvh", overflow: "hidden" }}>
-        <Header />
-        <NavDrawer />
-        <Main>
-          {!isAdminDashboard && <Breadcrumb />}
-          <Stack
-            p={{ xs: 1, sm: 2 }}
-            flexGrow={1}
-            height={isAdminDashboard ? "100%" : "calc(100% - 40px)"}
-            overflow="auto"
-          >
-            <GetMe>
+      <GetMe>
+        <Box sx={{ display: "flex", minHeight: "100dvh", overflow: "hidden" }}>
+          <Header />
+          <NavDrawer />
+          <Main>
+            {!isAdminDashboard && <Breadcrumb />}
+            <Stack
+              p={{ xs: 1, sm: 2 }}
+              flexGrow={1}
+              height={isAdminDashboard ? "100%" : "calc(100% - 40px)"}
+              overflow="auto"
+            >
               {children}
-            </GetMe>
-          </Stack>
-        </Main>
-      </Box>
+            </Stack>
+          </Main>
+        </Box>
+      </GetMe>
     </DashboardProvider>
   );
 };
