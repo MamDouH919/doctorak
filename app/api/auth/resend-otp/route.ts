@@ -28,7 +28,7 @@ export async function POST(req: Request) {
         user.otp = otp;
         await user.save();
 
-        await OTPEmail(otp);
+        await OTPEmail(email, otp);
 
         return NextResponse.json({ message: "تم إعادة إرسال رمز التحقق", type: "success" });
     } catch (error) {

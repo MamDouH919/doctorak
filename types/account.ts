@@ -11,6 +11,7 @@ export interface Videos {
 
 export interface CreateAccount {
     title: string,
+    siteName: string,
     phone: string,
     whatsApp: string,
     description: string,
@@ -21,10 +22,12 @@ export interface CreateAccount {
     userId: string,
     social: Social[],
     videos: Videos[],
+    showInHomePage: boolean,
+    isPremiumAccount: boolean,
     appointments: {
         day: string,
-        timeFrom: string,
-        timeTo: string,
+        timeFrom: string | Date,
+        timeTo: string | Date,
         checked?: boolean
     }[]
 }

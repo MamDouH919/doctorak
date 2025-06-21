@@ -17,6 +17,7 @@ const AppointmentSchema = new mongoose.Schema({
 });
 
 const AccountsSchema = new mongoose.Schema({
+  siteName: { type: String, },
   title: { type: String, },
   phone: { type: String, },
   whatsApp: { type: String, },
@@ -28,6 +29,8 @@ const AccountsSchema = new mongoose.Schema({
   domain: { type: String, unique: true },
   active: { type: Boolean, default: false },
   endDate: { type: String, },
+  showInHomePage: { type: Boolean, default: false },
+  isPremiumAccount: { type: Boolean, default: false },
 
   faqs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'FAQ' }],
   articles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Article' }],

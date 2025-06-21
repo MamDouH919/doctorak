@@ -8,10 +8,12 @@ const ListAccounts = <T extends FieldValues>({
   label,
   control,
   skip = false,
+  rules,
   disabled
 }: Omit<AutoCompleteComponentIProps<T>, "options" | "loading" | "valueKey"> & {
   skip?: boolean;
   disabled?: boolean;
+  rules?: any;
 }) => {
   const { data, isLoading } = useQuery({
     queryKey: ["listServicesDropDown"],
@@ -22,6 +24,7 @@ const ListAccounts = <T extends FieldValues>({
   return (
     <AutoCompleteComponent
       control={control}
+      rules={rules}
       label={label}
       name={name}
       disabled={disabled}

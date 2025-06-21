@@ -80,9 +80,6 @@ const AutoCompleteComponent = <T extends FieldValues>({
   onChangeFn,
   ...rest
 }: IProps<T>) => {
-  console.log(rest.disabled)
-  
-  // const { control } = useFormContext();
 
   const { field } = useController({ name, control });
 

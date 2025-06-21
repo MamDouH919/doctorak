@@ -44,7 +44,9 @@ export async function PUT(req: NextRequest) {
                     userId,
                     social,
                     videos,
-                    appointments
+                    appointments,
+                    showInHomePage,
+                    isPremiumAccount
                 } = await req.json();
 
                 if (title) account.title = title;
@@ -65,7 +67,8 @@ export async function PUT(req: NextRequest) {
                 if (social) account.social = social;
                 if (videos) account.videos = videos;
                 if (appointments) account.appointments = appointments;
-
+                account.showInHomePage = showInHomePage;
+                account.isPremiumAccount = isPremiumAccount;
                 // Optional: Reset these fields
                 account.faqs = [];
                 account.articles = [];

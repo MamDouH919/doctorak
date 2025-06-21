@@ -1,9 +1,7 @@
 import ListAccounts from '@/components/customAutoCompolete/ListAccounts'
 import ControlMUITextField from '@/components/MUI/ControlMUItextField'
 import CustomDialog from '@/components/MUI/CustomDialog'
-import MUIAutocomplete from '@/components/MUI/MUIAutocomplete'
-import useDashboard from '@/hooks/useDashboard'
-import { createFaq, updateFaq } from '@/lib/api/faqs'
+import { createArticles, updateArticles } from '@/lib/api/articles'
 import { useAppSelector } from '@/Store/store'
 import { Button, FormControl, FormControlLabel, Stack, Switch, Typography } from '@mui/material'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -21,17 +19,17 @@ const FormDialog = ({
     oldData: any
 }) => {
     const { auth } = useAppSelector((state) => state)
-    const { mutate: createFaqsMutation, isPending: createFaqsLoading } = useMutation({
-        mutationFn: (data: { question: string, answer: string, account: string }) =>
-            createFaq(data),
+    const { mutate: createArticlesMutation, isPending: createArticlesLoading } = useMutation({
+        mutationFn: (data: { title: string, content: string, account: string }) =>
+            createArticles(data),
         onError(error) {
             console.log(error);
         }
     });
 
-    const { mutate: updateFaqsMutation, isPending: updateFaqsLoading } = useMutation({
-        mutationFn: (data: { id: string, question: string, answer: string, account: string }) =>
-            updateFaq(data),
+    const { mutate: updateArticlesMutation, isPending: updateArticlesLoading } = useMutation({
+        mutationFn: (data: { id: string, title: string, content: string, account: string }) =>
+            updateArticles(data),
         onError(error) {
             console.log(error);
         }
@@ -51,47 +49,47 @@ const FormDialog = ({
 
     const onSubmit = async (data: any) => {
         if (oldData) {
-            updateFaqsMutation({
+            updateArticlesMutation({
                 id: oldData.id,
                 account: oldData.accountId ?? auth?.user?.accountId,
-                question: data.question,
-                answer: data.answer
+                title: data.title,
+                content: data.content
             }, {
                 onSuccess: () => {
-                    toast.success("تم تعديل السؤال بنجاح")
+                    toast.success("تم تعديل المقال بنجاح")
                     queryClient.invalidateQueries({
-                        queryKey: ['faqs'],
+                        queryKey: ['articles'],
                     });
                     handleClose()
                 },
                 onError(error) {
-                    toast.error("خطأ في تعديل السؤال")
+                    toast.error("خطأ في تعديل المقال")
                     console.log(error);
                 }
             })
         } else {
 
-            createFaqsMutation({
+            createArticlesMutation({
                 account: data.accountId ?? auth?.user?.accountId,
-                question: data.question,
-                answer: data.answer
+                title: data.title,
+                content: data.content
             }, {
                 onSuccess: () => {
-                    toast.success("تم اضافة السؤال بنجاح")
+                    toast.success("تم اضافة المقال بنجاح")
                     queryClient.invalidateQueries({
-                        queryKey: ['faqs'],
+                        queryKey: ['articles'],
                     });
                     if (!checked) {
                         handleClose()
                     } else {
                         reset({
-                            question: "",
-                            answer: ""
+                            title: "",
+                            content: ""
                         })
                     }
                 },
                 onError(error) {
-                    toast.error("خطأ في الاضافة السؤال")
+                    toast.error("خطأ في الاضافة المقال")
                     console.log(error);
                 }
             })
@@ -101,8 +99,8 @@ const FormDialog = ({
     useEffect(() => {
         if (oldData) {
             setValue('accountId', oldData.accountId)
-            setValue('question', oldData.question)
-            setValue('answer', oldData.answer)
+            setValue('title', oldData.title)
+            setValue('content', oldData.content)
         }
         return () => { }
     }, [oldData])
@@ -118,7 +116,7 @@ const FormDialog = ({
             }}
             title={
                 <Stack direction={"row"} spacing={1} justifyContent={"space-between"} alignItems={"center"}>
-                    <Typography variant='h6'>{"إضافة سؤال"}</Typography>
+                    <Typography variant='h6'>{"إضافة مقال"}</Typography>
                     {!oldData && <FormControl component="fieldset" variant="standard">
                         <FormControlLabel
                             labelPlacement="start"
@@ -150,8 +148,8 @@ const FormDialog = ({
                     }
                     <ControlMUITextField
                         control={control}
-                        name='question'
-                        label={"السؤال"}
+                        name='title'
+                        label={"العنوان"}
                         rows={3}
                         multiline
                         rules={{
@@ -160,8 +158,8 @@ const FormDialog = ({
                     />
                     <ControlMUITextField
                         control={control}
-                        name='answer'
-                        label={"الجواب"}
+                        name='content'
+                        label={"المحتوى"}
                         rows={4}
                         multiline
                         rules={{
@@ -171,7 +169,7 @@ const FormDialog = ({
                 </Stack>
             }
             buttonAction={
-                <Button loading={createFaqsLoading} type='submit' variant='contained'>{"تاكيد"}</Button>
+                <Button loading={createArticlesLoading} type='submit' variant='contained'>{"تاكيد"}</Button>
             }
         />
     )
