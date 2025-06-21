@@ -44,6 +44,7 @@ export async function PUT(req: NextRequest) {
                     userId,
                     social,
                     videos,
+                    appointments
                 } = await req.json();
 
                 if (title) account.title = title;
@@ -63,6 +64,7 @@ export async function PUT(req: NextRequest) {
                 if (userId) account.userId = userId;
                 if (social) account.social = social;
                 if (videos) account.videos = videos;
+                if (appointments) account.appointments = appointments;
 
                 // Optional: Reset these fields
                 account.faqs = [];

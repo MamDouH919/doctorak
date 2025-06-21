@@ -3,11 +3,16 @@
 import React, { useState } from 'react'
 import ThemeRegistry from './ThemeRegistry'
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import GetMe from './GetMe';
+import { Provider } from 'react-redux';
+import { store } from '@/Store/store';
 
 const Providers = ({
     children,
+    token,
 }: {
     children: React.ReactNode,
+    token?: string | null
 }) => {
     const [queryClient] = useState(() => new QueryClient({
         defaultOptions: {
@@ -45,9 +50,13 @@ const Providers = ({
 
     return (
         <ThemeRegistry>
-            <QueryClientProvider client={queryClient}>
-                {children}
-            </QueryClientProvider>
+            <Provider store={store}>
+                <QueryClientProvider client={queryClient}>
+                    <GetMe token={token}>
+                        {children}
+                    </GetMe>
+                </QueryClientProvider>
+            </Provider>
         </ThemeRegistry>
 
     )

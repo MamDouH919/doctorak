@@ -57,7 +57,7 @@ export async function POST(req: Request) {
 
         await savedUser.save()
 
-        await OTPEmail(otp);
+        await OTPEmail(savedUser.email, otp);
 
         return NextResponse.json({ message: 'Registered successfully', type: "success" });
     } catch (error) {

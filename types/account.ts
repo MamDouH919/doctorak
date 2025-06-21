@@ -20,5 +20,11 @@ export interface CreateAccount {
     domain: string,
     userId: string,
     social: Social[],
-    videos: Videos[]
+    videos: Videos[],
+    appointments: {
+        day: string,
+        timeFrom: string,
+        timeTo: string,
+        checked?: boolean
+    }[]
 }

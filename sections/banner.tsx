@@ -69,7 +69,7 @@ const Banner: React.FC<Props> = ({
                 <Box maxWidth="md" mx="auto">
                     <StyledPaper elevation={6}>
                         <Grid container spacing={2}>
-                            <Grid size={{ xs: 12, md: 6 }}>
+                            <Grid size={{ xs: 12 }}>
                                 <TextField
                                     fullWidth
                                     value={searchTerm}

@@ -1,19 +1,32 @@
-import useDashboard from '@/hooks/useDashboard';
 import { useQuery } from '@tanstack/react-query';
 import React, { useEffect } from 'react'
 import { getMe } from './api/auth';
 import { CircularProgress, Stack } from '@mui/material';
+import { useAppDispatch } from '@/Store/store';
+import { changeUser } from '@/Store/slices/auth';
 
-const GetMe = ({ children }: { children: React.ReactNode }) => {
+const GetMe = ({ children, token }: { children: React.ReactNode, token?: string | null }) => {
     const { data, isLoading, isError } = useQuery({
         queryKey: ['me'],
         queryFn: () => getMe(),
+        enabled: !!token,
     });
-    const context = useDashboard()
+
+    console.log(data);
+
+
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         if (data) {
-            context?.dispatch({ type: "UPDATE_STATE", payload: { user: data.user } });
+            dispatch(changeUser({
+                id: data._id,
+                name: data.name,
+                email: data.email,
+                role: data.role,
+                ...(data.role === "user" && { accountId: data?.account._id })
+            }));
+            // context?.dispatch({ type: "UPDATE_STATE", payload: { user: data.user } });
         }
         return () => { }
     }, [data])

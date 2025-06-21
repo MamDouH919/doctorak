@@ -1,13 +1,9 @@
-
-import useDashboard from "@/hooks/useDashboard";
+import { useAppSelector } from "@/Store/store";
 import {
-    Campaign,
     Inventory2Outlined,
-    InventoryOutlined,
     PeopleOutlineOutlined,
     Settings
 } from "@mui/icons-material";
-import { useTranslation } from "react-i18next";
 
 interface LinkItem {
     pathname?: string;
@@ -24,11 +20,11 @@ interface LinkItem {
 }
 
 export const useLinksList = () => {
-    const { t } = useTranslation()
-    const context = useDashboard()
+    // ✅ Correct usage: Only select the auth slice
+    const auth = useAppSelector((state) => state.auth);
 
     const linksList: LinkItem[] = [
-        ...(context?.state.user?.role === 'admin' ? [
+        ...(auth?.user?.role === 'admin' ? [
             {
                 pathname: "/dashboard/users",
                 primary: "المستخدمين",
@@ -74,5 +70,5 @@ export const useLinksList = () => {
         },
     ];
 
-    return linksList
-}
+    return linksList;
+};

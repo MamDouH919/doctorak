@@ -4,6 +4,7 @@ import CustomDialog from '@/components/MUI/CustomDialog'
 import MUIAutocomplete from '@/components/MUI/MUIAutocomplete'
 import useDashboard from '@/hooks/useDashboard'
 import { createFaq, updateFaq } from '@/lib/api/faqs'
+import { useAppSelector } from '@/Store/store'
 import { Button, FormControl, FormControlLabel, Stack, Switch, Typography } from '@mui/material'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import React, { useEffect } from 'react'
@@ -19,7 +20,7 @@ const FormDialog = ({
     handleClose: () => void,
     oldData: any
 }) => {
-    const context = useDashboard()
+    const { auth } = useAppSelector((state) => state)
     const { mutate: createFaqsMutation, isPending: createFaqsLoading } = useMutation({
         mutationFn: (data: { question: string, answer: string, account: string }) =>
             createFaq(data),
@@ -47,12 +48,12 @@ const FormDialog = ({
     const queryClient = useQueryClient(); // Use this to access queryClient
 
     console.log(oldData)
-    
+
     const onSubmit = async (data: any) => {
         if (oldData) {
             updateFaqsMutation({
                 id: oldData.id,
-                account: oldData.accountId ?? context?.state?.user?.account._id,
+                account: oldData.accountId ?? auth?.user?.accountId,
                 question: data.question,
                 answer: data.answer
             }, {
@@ -71,7 +72,7 @@ const FormDialog = ({
         } else {
 
             createFaqsMutation({
-                account: data.accountId ?? context?.state?.user?.account._id,
+                account: data.accountId ?? auth?.user?.accountId,
                 question: data.question,
                 answer: data.answer
             }, {
@@ -136,7 +137,7 @@ const FormDialog = ({
             }
             content={
                 <Stack py={2} spacing={2}>
-                    {context?.state?.user?.role === 'admin' &&
+                    {auth?.user?.role === 'admin' &&
                         <ListAccounts
                             control={control}
                             name='accountId'

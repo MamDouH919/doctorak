@@ -1,6 +1,10 @@
+import { getSpecializations } from '@/lib/api/website';
 import { DocumentScannerRounded } from '@mui/icons-material';
 import { Box, Container, Grid, Typography, Paper, styled } from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
 import React from 'react';
+import { getIcon } from './getIcon';
+
 
 const Section = styled(Box)(({ theme }) => ({
     backgroundColor: theme.palette.grey[50],
@@ -40,46 +44,14 @@ const IconWrapper = styled(Box)(({ theme }) => ({
     },
 }));
 
-const specialties = [
-    {
-        name: 'المعالجة الطبية',
-        icon: <DocumentScannerRounded />
-    },
-    {
-        name: 'العلوم الصناعية',
-        icon: <DocumentScannerRounded />
-    },
-    {
-        name: 'العلوم الحيوية',
-        icon: <DocumentScannerRounded />
-    },
-    {
-        name: 'العلوم البيئية',
-        icon: <DocumentScannerRounded />
-    },
-    {
-        name: 'العلوم الاجتماعية',
-        icon: <DocumentScannerRounded />
-    },
-    {
-        name: 'العلوم الاقتصادية',
-        icon: <DocumentScannerRounded />
-    },
-    {
-        name: 'العلوم التكنولوجية',
-        icon: <DocumentScannerRounded />
-    },
-    {
-        name: 'العلوم المعالجة الطبية',
-        icon: <DocumentScannerRounded />
-    },
-    {
-        name: 'العلوم الصناعية',
-        icon: <DocumentScannerRounded />
-    },
-]
+
 
 export default function SpecialtiesSection() {
+    const { data: specializations } = useQuery({
+        queryKey: ['specializations'],
+        queryFn: () => getSpecializations(),
+    });
+
     return (
         <Section>
             <Container>
@@ -93,13 +65,12 @@ export default function SpecialtiesSection() {
                 </Box>
 
                 <Grid container spacing={3}>
-                    {specialties.slice(1, 10).map((specialty, index) => {
-                        const IconComponent = specialty.icon;
+                    {specializations?.data.map((specialty, index) => {
                         return (
                             <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
                                 <SpecialtyCard elevation={1}>
                                     <IconWrapper>
-                                        {/* <IconComponent style={{ fontSize: 32, color: '#dc2626' }} /> */}
+                                        {getIcon(specialty.slug)}
                                     </IconWrapper>
                                     <Typography variant="body1" fontWeight={600} color="text.primary">
                                         {specialty.name}

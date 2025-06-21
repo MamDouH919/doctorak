@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 
-export async function OTPEmail(otp: number) {
+export async function OTPEmail(email: string, otp: number) {
     const transporter = nodemailer.createTransport({
         service: "Gmail",
         auth: {
@@ -10,11 +10,11 @@ export async function OTPEmail(otp: number) {
     });
 
     await transporter.sendMail({
-        to: process.env.EMAIL_USER,
-        subject: "Doctorak OTP",
+        to: email,
+        subject: process.env.APP_NAME + " OTP",
         html: `
-    <h2>Doctorak OTP</h2>
-    <p>${otp}</p>
-  `,
+            <h2>${process.env.APP_NAME}  OTP</h2>
+            <p>${otp}</p>
+            `,
     });
 }

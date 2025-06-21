@@ -20,6 +20,9 @@ import { hashPassword } from "@/lib/hash-passwords";
 import { useRouter } from "next/navigation";
 import VerifyCode from "@/components/dialogs/VerifyCode";
 import Link from "next/link";
+import { useQuery } from "@tanstack/react-query";
+import { getSpecializations } from "@/lib/api/website";
+import AutoComplete from "@/components/MUI/AutoComplete";
 
 
 const PREFIX = "Login";
@@ -50,7 +53,11 @@ const Register = () => {
     const [loading, setLoading] = useState(false);
     const [verifyCodeOpen, setVerifyCodeOpen] = useState(false);
 
-
+    // get specializations
+    const { data: specializations } = useQuery({
+        queryKey: ['specializations'],
+        queryFn: () => getSpecializations(),
+    });
 
     const onSubmit = async (data: any) => {
         try {
@@ -70,7 +77,6 @@ const Register = () => {
 
 
             const result = await response.json();
-            console.log(result);
             if (result.typeError === 'validation') {
                 if (result.field === 'email') {
                     setError("email", { type: "manual", message: result.message });
@@ -94,6 +100,9 @@ const Register = () => {
         }
     };
 
+    console.log(specializations);
+
+
     return (
         <AuthLayout>
             {verifyCodeOpen &&
@@ -106,7 +115,7 @@ const Register = () => {
                 <Root spacing={3} alignItems={"center"}>
                     <Stack
                         component={"form"}
-                        spacing={3}
+                        spacing={2}
                         alignItems={"center"}
                         onSubmit={handleSubmit(onSubmit)}
                         width={"100%"}
@@ -121,6 +130,20 @@ const Register = () => {
                             control={control}
                             name='name'
                             label={"الاسم"}
+                            rules={{
+                                required: t("auth.fieldIsRequired"),
+                            }}
+                        />
+                        <AutoComplete
+                            control={control}
+                            name='specialization'
+                            label={"التخصص"}
+                            data={specializations ?
+                                specializations?.data.map((e) => ({
+                                    key: e.name,
+                                    value: e._id,
+                                })) : []
+                            }
                             rules={{
                                 required: t("auth.fieldIsRequired"),
                             }}

@@ -105,7 +105,7 @@ const FeaturedDoctorsSection = () => {
         <GradientSection>
             <Box maxWidth="lg" mx="auto">
                 <Box textAlign="center" mb={6}>
-                    <Typography variant="h4" fontWeight={700} color="error.dark" gutterBottom>
+                    <Typography variant="h4" fontWeight={700} color="primary" gutterBottom>
                         الأطباء المميزون
                     </Typography>
                     <Typography variant="h6" color="textSecondary">
@@ -115,7 +115,7 @@ const FeaturedDoctorsSection = () => {
 
                 <Grid container spacing={4}>
                     {featuredDoctors.map((doctor) => (
-                        <Grid size={{xs: 12, sm: 6, md: 4}} key={doctor.id}>
+                        <Grid size={{ xs: 12, sm: 6, md: 4 }} key={doctor.id}>
                             <DoctorCard>
                                 <Box position="relative" display="flex" alignItems="center" justifyContent="center" height={200} bgcolor="#dbeafe">
                                     <Avatar
@@ -132,7 +132,10 @@ const FeaturedDoctorsSection = () => {
                                     </Typography>
 
                                     <Box textAlign="center" mb={2}>
-                                        <Chip label={doctor.specialty} sx={{ backgroundColor: '#fee2e2', color: '#b91c1c' }} />
+                                        <Chip
+                                            label={doctor.specialty}
+                                            sx={{ backgroundColor: '#fee2e2', color: '#b91c1c' }}
+                                        />
                                     </Box>
 
                                     <IconLabel icon={Room} label={doctor.city} />

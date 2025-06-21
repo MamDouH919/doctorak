@@ -20,6 +20,8 @@ import { hashPassword } from "@/lib/hash-passwords";
 import Link from "next/link";
 import VerifyCode from "@/components/dialogs/VerifyCode";
 import { useRouter } from "next/navigation";
+import { changeUser } from "@/Store/slices/auth";
+import { useAppDispatch } from "@/Store/store";
 
 
 const PREFIX = "Login";
@@ -49,6 +51,7 @@ const Login = () => {
     const [passType, setPassType] = useState("password");
     const [loading, setLoading] = useState(false);
     const [verifyCodeOpen, setVerifyCodeOpen] = useState(false);
+    const dispatch = useAppDispatch();
     const router = useRouter();
     const onSubmit = async (data: any) => {
         setLoading(true);
@@ -77,6 +80,13 @@ const Login = () => {
             toast.error(result.message);
         } else {
             setLoading(false);
+            dispatch(changeUser({
+                id: result.data._id,
+                name: result.data.name,
+                email: result.data.email,
+                role: result.data.role,
+                ...(result.data.role === "user" && { accountId: result.data?.account._id })
+            }));
             router.push('/dashboard');
         }
 

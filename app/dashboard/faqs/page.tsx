@@ -1,9 +1,7 @@
 "use client"
 import * as React from 'react';
-import { CellLink } from '@/components/data-table/CellLink';
 import TankStackTable from '@/components/data-table/TankStackTable';
 import { PaginatorInfo } from '@/types';
-import { fetchListAccounts } from '@/lib/api/accounts';
 import { useQuery } from '@tanstack/react-query';
 import { fetchListFaqs } from '@/lib/api/faqs';
 import useDashboard from '@/hooks/useDashboard';
@@ -12,9 +10,11 @@ import { Button, IconButton, Stack } from '@mui/material';
 import FormDialog from './_formDialog';
 import { ColumnDef } from '@tanstack/react-table';
 import DeleteDialog from './_deleteDialog';
+import { useAppSelector } from '@/Store/store';
 
 export default function ListFaqs() {
   const context = useDashboard()
+  const { auth } = useAppSelector((state) => state)
   const [createState, setCreateState] = React.useState<{ open: boolean, data: any }>({
     open: false,
     data: null
@@ -54,7 +54,7 @@ export default function ListFaqs() {
   }, [])
 
   const columns: ColumnDef<any>[] = [
-    ...(context?.state?.user?.role === 'admin' ? [
+    ...(auth?.user?.role === 'admin' ? [
       {
         accessorKey: "account",
         header: "الحساب",

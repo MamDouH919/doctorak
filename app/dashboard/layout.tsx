@@ -14,8 +14,6 @@ export const drawerWidth = 250;
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
-
-
   const isAdminDashboard = pathname === "/dashboard";
 
   return (

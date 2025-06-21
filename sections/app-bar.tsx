@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { styled } from "@mui/material/styles";
 import { AppBar, Box, Button, Container, IconButton, Menu, MenuItem, Stack, Toolbar, Typography } from '@mui/material';
-import { Menu as MenuIcon } from "@mui/icons-material";
+import { Dashboard, Menu as MenuIcon } from "@mui/icons-material";
 import Link from 'next/link';
+import { useAppSelector } from '@/Store/store';
 
 const AppBarStyle = styled(AppBar)(() => ({
     position: 'sticky',
@@ -16,7 +17,7 @@ const AppBarStyle = styled(AppBar)(() => ({
     },
 }));
 const AppBarComponent = () => {
-
+    const { auth } = useAppSelector(state => state);
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -62,11 +63,22 @@ const AppBarComponent = () => {
                                 {/* {translate[context?.state.clientData?.lang as "ar" | "en"]["Testimonials"]} */}
                             </Button>
                         </Box>
-                        <Link href="/login" passHref>
+                        {auth.user ?
                             <Button color="primary" variant="outlined" sx={{ ml: 2 }}>
-                                تسجيل الدخول
-                            </Button>
-                        </Link>
+                                تسجيل الخروج
+                            </Button> :
+                            <Link href="/login" passHref>
+                                <Button color="primary" variant="outlined" sx={{ ml: 2 }}>
+                                    تسجيل الدخول
+                                </Button>
+                            </Link>}
+                        {auth.user &&
+                            <Link href="/dashboard" passHref>
+                                <IconButton>
+                                    <Dashboard />
+                                </IconButton>
+                            </Link>
+                        }
                         <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
                             <IconButton
                                 size="large"

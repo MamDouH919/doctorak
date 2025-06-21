@@ -10,6 +10,12 @@ const VideosSchema = new mongoose.Schema({
   type: { type: String, required: true, enum: ["facebook", "instagram", "tikTok", "youtube"] },
 });
 
+const AppointmentSchema = new mongoose.Schema({
+  day: { type: String, required: true },
+  timeFrom: { type: String, required: true },
+  timeTo: { type: String, required: true },
+});
+
 const AccountsSchema = new mongoose.Schema({
   title: { type: String, },
   phone: { type: String, },
@@ -20,7 +26,7 @@ const AccountsSchema = new mongoose.Schema({
   lang: { type: String, enum: ["ar", "en"] },
   about: { type: String, },
   domain: { type: String, unique: true },
-  active: { type: Boolean, default: true },
+  active: { type: Boolean, default: false },
   endDate: { type: String, },
 
   faqs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'FAQ' }],
@@ -29,6 +35,7 @@ const AccountsSchema = new mongoose.Schema({
   expertise: { type: mongoose.Schema.Types.ObjectId, ref: 'Expertise' },
   videos: [VideosSchema],
   social: [SocialSchema],
+  appointments: [AppointmentSchema],
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'Users', required: true, unique: true },
 }, {
   timestamps: true,

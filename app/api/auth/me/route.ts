@@ -32,7 +32,14 @@ export async function GET(req: Request) {
 
     await dbConnect();
 
-    const user = await Users.findById(userId).populate('account');
+    const user = await Users.findById(userId)
+      .select('role _id email name') // select only these fields from Users
+      .populate({
+        path: 'account',
+        select: '_id' // select only _id from the populated account
+      });
+
+    console.log(user);
 
     if (!user) {
       return NextResponse.json({ message: 'User not found' }, { status: 404 });
@@ -43,7 +50,7 @@ export async function GET(req: Request) {
 
     return NextResponse.json({
       message: 'User retrieved successfully',
-      user: userData,
+      data: user,
     });
   } catch (error) {
     console.error('Get Me Error:', error);
