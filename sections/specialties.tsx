@@ -1,6 +1,6 @@
 import { getSpecializations } from '@/lib/api/website';
 import { DocumentScannerRounded } from '@mui/icons-material';
-import { Box, Container, Grid, Typography, Paper, styled } from '@mui/material';
+import { Box, Container, Grid, Typography, Paper, styled, Skeleton } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import { getIcon } from './getIcon';
@@ -47,7 +47,7 @@ const IconWrapper = styled(Box)(({ theme }) => ({
 
 
 export default function SpecialtiesSection() {
-    const { data: specializations } = useQuery({
+    const { data: specializations, isLoading } = useQuery({
         queryKey: ['specializations'],
         queryFn: () => getSpecializations(),
     });
@@ -65,6 +65,18 @@ export default function SpecialtiesSection() {
                 </Box>
 
                 <Grid container spacing={3}>
+                    {isLoading && [1, 2, 3].map(e =>
+                        <Grid size={{ xs: 12, sm: 6, md: 4 }} key={e}>
+                            <SpecialtyCard elevation={1}>
+                                <IconWrapper>
+                                    <Skeleton variant="circular" width={64} height={64} />
+                                </IconWrapper>
+                                <Typography variant="body1" fontWeight={600} color="text.primary">
+                                    <Skeleton width="100%" />
+                                </Typography>
+                            </SpecialtyCard>
+                        </Grid>
+                    )}
                     {specializations?.data.map((specialty, index) => {
                         return (
                             <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>

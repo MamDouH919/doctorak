@@ -17,7 +17,7 @@ export default function Footer() {
                 <Grid container spacing={4}>
                     {/* Company Info */}
                     <Grid size={{ xs: 12, md: 3 }}>
-                        <SiteLogo />
+                        <SiteLogo color="#fff" />
                         <Typography variant="body2" color="grey.500" mb={2}>
                             منصة طبية شاملة تجمع أفضل الأطباء في مكان واحد لتسهيل الوصول إلى الرعاية الصحية المناسبة.
                         </Typography>

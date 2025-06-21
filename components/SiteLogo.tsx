@@ -11,11 +11,19 @@ const TypographyStyle = styled(Typography)(({ theme }) => ({
     color: theme.palette.text.primary,
 }));
 
-const SiteLogo = () => {
+const SiteLogo = ({
+    color,
+}: {
+    color?: string
+}) => {
     return (
         <Stack direction="row" spacing={1} justifyContent="flex-start">
             <StethoscopeIcon />
-            <TypographyStyle variant="h6" fontWeight="bold">
+            <TypographyStyle
+                variant="h6"
+                fontWeight="bold"
+                sx={color ? { color } : undefined}
+            >
                 دكتورك
             </TypographyStyle>
         </Stack>
