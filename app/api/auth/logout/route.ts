@@ -9,8 +9,6 @@ export async function POST(req: Request) {
     try {
         const { token } = await req.json();
 
-        console.log(token);
-        
         if (!token) {
             return NextResponse.json({ message: 'Token is required' }, { status: 400 });
         }

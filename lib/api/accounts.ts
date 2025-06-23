@@ -33,7 +33,6 @@ export const fetchListAccounts = async (
 };
 
 export const fetchAccount = async (id?: string): Promise<{ data: any }> => {
-    console.log(id)
     const token = await getToken();
     const response = await api.get('/api/accounts/' + id, {
         headers: {
@@ -67,4 +66,54 @@ export const updateAccount = async (id: string, data: CreateAccount) => {
     })
 
     return response.data;
+};
+
+import { AxiosProgressEvent } from 'axios';
+
+interface UploadOptions {
+    onUploadProgress?: (progressEvent: AxiosProgressEvent) => void;
+}
+
+export const uploadAccountImage = async (
+    file: File,
+    accountId: string,
+    alt: string,
+    options?: UploadOptions
+) => {
+    try {
+        const token = await getToken();
+
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("accountId", accountId);
+        formData.append("alt", alt);
+
+        const response = await api.post('/api/images/upload-image', formData, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            onUploadProgress: options?.onUploadProgress,
+        });
+
+        return response.data;
+    } catch (error: any) {
+        console.error("❌ Error uploading account image:", error.response?.data || error.message);
+        throw error;
+    }
+};
+
+export const deleteAccountImage = async (accountId: string, imagePath: string) => {
+    const response = await fetch('/api/images/remove-image', {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ accountId, imagePath }),
+    });
+
+    if (!response.ok) {
+        throw new Error(`Failed to delete image: ${await response.text()}`);
+    }
+
+    return await response.json();
 };

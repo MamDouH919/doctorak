@@ -7,13 +7,10 @@ import { changeUser } from '@/Store/slices/auth';
 
 const GetMe = ({ children, token }: { children: React.ReactNode, token?: string | null }) => {
     const { data, isLoading, isError } = useQuery({
-        queryKey: ['me'],
+        queryKey: ['me', token],
         queryFn: () => getMe(),
         enabled: !!token,
     });
-
-    console.log(data);
-
 
     const dispatch = useAppDispatch();
 

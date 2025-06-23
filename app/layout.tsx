@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import { I18nProvider } from "./i18n-provider";
 import Providers from "@/lib/Providers";
 import { getToken } from "@/action/token";
-import dbConnect from "@/lib/dbConnect";
-import { seedSpecializations } from "@/lib/seedSpecializations";
+// import { seedSpecializations } from "@/scripts/seedSpecializations";
+// import { seedGovernorate } from "@/scripts/seedGovernorates";
+// import dbConnect from "@/lib/dbConnect";
+// import { seedCities } from "@/scripts/seedCities";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -20,12 +22,14 @@ export default async function RootLayout({
   // get token from cookie
 
 
-  async function initialize() {
-    await dbConnect();
-    await seedSpecializations();
-  }
+  // async function initialize() {
+  //   await dbConnect();
+  //   await seedSpecializations();
+  //   await seedGovernorate();
+  //   await seedCities();
+  // }
 
-  initialize();
+  // initialize();
 
   const token = await getToken();
   // wait one second 

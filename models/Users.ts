@@ -14,7 +14,7 @@ const UsersSchema = new mongoose.Schema({
   },
   otp: { type: String, required: false, default: "" },
   token: { type: String, required: false, default: "" },
-  account: { type: mongoose.Schema.Types.ObjectId, ref: 'Accounts', unique: true },
+  account: { type: mongoose.Schema.Types.ObjectId, ref: 'Accounts' },
 }, {
   timestamps: true,
   versionKey: false,

@@ -1,4 +1,6 @@
+"use client"
 import SiteLogo from '@/components/SiteLogo';
+import { useAppSelector } from '@/Store/store';
 import {
     Box,
     Container,
@@ -10,16 +12,34 @@ import {
 } from '@mui/material';
 import { Stethoscope, Phone, MessageCircle, MapPin } from 'lucide-react';
 
+const FooterLinks = [
+    {
+        label: "جميع التخصصات",
+        link: "/specialties"
+    },
+    {
+        label: "جميع الدكاترة",
+        link: "/doctors"
+    },
+    {
+        label: "تسجيل دكتور جديد",
+        link: "/doctors"
+    }
+]
 export default function Footer() {
+    const auth = useAppSelector((state) => state.auth)
+    if (auth.user) {
+        FooterLinks.pop()
+    }
     return (
         <Box bgcolor="grey.900" color="common.white" py={12}>
             <Container>
                 <Grid container spacing={4}>
                     {/* Company Info */}
-                    <Grid size={{ xs: 12, md: 3 }}>
+                    <Grid size={{ xs: 12, md: 6 }}>
                         <SiteLogo color="#fff" />
                         <Typography variant="body2" color="grey.500" mb={2}>
-                            منصة طبية شاملة تجمع أفضل الأطباء في مكان واحد لتسهيل الوصول إلى الرعاية الصحية المناسبة.
+                            منصة طبية شاملة تجمع أفضل الدكاترة في مكان واحد لتسهيل الوصول إلى الرعاية الصحية المناسبة.
                         </Typography>
                     </Grid>
 
@@ -28,23 +48,26 @@ export default function Footer() {
                         <Typography variant="subtitle1" fontWeight="bold" mb={2}>
                             روابط سريعة
                         </Typography>
+
+
+
                         <Stack spacing={1}>
-                            {['جميع التخصصات', 'الأطباء المميزون', 'احجز موعد', 'تسجيل طبيب جديد'].map((text, i) => (
+                            {FooterLinks.map((text, i) => (
                                 <Link
                                     key={i}
-                                    href="#"
+                                    href={text.link}
                                     underline="hover"
                                     color="grey.500"
                                     sx={{ '&:hover': { color: 'common.white' } }}
                                 >
-                                    {text}
+                                    {text.label}
                                 </Link>
                             ))}
                         </Stack>
                     </Grid>
 
                     {/* Support */}
-                    <Grid size={{ xs: 12, md: 3 }}>
+                    {/* <Grid size={{ xs: 12, md: 3 }}>
                         <Typography variant="subtitle1" fontWeight="bold" mb={2}>
                             الدعم
                         </Typography>
@@ -61,7 +84,7 @@ export default function Footer() {
                                 </Link>
                             ))}
                         </Stack>
-                    </Grid>
+                    </Grid> */}
 
                     {/* Contact */}
                     <Grid size={{ xs: 12, md: 3 }}>
@@ -71,15 +94,19 @@ export default function Footer() {
                         <Stack spacing={2}>
                             <Stack direction="row" spacing={1} alignItems="center">
                                 <Phone size={20} color="#f87171" />
-                                <Typography color="grey.500">920000000</Typography>
+                                <Typography color="grey.500" component={Link} href="tel:+201157872277">
+                                    {/* <Link href="tel:+201157872277"> */}
+                                    01157872277
+                                    {/* </Link> */}
+                                </Typography>
                             </Stack>
                             <Stack direction="row" spacing={1} alignItems="center">
                                 <MessageCircle size={20} color="#f87171" />
-                                <Typography color="grey.500">info@doctorك.com</Typography>
+                                <Typography color="grey.500">dakatrah.site@gmail.com</Typography>
                             </Stack>
                             <Stack direction="row" spacing={1} alignItems="center">
                                 <MapPin size={20} color="#f87171" />
-                                <Typography color="grey.500">الرياض، المملكة العربية السعودية</Typography>
+                                <Typography color="grey.500">جمهورية مصر العربية</Typography>
                             </Stack>
                         </Stack>
                     </Grid>

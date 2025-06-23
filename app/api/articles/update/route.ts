@@ -7,8 +7,7 @@ import { NextRequest } from 'next/server';
 async function handler(req: NextRequest) {
     try {
         const { id, title, content, account } = await req.json();
-        console.log(id, title, content, account)
-        
+
         // Validate required fields
         if (!id || !title || !content) {
             return NextResponse.json(

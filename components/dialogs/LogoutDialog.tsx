@@ -1,4 +1,5 @@
 
+"use client"
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -7,6 +8,8 @@ import { useRouter } from 'next/navigation'
 import CustomDialog from '../MUI/CustomDialog'
 import { useState } from 'react'
 import { getToken } from '@/action/token'
+import { useAppDispatch } from '@/Store/store'
+import { resetAuthData } from '@/Store/slices/auth'
 
 interface PropsType {
     open: boolean
@@ -17,6 +20,7 @@ const LogoutDialog = ({
     open,
     handleClose
 }: PropsType) => {
+    const dispatch = useAppDispatch()
     const [loading, setLoading] = useState(false)
     const router = useRouter()
     const { t } = useTranslation()
@@ -39,8 +43,8 @@ const LogoutDialog = ({
                 setLoading(false)
                 if (response.ok) {
                     toast.success("تم تسجيل الخروج بنجاح")
-                    
-                    router.push('/login')
+                    dispatch(resetAuthData())
+                    router.push('/')
                 } else {
                     toast.error("حدث خطأ ما")
                 }

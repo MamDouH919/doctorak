@@ -3,11 +3,15 @@ import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
 import Specializations from '@/models/Specialization';
 
-export async function GET() {
+export async function GET(req: NextRequest) {
     try {
         await dbConnect();
 
+        const { searchParams } = new URL(req.url);
+        const limit = parseInt(searchParams.get('limit') || '0');
+
         const specializations = await Specializations.find({}, '_id name slug name_en')
+            .limit(limit || 0); // if limit is 0, return all
 
         return NextResponse.json({
             type: 'success',

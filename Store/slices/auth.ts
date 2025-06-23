@@ -32,7 +32,7 @@ export const authSlice = createSlice({
             state.user = action.payload
         },
         resetAuthData: (state) => {
-            state.user = initialState.user
+            state.user = null
         }
     },
 })

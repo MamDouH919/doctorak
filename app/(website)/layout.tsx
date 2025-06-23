@@ -1,3 +1,5 @@
+import AppBarComponent from '@/sections/app-bar'
+import Footer from '@/sections/footer'
 import React from 'react'
 
 const Layout = ({
@@ -5,7 +7,11 @@ const Layout = ({
 }: {
     children: React.ReactNode,
 }) => {
-    return children
+    return <>
+        <AppBarComponent />
+        {children}
+        <Footer />
+    </>
 }
 
 export default Layout

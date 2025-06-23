@@ -16,8 +16,6 @@ export default function ThemeRegistry({
 }) {
   const { i18n } = useTranslation();
   const isRtl = i18n.dir() === 'rtl';
-  console.log(isRtl);
-
   const cache = useMemo(() => createEmotionCache(isRtl), [isRtl]);
 
   const theme = useMemo(() => getTheme({

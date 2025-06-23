@@ -13,8 +13,6 @@ export async function GET(req: Request) {
         const domain = searchParams.get("domain");
 
         await dbConnect();
-        console.log('Registered Models:', Object.keys(mongoose.models));
-
         const doctor = await Accounts.findOne({ domain: domain })
             .populate('user')
             // .populate('user')

@@ -7,22 +7,22 @@ import {
     Divider,
     IconButton,
     Stack,
+    Tooltip,
     Typography,
 } from "@mui/material";
-import { LockOpen, Visibility, VisibilityOff } from "@mui/icons-material";
+import { Info, LockOpen, Visibility, VisibilityOff } from "@mui/icons-material";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import ControlMUITextField from "../../components/MUI/ControlMUItextField";
 import { toast } from "sonner";
 import AuthLayout from "@/layouts/auth";
-import { hashPassword } from "@/lib/hash-passwords";
-import { useRouter } from "next/navigation";
 import VerifyCode from "@/components/dialogs/VerifyCode";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { getSpecializations } from "@/lib/api/website";
-import AutoComplete from "@/components/MUI/AutoComplete";
+import ListSpecializations from "@/components/customAutoCompolete/ListSpecializations";
+// import ListGovernorate from "@/components/customAutoCompolete/ListGovernorate";
 
 
 const PREFIX = "Login";
@@ -47,7 +47,9 @@ const Root = styled(Stack)(({ theme }) => ({
 }));
 
 const Register = () => {
-    const { control, handleSubmit, setError, watch } = useForm();
+    const { control, handleSubmit, setError, watch } = useForm({
+        mode: "onChange",
+    });
     const { t } = useTranslation();
     const [passType, setPassType] = useState("password");
     const [loading, setLoading] = useState(false);
@@ -70,7 +72,9 @@ const Register = () => {
                 body: JSON.stringify({
                     name: data.name,
                     email: data.email,
-                    password: data.password
+                    password: data.password,
+                    specialization: data.specialization,
+                    specialization_needed: data.specialization_needed,
                 }),
             });
 
@@ -87,7 +91,7 @@ const Register = () => {
             if (response.type === 'error') {
                 toast.error(result.message);
             } else {
-                toast.success("تم تسجيل الدخول بنجاح");
+                toast.success("تم إنشاء حساب بنجاح");
                 setVerifyCodeOpen(true);
             }
 
@@ -99,9 +103,6 @@ const Register = () => {
             setLoading(false);
         }
     };
-
-    console.log(specializations);
-
 
     return (
         <AuthLayout>
@@ -124,28 +125,47 @@ const Register = () => {
                             <LockOpen fontSize='large' />
                         </Avatar>
                         <Typography variant='h1' fontSize={40}>
-                            تسجيل الدخول
+                            إنشا حساب جديد
                         </Typography>
                         <ControlMUITextField
                             control={control}
                             name='name'
                             label={"الاسم"}
                             rules={{
-                                required: t("auth.fieldIsRequired"),
+                                required: "هذا الحقل مطلوب",
                             }}
                         />
-                        <AutoComplete
+                        {/* <ListGovernorate
+                            control={control}
+                            name='governorate'
+                            label={"المحافظة"}
+                            rules={{
+                                required: "هذا الحقل مطلوب",
+                            }}
+                        /> */}
+                        <ListSpecializations
                             control={control}
                             name='specialization'
                             label={"التخصص"}
-                            data={specializations ?
-                                specializations?.data.map((e) => ({
-                                    key: e.name,
-                                    value: e._id,
-                                })) : []
-                            }
                             rules={{
-                                required: t("auth.fieldIsRequired"),
+                                required: watch('specialization_needed') ? false : "هذا الحقل مطلوب",
+                            }}
+                            disabled={!!watch('specialization_needed')}
+                        />
+                        <ControlMUITextField
+                            control={control}
+                            name='specialization_needed'
+                            label={"التخصص المطلوب"}
+                            rules={{
+                                required: watch('specialization') ? false : "هذا الحقل مطلوب",
+                            }}
+                            disabled={!!watch('specialization')}
+                            InputProps={{
+                                endAdornment: (
+                                    <Tooltip title={"إذا لم تجد تخصصك، يمكنك كتابته وسنقوم بإضافته لاحقًا."}>
+                                        <Info />
+                                    </Tooltip>
+                                ),
                             }}
                         />
                         <ControlMUITextField
@@ -153,7 +173,7 @@ const Register = () => {
                             name='email'
                             label={"البريد الإلكتروني"}
                             rules={{
-                                required: t("auth.fieldIsRequired"),
+                                required: "هذا الحقل مطلوب",
                             }}
                         />
                         <ControlMUITextField
@@ -162,7 +182,7 @@ const Register = () => {
                             type={passType}
                             control={control}
                             rules={{
-                                required: t("auth.fieldIsRequired"),
+                                required: "هذا الحقل مطلوب",
                             }}
                             slotProps={{
                                 input: {

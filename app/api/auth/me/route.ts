@@ -39,8 +39,6 @@ export async function GET(req: Request) {
         select: '_id' // select only _id from the populated account
       });
 
-    console.log(user);
-
     if (!user) {
       return NextResponse.json({ message: 'User not found' }, { status: 404 });
     }
@@ -50,7 +48,7 @@ export async function GET(req: Request) {
 
     return NextResponse.json({
       message: 'User retrieved successfully',
-      data: user,
+      data: userData,
     });
   } catch (error) {
     console.error('Get Me Error:', error);

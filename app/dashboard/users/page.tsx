@@ -1,48 +1,25 @@
 "use client"
 import * as React from 'react';
-import { toast } from 'sonner';
-import { getToken } from '@/action/token';
-import { CellLink } from '@/components/data-table/CellLink';
 import TankStackTable from '@/components/data-table/TankStackTable';
+import { fetchListUsers } from '@/lib/api/users';
+import { useQuery } from '@tanstack/react-query';
 
 export default function ListUsers() {
-    const [loading, setLoading] = React.useState(false)
-    const [users, setUsers] = React.useState<any>([])
+    const { data, isLoading } = useQuery({
+        queryKey: ['accounts'],
+        queryFn: () => fetchListUsers(),
+    });
 
-    const getUsers = async () => {
-        setLoading(true)
-        const token = await getToken()
-        const response = await fetch('/api/users/list', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        })
-        const result = await response.json();
-        if (result.type === 'success') {
-            setLoading(false);
-            setUsers(result.users);
-        } else {
-            toast.error("خطأ في الخطأ");
-            setLoading(false);
-        }
-    }
-    React.useEffect(() => {
-        setLoading(true)
-        getUsers()
-
-    }, [])
 
     const columns = [
         {
             accessorKey: "name",
             header: "اسم المستخدم",
-            cell: ({ row }: { row: any }) => (
-                <CellLink to={`/dashboard/accounts/${row?.original?._id}`}>
-                    {row?.original?.name}
-                </CellLink>
-            ),
+            // cell: ({ row }: { row: any }) => (
+            //     <CellLink to={`/dashboard/accounts/${row?.original?._id}`}>
+            //         {row?.original?.name}
+            //     </CellLink>
+            // ),
         },
         {
             accessorKey: "email",
@@ -70,9 +47,9 @@ export default function ListUsers() {
     return (
         <TankStackTable
             columns={columns}
-            data={users as any}
+            data={data?.data ?? [] as any}
             // paginatorInfo={paginatorInfo as PaginatorInfo}
-            loading={loading}
+            loading={isLoading}
         />
     );
 }

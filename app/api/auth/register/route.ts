@@ -11,11 +11,11 @@ import Accounts from '@/models/Accounts';
 
 export async function POST(req: Request) {
     try {
-        const { name, email, password } = await req.json();
+        const { name, email, password, specialization, specialization_needed } = await req.json();
 
-        if (!name || !email || !password) {
+        if (!name || !email || !password || !(specialization || specialization_needed)) {
             return NextResponse.json({
-                message: "الاسم، البريد الإلكتروني وكلمة المرور مطلوبة",
+                message: "الاسم، البريد الإلكتروني وكلمة المرور والتخصص مطلوبين",
                 type: "error"
             }, { status: 400 });
         }
@@ -50,6 +50,8 @@ export async function POST(req: Request) {
         const userAccount = new Accounts({
             user: savedUser._id,
             domain: Math.random().toString(36).substring(2, 7),
+            ...(specialization && { specialization }),
+            ...(specialization_needed && { specialization_needed }),
         });
 
         const account = await userAccount.save();

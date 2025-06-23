@@ -47,8 +47,6 @@ const FormDialog = ({
 
     const queryClient = useQueryClient(); // Use this to access queryClient
 
-    console.log(oldData)
-
     const onSubmit = async (data: any) => {
         if (oldData) {
             updateFaqsMutation({

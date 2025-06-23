@@ -1,8 +1,33 @@
-import mongoose from 'mongoose';
+// models/Cities.ts
+import mongoose, { Schema, Document } from 'mongoose';
 
-// models/City.ts
-const citySchema = new mongoose.Schema({
-    name: { type: String, required: true }
-});
+export interface ICities extends Document {
+    name: {
+        en: string;
+        ar: string;
+    };
+    slug?: string;
+    governorate: mongoose.Types.ObjectId;
+}
 
-export default mongoose.models.City || mongoose.model('City', citySchema);
+const CitiesSchema = new Schema<ICities>(
+    {
+        name: {
+            en: { type: String, required: true },
+            ar: { type: String, required: true }
+        },
+        slug: { type: String },
+        governorate: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Governorate',
+            required: true
+        }
+    },
+
+    {
+        timestamps: true,
+    }
+);
+
+export default mongoose.models.Cities ||
+    mongoose.model<ICities>('Cities', CitiesSchema);

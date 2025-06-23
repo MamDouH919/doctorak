@@ -35,6 +35,8 @@
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.13",
     "dotenv": "^16.5.0",
+    "firebase": "^11.9.1",
+    "formidable": "^3.5.4",
     "gql-query-builder": "^3.8.0",
     "i18next": "^25.1.2",
     "i18next-browser-languagedetector": "^8.1.0",
@@ -59,9 +61,11 @@
     "react-leaflet": "^5.0.0",
     "react-redux": "^9.2.0",
     "react-window": "^1.8.11",
+    "slugify": "^1.6.6",
     "sonner": "^2.0.3",
     "stylis": "^4.3.6",
-    "stylis-plugin-rtl": "^2.1.1"
+    "stylis-plugin-rtl": "^2.1.1",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -70,6 +74,7 @@
     "@graphql-codegen/typescript-graphql-request": "^6.2.0",
     "@graphql-codegen/typescript-react-apollo": "^4.1.0",
     "@types/bcrypt": "^5.0.2",
+    "@types/formidable": "^3.4.5",
     "@types/js-cookie": "^3.0.6",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/leaflet": "^1.9.17",

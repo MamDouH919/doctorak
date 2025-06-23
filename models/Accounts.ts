@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const SocialSchema = new mongoose.Schema({
   type: { type: String, required: true, enum: ["facebook", "instagram", "tikTok", "twitter", "snapChat", "youtube", "group", "Share", "website"] },
@@ -10,11 +10,11 @@ const VideosSchema = new mongoose.Schema({
   type: { type: String, required: true, enum: ["facebook", "instagram", "tikTok", "youtube"] },
 });
 
-const AppointmentSchema = new mongoose.Schema({
-  day: { type: String, required: true },
-  timeFrom: { type: String, required: true },
-  timeTo: { type: String, required: true },
-});
+// const AppointmentSchema = new mongoose.Schema({
+//   day: { type: String, required: true },
+//   timeFrom: { type: String, required: true },
+//   timeTo: { type: String, required: true },
+// });
 
 const AccountsSchema = new mongoose.Schema({
   siteName: { type: String, },
@@ -22,7 +22,6 @@ const AccountsSchema = new mongoose.Schema({
   phone: { type: String, },
   whatsApp: { type: String, },
   description: { type: String, },
-  image: { type: String, },
   color: { type: String, },
   lang: { type: String, enum: ["ar", "en"] },
   about: { type: String, },
@@ -30,7 +29,9 @@ const AccountsSchema = new mongoose.Schema({
   active: { type: Boolean, default: false },
   endDate: { type: String, },
   showInHomePage: { type: Boolean, default: false },
-  isPremiumAccount: { type: Boolean, default: false },
+  isPremium: { type: Boolean, default: false },
+  specialization_needed: { type: String, },
+  visitors: { type: Number, default: 0 },
 
   faqs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'FAQ' }],
   articles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Article' }],
@@ -38,8 +39,10 @@ const AccountsSchema = new mongoose.Schema({
   expertise: { type: mongoose.Schema.Types.ObjectId, ref: 'Expertise' },
   videos: [VideosSchema],
   social: [SocialSchema],
-  appointments: [AppointmentSchema],
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'Users', required: true, unique: true },
+  // appointments: [AppointmentSchema],
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'Users', required: true, },
+  specialization: { type: mongoose.Schema.Types.ObjectId, ref: 'Specialization', },
+  image: { type: mongoose.Schema.Types.ObjectId, ref: "Image" }, // One-to-One reference
 }, {
   timestamps: true,
   versionKey: false,

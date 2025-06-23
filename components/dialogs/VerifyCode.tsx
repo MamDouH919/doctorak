@@ -7,6 +7,8 @@ import CustomDialog from '../MUI/CustomDialog'
 import { useState } from 'react'
 import { getToken } from '@/action/token'
 import ControlMUITextField from '../MUI/ControlMUItextField'
+import { useAppDispatch } from '@/Store/store'
+import { changeUser } from '@/Store/slices/auth'
 
 interface PropsType {
     open: boolean
@@ -22,7 +24,7 @@ const VerifyCode = ({
     const [loading, setLoading] = useState(false)
     const [resendLoading, setResendLoading] = useState(false)
     const router = useRouter()
-    const { t } = useTranslation()
+    const dispatch = useAppDispatch()
     const { handleSubmit, control, setError } = useForm()
 
     const onSubmit = async (data: any) => {
@@ -53,6 +55,13 @@ const VerifyCode = ({
             } else {
                 toast.success("تم تسجيل الدخول بنجاح");
                 handleClose()
+                dispatch(changeUser({
+                    id: result.data._id,
+                    name: result.data.name,
+                    email: result.data.email,
+                    role: result.data.role,
+                    ...(result.data.role === "user" && { accountId: result.data?.account._id })
+                }));
                 router.push('/dashboard')
             }
 
@@ -78,8 +87,10 @@ const VerifyCode = ({
 
             if (response.type === 'error') {
                 toast.error(result.message);
+                setResendLoading(false)
             } else {
                 toast.success(result.message);
+                setResendLoading(false)
             }
 
         } catch (error) {

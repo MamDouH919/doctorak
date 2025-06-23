@@ -1,6 +1,11 @@
+"use client"
 import React from 'react';
-import { Box, Typography, Grid, Card, CardContent, Avatar, Button, styled, Chip, Tooltip } from '@mui/material';
+import { Box, Typography, Grid, Card, CardContent, Avatar, Button, styled, Chip, Tooltip, Stack } from '@mui/material';
 import { Phone, Message, CalendarToday, Star, Room, AccessTime, EmojiEvents } from '@mui/icons-material';
+import { useQuery } from '@tanstack/react-query';
+import { getDoctors } from '@/lib/api/website';
+import { TbWorld } from 'react-icons/tb';
+import DoctorCardSkeleton from '@/loading/DoctorCard';
 
 const GradientSection = styled(Box)(({ theme }) => ({
     padding: theme.spacing(8, 2),
@@ -10,7 +15,7 @@ const GradientSection = styled(Box)(({ theme }) => ({
     background: 'linear-gradient(to bottom right, #fff5f5, #ffeaea)',
 }));
 
-const DoctorCard = styled(Card)(({ theme }) => ({
+export const DoctorCard = styled(Card)(({ theme }) => ({
     borderRadius: theme.spacing(3),
     transition: 'all 0.3s ease',
     boxShadow: theme.shadows[4],
@@ -58,138 +63,190 @@ const renderStars = (rating: number): React.ReactNode[] => {
     return stars;
 };
 
-const featuredDoctors = [
-    {
-        id: 1,
-        name: 'أحمد الشيخ',
-        image: '/placeholder.svg',
-        specialty: 'العلوم الصناعية',
-        city: 'المدينة العربية',
-        experience: 'مدينة العربية',
-        rating: 4.5,
-        reviews: 10,
-        price: '$100',
-        available: true,
-        nextAvailable: 'اليوم',
-    },
-    {
-        id: 2,
-        name: 'أحمد الشيخ',
-        image: '/placeholder.svg',
-        specialty: 'العلوم الصناعية',
-        city: 'المدينة العربية',
-        experience: 'مدينة العربية',
-        rating: 4.5,
-        reviews: 10,
-        price: '$100',
-        available: true,
-        nextAvailable: 'اليوم',
-    },
-    {
-        id: 3,
-        name: 'أحمد الشيخ',
-        image: '/placeholder.svg',
-        specialty: 'العلوم الصناعية',
-        city: 'المدينة العربية',
-        experience: 'مدينة العربية',
-        rating: 4.5,
-        reviews: 10,
-        price: '$100',
-        available: true,
-        nextAvailable: 'اليوم',
-    },
-]
+// const featuredDoctors = [
+//     {
+//         id: 1,
+//         name: 'أحمد الشيخ',
+//         image: '/placeholder.svg',
+//         specialty: 'العلوم الصناعية',
+//         city: 'المدينة العربية',
+//         experience: 'مدينة العربية',
+//         rating: 4.5,
+//         reviews: 10,
+//         price: '$100',
+//         available: true,
+//         nextAvailable: 'اليوم',
+//     },
+//     {
+//         id: 2,
+//         name: 'أحمد الشيخ',
+//         image: '/placeholder.svg',
+//         specialty: 'العلوم الصناعية',
+//         city: 'المدينة العربية',
+//         experience: 'مدينة العربية',
+//         rating: 4.5,
+//         reviews: 10,
+//         price: '$100',
+//         available: true,
+//         nextAvailable: 'اليوم',
+//     },
+//     {
+//         id: 3,
+//         name: 'أحمد الشيخ',
+//         image: '/placeholder.svg',
+//         specialty: 'العلوم الصناعية',
+//         city: 'المدينة العربية',
+//         experience: 'مدينة العربية',
+//         rating: 4.5,
+//         reviews: 10,
+//         price: '$100',
+//         available: true,
+//         nextAvailable: 'اليوم',
+//     },
+// ]
 
-const FeaturedDoctorsSection = () => {
+const FeaturedDoctorsSection = ({
+    showInHomePage = true,
+    name,
+    specialty,
+    fromPage = false,
+}: {
+    showInHomePage?: boolean
+    name?: string | null
+    specialty?: string | null
+    fromPage?: boolean
+}) => {
+
+    const { data: doctors, isLoading } = useQuery({
+        queryKey: ['doctors', name, specialty],
+        queryFn: () => getDoctors({
+            ...(showInHomePage && { showInHomePage: showInHomePage }),
+            ...(name && { name: name }),
+            ...(specialty && { specialty: specialty }),
+        }),
+    });
+
     return (
         <GradientSection>
             <Box maxWidth="lg" mx="auto">
                 <Box textAlign="center" mb={6}>
                     <Typography variant="h4" fontWeight={700} color="primary" gutterBottom>
-                        الأطباء المميزون
+                        الدكاترة
                     </Typography>
                     <Typography variant="h6" color="textSecondary">
-                        أفضل الأطباء المتخصصين في مختلف المجالات الطبية
+                        أفضل الدكاترة المتخصصين في مختلف المجالات الطبية
                     </Typography>
                 </Box>
 
                 <Grid container spacing={4}>
-                    {featuredDoctors.map((doctor) => (
-                        <Grid size={{ xs: 12, sm: 6, md: 4 }} key={doctor.id}>
+                    {isLoading && [1, 2, 3].map(e =>
+                        <Grid size={{ xs: 12, sm: 6, md: 4 }} key={e}>
+                            <DoctorCardSkeleton />
+                        </Grid>
+                    )}
+                    {doctors?.data.map((doctor) => (
+                        <Grid size={{ xs: 12, sm: 6, md: 4 }} key={doctor._id}>
                             <DoctorCard>
                                 <Box position="relative" display="flex" alignItems="center" justifyContent="center" height={200} bgcolor="#dbeafe">
                                     <Avatar
-                                        src={doctor.image || '/placeholder.svg'}
-                                        alt={doctor.name}
+                                        src={doctor.image.url}
+                                        alt={doctor.image.alt}
                                         sx={{ width: 96, height: 96, border: '4px solid white', boxShadow: 2 }}
                                     />
-                                    {doctor.available && <AvailabilityBadge>متاح الآن</AvailabilityBadge>}
+                                    {<AvailabilityBadge>
+                                        {doctor.visitors} متابع
+                                    </AvailabilityBadge>}
                                 </Box>
 
                                 <CardContent>
                                     <Typography variant="h6" fontWeight={700} textAlign="center" gutterBottom>
-                                        {doctor.name}
+                                        {doctor.user.name}
                                     </Typography>
 
                                     <Box textAlign="center" mb={2}>
                                         <Chip
-                                            label={doctor.specialty}
+                                            label={doctor.specialization.name}
                                             sx={{ backgroundColor: '#fee2e2', color: '#b91c1c' }}
                                         />
                                     </Box>
 
-                                    <IconLabel icon={Room} label={doctor.city} />
+                                    {/* <IconLabel icon={Room} label={doctor.city} /> */}
 
-                                    <Box display="flex" justifyContent="center" alignItems="center" mb={1}>
+                                    {/* <Box display="flex" justifyContent="center" alignItems="center" mb={1}>
                                         {renderStars(doctor.rating)}
                                         <Typography variant="body2" color="textSecondary" ml={1}>
                                             {doctor.rating} ({doctor.reviews} تقييم)
                                         </Typography>
-                                    </Box>
+                                    </Box> */}
 
-                                    <IconLabel icon={EmojiEvents} label={doctor.experience} />
+                                    {/* <IconLabel icon={EmojiEvents} label={doctor.experience} /> */}
 
-                                    <Typography align="center" color="error" variant="h6" fontWeight={700} mb={1}>
-                                        {doctor.price}
+                                    {/* make it only two lines and over make three dots */}
+                                    <Typography
+                                        align="center"
+                                        color='textSecondary'
+                                        mb={1}
+                                        sx={{
+                                            display: '-webkit-box',
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis',
+                                            WebkitLineClamp: 2,
+                                            WebkitBoxOrient: 'vertical',
+                                        }}
+                                    >
+                                        {doctor.description}
                                     </Typography>
 
-                                    {doctor.available && (
+                                    {/* {doctor.available && (
                                         <IconLabel icon={AccessTime} label={`متاح ${doctor.nextAvailable}`} />
-                                    )}
+                                    )} */}
 
-                                    <Box display="flex" justifyContent="space-between" mt={2}>
-                                        <Button
-                                            variant="contained"
-                                            color="error"
-                                            fullWidth
-                                            disabled={!doctor.available}
-                                            startIcon={<CalendarToday />}
-                                            sx={{ mr: 1 }}
-                                        >
-                                            احجز موعد
-                                        </Button>
-                                        <Tooltip title="اتصال">
-                                            <Button variant="contained" color="success" sx={{ minWidth: 40 }}>
-                                                <Phone fontSize="small" />
+                                    <Stack direction={"row"} spacing={2}>
+                                        <Stack position={"relative"} flexGrow={1}>
+                                            <Button
+                                                variant="contained"
+                                                color="error"
+                                                fullWidth
+                                                disabled
+                                                startIcon={<CalendarToday />}
+                                            >
+                                                احجز موعد
+                                            </Button>
+
+                                            <Stack
+                                                position={"absolute"}
+                                                top={0}
+                                                right={20}
+                                            >
+                                                <Chip
+                                                    label={"قريبا"}
+                                                    color='error'
+                                                />
+                                            </Stack>
+                                        </Stack>
+                                        <Tooltip title="البروفايل">
+                                            <Button variant="contained" color="info" sx={{ minWidth: 40 }}>
+                                                <TbWorld size={20} />
                                             </Button>
                                         </Tooltip>
-                                        <Tooltip title="رسالة">
-                                            <Button variant="contained" color="primary" sx={{ minWidth: 40 }}>
-                                                <Message fontSize="small" />
-                                            </Button>
-                                        </Tooltip>
-                                    </Box>
+                                    </Stack>
                                 </CardContent>
                             </DoctorCard>
                         </Grid>
                     ))}
+                    {!isLoading && doctors?.data.length === 0 &&
+                        <Box textAlign="center" mt={8} width={"100%"}>
+                            <Typography variant="h6" color="text.secondary" textAlign={"center"}>
+                                لا يوجد دكاترة مطابقة للبحث المحدد
+                            </Typography>
+                        </Box>}
                 </Grid>
 
-                <Box textAlign="center" mt={8}>
-                    <Button variant="contained" color="error" size="large">
-                        عرض جميع الأطباء
+                {!fromPage && <Box textAlign="center" mt={8}>
+                    <Button variant="contained" color="primary" size="large">
+                        عرض جميع الدكاترة
                     </Button>
-                </Box>
+                </Box>}
             </Box>
         </GradientSection>
     );

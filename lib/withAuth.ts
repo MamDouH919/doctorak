@@ -14,17 +14,12 @@ export async function withAuth(
 ) {
     const token = req.cookies.get('token')?.value;
 
-    console.log("token", token)
-    
     if (!token) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     try {
         const user = verifyToken(token);
-
-        console.log("user", user)
-        
 
         // Type guard: ensure user is an object with a role property
         if (
@@ -39,7 +34,6 @@ export async function withAuth(
         return await handler(req, user);
     } catch (err) {
         console.log(err);
-        
         return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
 }

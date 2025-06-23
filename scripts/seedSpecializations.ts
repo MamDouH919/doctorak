@@ -1,5 +1,5 @@
 import Specialization from '@/models/Specialization';
-import data from './specializations.json';
+import data from '../seed/specializations.json';
 
 export async function seedSpecializations() {
     const count = await Specialization.countDocuments();

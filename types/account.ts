@@ -23,7 +23,11 @@ export interface CreateAccount {
     social: Social[],
     videos: Videos[],
     showInHomePage: boolean,
-    isPremiumAccount: boolean,
+    isPremium: boolean,
+    active: boolean,
+    specialization?: string,
+    specialization_needed?: string,
+    image?: File,
     appointments: {
         day: string,
         timeFrom: string | Date,

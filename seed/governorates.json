@@ -1,0 +1,184 @@
+[
+  {
+    "name": {
+      "en": "Cairo",
+      "ar": "القاهرة"
+    },
+    "slug": "cairo"
+  },
+  {
+    "name": {
+      "en": "Giza",
+      "ar": "الجيزة"
+    },
+    "slug": "giza"
+  },
+  {
+    "name": {
+      "en": "Alexandria",
+      "ar": "الإسكندرية"
+    },
+    "slug": "alexandria"
+  },
+  {
+    "name": {
+      "en": "Dakahlia",
+      "ar": "الدقهلية"
+    },
+    "slug": "dakahlia"
+  },
+  {
+    "name": {
+      "en": "Sharqia",
+      "ar": "الشرقية"
+    },
+    "slug": "sharqia"
+  },
+  {
+    "name": {
+      "en": "Qalyubia",
+      "ar": "القليوبية"
+    },
+    "slug": "qalyubia"
+  },
+  {
+    "name": {
+      "en": "Kafr El Sheikh",
+      "ar": "كفر الشيخ"
+    },
+    "slug": "kafr-el-sheikh"
+  },
+  {
+    "name": {
+      "en": "Gharbia",
+      "ar": "الغربية"
+    },
+    "slug": "gharbia"
+  },
+  {
+    "name": {
+      "en": "Monufia",
+      "ar": "المنوفية"
+    },
+    "slug": "monufia"
+  },
+  {
+    "name": {
+      "en": "Beheira",
+      "ar": "البحيرة"
+    },
+    "slug": "beheira"
+  },
+  {
+    "name": {
+      "en": "Ismailia",
+      "ar": "الإسماعيلية"
+    },
+    "slug": "ismailia"
+  },
+  {
+    "name": {
+      "en": "Faiyum",
+      "ar": "الفيوم"
+    },
+    "slug": "faiyum"
+  },
+  {
+    "name": {
+      "en": "Beni Suef",
+      "ar": "بني سويف"
+    },
+    "slug": "beni-suef"
+  },
+  {
+    "name": {
+      "en": "Minya",
+      "ar": "المنيا"
+    },
+    "slug": "minya"
+  },
+  {
+    "name": {
+      "en": "Assiut",
+      "ar": "أسيوط"
+    },
+    "slug": "assiut"
+  },
+  {
+    "name": {
+      "en": "Sohag",
+      "ar": "سوهاج"
+    },
+    "slug": "sohag"
+  },
+  {
+    "name": {
+      "en": "Qena",
+      "ar": "قنا"
+    },
+    "slug": "qena"
+  },
+  {
+    "name": {
+      "en": "Luxor",
+      "ar": "الأقصر"
+    },
+    "slug": "luxor"
+  },
+  {
+    "name": {
+      "en": "Red Sea",
+      "ar": "البحر الأحمر"
+    },
+    "slug": "red-sea"
+  },
+  {
+    "name": {
+      "en": "New Valley",
+      "ar": "الوادي الجديد"
+    },
+    "slug": "new-valley"
+  },
+  {
+    "name": {
+      "en": "Matrouh",
+      "ar": "مطروح"
+    },
+    "slug": "matrouh"
+  },
+  {
+    "name": {
+      "en": "North Sinai",
+      "ar": "شمال سيناء"
+    },
+    "slug": "north-sinai"
+  },
+  {
+    "name": {
+      "en": "South Sinai",
+      "ar": "جنوب سيناء"
+    },
+    "slug": "south-sinai"
+  },
+  {
+    "name": {
+      "en": "Suez",
+      "ar": "السويس"
+    },
+    "slug": "suez"
+  },
+  {
+    "name": {
+      "en": "Port Said",
+      "ar": "بورسعيد"
+    },
+    "slug": "port-said"
+  },
+  {
+    "name": {
+      "en": "Damietta",
+      "ar": "دمياط"
+    },
+    "slug": "damietta"
+  }
+]

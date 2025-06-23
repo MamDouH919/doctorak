@@ -1,19 +1,19 @@
+"use client"
 import { getSpecializations } from '@/lib/api/website';
-import { DocumentScannerRounded } from '@mui/icons-material';
-import { Box, Container, Grid, Typography, Paper, styled, Skeleton } from '@mui/material';
+import { Box, Container, Grid, Typography, Paper, styled, Skeleton, Button } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import { getIcon } from './getIcon';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 
 const Section = styled(Box)(({ theme }) => ({
     backgroundColor: theme.palette.grey[50],
-    paddingTop: theme.spacing(16),
-    paddingBottom: theme.spacing(16),
-    [theme.breakpoints.up('lg')]: {
-        paddingTop: theme.spacing(24),
-        paddingBottom: theme.spacing(24),
-    },
+    // [theme.breakpoints.up('lg')]: {
+    //     paddingTop: theme.spacing(24),
+    //     paddingBottom: theme.spacing(24),
+    // },
 }));
 
 const SpecialtyCard = styled(Paper)(({ theme }) => ({
@@ -46,17 +46,36 @@ const IconWrapper = styled(Box)(({ theme }) => ({
 
 
 
-export default function SpecialtiesSection() {
+export default function SpecialtiesSection({
+    limit,
+    fromPage = false
+}: {
+    limit?: number
+    fromPage?: boolean
+}) {
+    const router = useRouter()
     const { data: specializations, isLoading } = useQuery({
         queryKey: ['specializations'],
-        queryFn: () => getSpecializations(),
+        queryFn: () => getSpecializations({
+            limit: limit ?? 9
+        }),
     });
 
+    const handleClick = (id: string) => {
+        router.push(`/doctors?specialty=${id}`)
+    }
+
     return (
-        <Section>
+        <Section paddingTop={{
+            xs: fromPage ? 8 : 16,
+            md: fromPage ? 8 : 24
+        }} paddingBottom={{
+            xs: fromPage ? 8 : 16,
+            md: fromPage ? 8 : 24
+        }}>
             <Container>
                 <Box textAlign="center" mb={6}>
-                    <Typography variant="h4" fontWeight="bold" color="error.dark" gutterBottom>
+                    <Typography variant="h4" fontWeight="bold" color="primary" gutterBottom>
                         التخصصات الطبية
                     </Typography>
                     <Typography variant="body1" color="text.secondary">
@@ -80,7 +99,7 @@ export default function SpecialtiesSection() {
                     {specializations?.data.map((specialty, index) => {
                         return (
                             <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
-                                <SpecialtyCard elevation={1}>
+                                <SpecialtyCard elevation={1} onClick={() => handleClick(specialty._id)}>
                                     <IconWrapper>
                                         {getIcon(specialty.slug)}
                                     </IconWrapper>
@@ -92,6 +111,14 @@ export default function SpecialtiesSection() {
                         );
                     })}
                 </Grid>
+
+                {!fromPage && <Box textAlign="center" mt={8}>
+                    <Link href="/specialties" passHref>
+                        <Button variant="contained" color="primary" size="large">
+                            عرض جميع التخصصات
+                        </Button>
+                    </Link>
+                </Box>}
             </Container>
         </Section>
     );

@@ -44,7 +44,7 @@ export async function POST(req: Request) {
             maxAge: 86400, // 1 day in seconds
         });
 
-        return NextResponse.json({ message: 'Email verified successfully' });
+        return NextResponse.json({ message: 'Email verified successfully', type: "success", data: user });
     } catch (error) {
         console.error('Verify Email Error:', error);
         return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });

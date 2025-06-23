@@ -18,9 +18,6 @@ export const fetchListFaqs = async (
 }> => {
     const token = await getToken();
 
-    console.log(token)
-    
-
     const queryParams = new URLSearchParams();
     if (params.page) queryParams.append('page', String(params.page));
     if (params.limit) queryParams.append('limit', String(params.limit));

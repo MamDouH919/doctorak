@@ -44,9 +44,12 @@ export async function PUT(req: NextRequest) {
                     userId,
                     social,
                     videos,
-                    appointments,
+                    // appointments,
                     showInHomePage,
-                    isPremiumAccount
+                    isPremium,
+                    siteName,
+                    specialization,
+                    specialization_needed,
                 } = await req.json();
 
                 if (title) account.title = title;
@@ -61,14 +64,18 @@ export async function PUT(req: NextRequest) {
                 } else {
                     account.domain = user.accountId;
                 }
-                if (active !== undefined) account.active = active;
                 if (endDate) account.endDate = endDate;
                 if (userId) account.userId = userId;
                 if (social) account.social = social;
                 if (videos) account.videos = videos;
-                if (appointments) account.appointments = appointments;
+                if (siteName) account.siteName = siteName;
+                // if (appointments) account.appointments = appointments;
+
+                if (specialization) account.specialization = specialization;
+                if (specialization_needed) account.specialization_needed = specialization_needed;
+                account.active = active;
                 account.showInHomePage = showInHomePage;
-                account.isPremiumAccount = isPremiumAccount;
+                account.isPremium = isPremium;
                 // Optional: Reset these fields
                 account.faqs = [];
                 account.articles = [];

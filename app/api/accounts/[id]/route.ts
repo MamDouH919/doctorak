@@ -3,6 +3,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
 import Accounts from '@/models/Accounts';
+import '@/models/Images';
+import '@/models/Users';
+
 
 export async function GET(request: NextRequest) {
   try {
@@ -19,7 +22,9 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const account = await Accounts.findById(id);
+    const account = await Accounts.findById(id)
+      .populate('image')
+      .populate('user')
 
     if (!account) {
       return NextResponse.json(

@@ -6,16 +6,18 @@ import { fetchAccount, updateAccount } from "@/lib/api/accounts"
 import { useAppSelector } from "@/Store/store"
 import { CreateAccount } from "@/types/account"
 import { Add, ColorLens, Delete, Info } from "@mui/icons-material"
-import { Box, Button, Grid, IconButton, Paper, Popover, Stack, Tooltip, Typography } from "@mui/material"
+import { Box, Button, Grid, IconButton, Paper, Popover, Stack, TextField, Tooltip, Typography } from "@mui/material"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
 import { FormProvider, useFieldArray, useForm, useWatch } from "react-hook-form"
 import { toast } from "sonner"
 import moment from "moment"
-import { Appointments } from "./Appointments"
+// import { Appointments } from "./Appointments"
 import { HexColorPicker } from "react-colorful"
 import useDashboard from "@/hooks/useDashboard"
 import MuiSwitch from "../MUI/MuiSwitch"
+import ListSpecializations from "../customAutoCompolete/ListSpecializations"
+import { SingleImageUploader } from "../MUI/FileUpload"
 
 // import Details from "@/Sections/Details"
 
@@ -34,30 +36,31 @@ const selectOptions = [
 const getTime = (time: string | Date) => moment(time).locale("en").format('HH:mm');
 const stringFormatToDate = (date: string) => moment(date, "HH:mm").locale("en").toDate();
 
-const Days = [
-    'الاثنين',
-    'الثلاثاء',
-    'الأربعاء',
-    'الخميس',
-    'الجمعة',
-    'السبت',
-    'الأحد',
-];
+// const Days = [
+//     'الاثنين',
+//     'الثلاثاء',
+//     'الأربعاء',
+//     'الخميس',
+//     'الجمعة',
+//     'السبت',
+//     'الأحد',
+// ];
 
 const Accounts = ({ id }: { id?: string }) => {
     const context = useDashboard();
 
     const methods = useForm<CreateAccount>({
         defaultValues: {
-            appointments: Days.map(day => ({
-                day,
-                timeFrom: undefined,
-                timeTo: undefined,
-                checked: false,
-            })),
+            // appointments: Days.map(day => ({
+            //     day,
+            //     timeFrom: undefined,
+            //     timeTo: undefined,
+            //     checked: false,
+            // })),
+            color: '#FFFFFF',
         }
     })
-    const { auth } = useAppSelector((state) => state)
+    const auth = useAppSelector((state) => state.auth)
 
     const { data: account, isLoading } = useQuery({
         queryKey: ['account', id ?? auth.user?.accountId],
@@ -87,24 +90,31 @@ const Accounts = ({ id }: { id?: string }) => {
             methods.setValue('lang', account.data.lang)
             methods.setValue('about', account.data.about)
             methods.setValue('showInHomePage', account.data.showInHomePage)
-            methods.setValue('isPremiumAccount', account.data.isPremiumAccount)
+            methods.setValue('isPremium', account.data.isPremium)
             methods.setValue('domain', account.data.domain)
             methods.setValue('social', account.data.social)
             methods.setValue('videos', account.data.videos)
+            methods.setValue('active', account.data.active)
+            methods.setValue('siteName', account.data.siteName)
+            methods.setValue('specialization', account.data?.specialization)
+            methods.setValue('specialization_needed', account.data?.specialization_needed)
+
+            methods.setValue('image', account.data?.image?.url)
+
 
             const appointmentsFromBackend = account.data.appointments || [];
 
-            const updatedAppointments = Days.map((day) => {
-                const matched = appointmentsFromBackend.find((a: any) => a.day === day);
-                return {
-                    day,
-                    timeFrom: stringFormatToDate(matched?.timeFrom) || undefined,
-                    timeTo: stringFormatToDate(matched?.timeTo) || undefined,
-                    checked: !!matched,
-                };
-            });
+            // const updatedAppointments = Days.map((day) => {
+            //     const matched = appointmentsFromBackend.find((a: any) => a.day === day);
+            //     return {
+            //         day,
+            //         timeFrom: stringFormatToDate(matched?.timeFrom) || undefined,
+            //         timeTo: stringFormatToDate(matched?.timeTo) || undefined,
+            //         checked: !!matched,
+            //     };
+            // });
 
-            methods.setValue('appointments', updatedAppointments);
+            // methods.setValue('appointments', updatedAppointments);
         }
 
         return () => { }
@@ -112,6 +122,7 @@ const Accounts = ({ id }: { id?: string }) => {
 
 
     const onSubmit = async (data: CreateAccount) => {
+        delete data.image
         updateAccountMutation({
             id: id! ?? auth.user?.accountId,
             data: {
@@ -122,6 +133,7 @@ const Accounts = ({ id }: { id?: string }) => {
                     timeFrom: getTime(e.timeFrom),
                     timeTo: getTime(e.timeTo)
                 })),
+                ...(typeof data.image !== "string" && { image: data.image }),
                 phone: "+20" + data.phone,
                 whatsApp: "+20" + data.whatsApp,
                 ...(auth.user?.role === 'admin' && { domain: data.domain }),
@@ -185,6 +197,14 @@ const Accounts = ({ id }: { id?: string }) => {
                                     بيانات الحساب
                                 </Typography>
                             </Grid>
+                            <Grid size={{ xs: 12, }} >
+                                <SingleImageUploader
+                                    name='image'
+                                    control={methods.control}
+                                    accountId={id! ?? auth.user?.accountId}
+                                    alt={account?.data.user.name}
+                                />
+                            </Grid>
                             {auth.user?.role === 'admin' &&
                                 <Grid size={{ xs: 12, sm: 6, md: 4 }} >
                                     <ControlMUITextField
@@ -198,18 +218,60 @@ const Accounts = ({ id }: { id?: string }) => {
                                 <Grid size={{ xs: 12, sm: 6, md: 4 }} >
                                     <MuiSwitch
                                         control={methods.control}
-                                        name='showInHomePage'
-                                        label={"اظهار في الصفحة الرئيسية"}
+                                        name='active'
+                                        label={"فعال"}
                                     />
                                 </Grid>}
                             {auth.user?.role === 'admin' &&
                                 <Grid size={{ xs: 12, sm: 6, md: 4 }} >
                                     <MuiSwitch
                                         control={methods.control}
-                                        name='isPremiumAccount'
+                                        name='showInHomePage'
+                                        label={"اظهار في الصفحة الرئيسية"}
+                                    />
+                                </Grid>}
+
+                            {auth.user?.role === 'admin' &&
+                                <Grid size={{ xs: 12, sm: 6, md: 4 }} >
+                                    <MuiSwitch
+                                        control={methods.control}
+                                        name='isPremium'
                                         label={"حساب مميز"}
                                     />
                                 </Grid>}
+                            {auth.user?.role === 'admin' &&
+                                <Grid size={{ xs: 12, sm: 6, md: 4 }} >
+                                    <ListSpecializations
+                                        control={methods.control}
+                                        name='specialization'
+                                        label={"التخصص"}
+                                        rules={{
+                                            required: methods.watch('specialization_needed') ? false : rules.required,
+                                        }}
+                                        disabled={!!methods.watch('specialization_needed')}
+                                    />
+                                </Grid>
+                            }
+                            {auth.user?.role === 'admin' &&
+                                <Grid size={{ xs: 12, sm: 6, md: 4 }} >
+                                    <ControlMUITextField
+                                        control={methods.control}
+                                        name='specialization_needed'
+                                        label={"التخصص المطلوب"}
+                                        rules={{
+                                            required: methods.watch('specialization') ? false : rules.required,
+                                        }}
+                                        disabled={!!methods.watch('specialization')}
+                                        InputProps={{
+                                            endAdornment: (
+                                                <Tooltip title={"إذا لم تجد تخصصك، يمكنك كتابته وسنقوم بإضافته لاحقًا."}>
+                                                    <Info />
+                                                </Tooltip>
+                                            ),
+                                        }}
+                                    />
+                                </Grid>
+                            }
                             <Grid size={{ xs: 12, sm: 6, md: 4 }} >
                                 <ControlMUITextField
                                     control={methods.control}
@@ -218,11 +280,16 @@ const Accounts = ({ id }: { id?: string }) => {
                                     rules={rules}
                                     InputProps={{
                                         endAdornment: (
-                                            <Tooltip title={
-                                                <img src="/site-name-info.png" alt="info" width={"100%"} height={"100%"} />
-                                            }>
-                                                <Info />
-                                            </Tooltip>
+                                            <TooltipComponent
+                                                title={
+                                                    <img
+                                                        src="/site-name-info.png"
+                                                        alt="info"
+                                                        width={"100%"}
+                                                        height={"100%"}
+                                                    />
+                                                }
+                                            />
                                         ),
                                     }}
                                 />
@@ -235,11 +302,11 @@ const Accounts = ({ id }: { id?: string }) => {
                                     rules={rules}
                                     InputProps={{
                                         endAdornment: (
-                                            <Tooltip title={
-                                                <img src="/title-info.png" alt="info" width={"100%"} height={"100%"} />
-                                            }>
-                                                <Info />
-                                            </Tooltip>
+                                            <TooltipComponent
+                                                title={
+                                                    <img src="/title-info.png" alt="info" width={"100%"} height={"100%"} />
+                                                }
+                                            />
                                         ),
                                     }}
                                 />
@@ -270,7 +337,7 @@ const Accounts = ({ id }: { id?: string }) => {
                                     }}
                                 />
                             </Grid>
-                            <Grid size={{ xs: 12, sm: 6, md: 4 }} >
+                            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
                                 <Popover
                                     open={open}
                                     anchorEl={anchorEl}
@@ -278,33 +345,60 @@ const Accounts = ({ id }: { id?: string }) => {
                                     anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
                                     transformOrigin={{ vertical: 'top', horizontal: 'left' }}
                                 >
-                                    <Box sx={{ p: 2 }}>
+                                    <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', gap: 2, minWidth: 200 }}>
                                         <HexColorPicker
                                             color={methods.watch('color')}
                                             onChange={(color: string) => methods.setValue('color', color)}
                                         />
+
+                                        {/* <TextField
+                                            label="اللون"
+                                            value={colorChecked}
+                                            onChange={(e) => {
+                                                const value = e.target.value;
+                                                const isValidHex = /^#([0-9A-F]{3}){1,2}$/i.test(value);
+                                                if (isValidHex || value === '') {
+                                                    methods.setValue('color', value);
+                                                    setColorChecked(value)
+                                                }
+                                            }}
+                                            placeholder="#FFFFFF"
+                                            size="small"
+                                        /> */}
                                     </Box>
                                 </Popover>
+
                                 <ControlMUITextField
                                     control={methods.control}
                                     name='color'
-                                    label={"اللون"}
-                                    rules={rules}
-                                    readOnly
+                                    label="اللون"
+                                    rules={{
+                                        required: rules.required,
+                                        validate: {
+                                            // /^#([0-9A-F]{3}){1,2}$/i.test(value) يجب ان يكون لون صحيحا
+                                            onlyHex: (value: string) => /^#([0-9A-F]{3}){1,2}$/i.test(value) || "يجب ان يكون لون صحيحا",
+                                        },
+                                    }}
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        const isValidHex = /^#([0-9A-F]{3}){1,2}$/i.test(value);
+                                        if (isValidHex || value === '') {
+                                            methods.setValue('color', value);
+                                            // setColorChecked(value)
+                                        }
+                                    }}
+
+
                                     InputProps={{
                                         endAdornment: (
-                                            <IconButton
-                                                size='small'
-                                                onClick={handleIconClick}
-                                            >
-
+                                            <IconButton size="small" onClick={handleIconClick}>
                                                 <ColorLens />
                                             </IconButton>
                                         ),
                                     }}
                                 />
-                                {/* <MUIColorPicker name="color" control={methods.control} label="Pick a color" /> */}
                             </Grid>
+
                             <Grid size={{ xs: 12, sm: 6, md: 4 }} >
                                 <MuiSelect
                                     control={methods.control}
@@ -327,11 +421,11 @@ const Accounts = ({ id }: { id?: string }) => {
                                     rows={5}
                                     InputProps={{
                                         endAdornment: (
-                                            <Tooltip title={
-                                                <img src="/about-info.png" alt="info" width={"100%"} height={"100%"} />
-                                            }>
-                                                <Info />
-                                            </Tooltip>
+                                            <TooltipComponent
+                                                title={
+                                                    <img src="/about-info.png" alt="info" width={"100%"} height={"100%"} />
+                                                }
+                                            />
                                         ),
                                     }}
                                 />
@@ -346,11 +440,11 @@ const Accounts = ({ id }: { id?: string }) => {
                                     rows={5}
                                     InputProps={{
                                         endAdornment: (
-                                            <Tooltip title={
-                                                <img src="/description-info.png" alt="info" width={"100%"} height={"100%"} />
-                                            }>
-                                                <Info />
-                                            </Tooltip>
+                                            <TooltipComponent
+                                                title={
+                                                    <img src="/description-info.png" alt="info" width={"100%"} height={"100%"} />
+                                                }
+                                            />
                                         ),
                                     }}
                                 />
@@ -468,7 +562,7 @@ const Accounts = ({ id }: { id?: string }) => {
                                 <Typography variant="h6" fontWeight="bold" color="primary.main" gutterBottom>
                                     المواعيد
                                 </Typography>
-                                <Appointments />
+                                {/* <Appointments /> */}
                             </Grid>
 
                             <Grid size={{ xs: 12 }} >
@@ -485,3 +579,17 @@ const Accounts = ({ id }: { id?: string }) => {
 }
 
 export default Accounts
+
+const TooltipComponent = ({ title }: { title: string | React.ReactNode }) => {
+    return <Tooltip
+        sx={{
+            cursor: "pointer",
+            fontSize: "25px",
+        }}
+        title={
+            title
+        }
+    >
+        <Info />
+    </Tooltip>
+}

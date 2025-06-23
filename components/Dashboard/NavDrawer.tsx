@@ -153,9 +153,6 @@ const NavDrawer: React.FC = () => {
                 ? prev.filter(e => e !== key)
                 : [...prev, key];
 
-            console.log(newList);
-
-
             localStorage.setItem("dashboard-nav-drawer", JSON.stringify(newList));
             return newList;
         });

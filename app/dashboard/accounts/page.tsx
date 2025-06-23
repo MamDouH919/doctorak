@@ -23,7 +23,11 @@ export default function ListUsers() {
             ),
         },
         {
-            accessorKey: "",
+            accessorKey: "user.name",
+            header: "اسم المستخدم",
+        },
+        {
+            accessorKey: "user.email",
             header: "البريد الإلكتروني",
         },
         // {
