@@ -30,7 +30,7 @@ const handler = async (req: Request) => {
 
     await dbConnect();
 
-    const user = await Users.findOne({ email: email.toLowerCase() });
+    const user = await Users.findOne({ email: email.toLowerCase() }).populate('account', '_id isPremium');
 
     if (!user) {
         const errors = [{ field: 'email', message: 'البريد الإلكتروني غير صحيح' }];
@@ -46,8 +46,6 @@ const handler = async (req: Request) => {
     if (!user.verified) {
         throw new AppError('البريد الإلكتروني غير مفعل', 400, 'custom');
     }
-    
-    const account = await user.populate('account', '_id isPremium');
 
     const token = jwt.sign(
         {

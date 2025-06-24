@@ -55,14 +55,13 @@ const Register = () => {
     });
     const { t } = useTranslation();
     const [passType, setPassType] = useState("password");
-    const [loading, setLoading] = useState(false);
     const [verifyCodeOpen, setVerifyCodeOpen] = useState(false);
 
     // get specializations
-    const { data: specializations } = useQuery({
-        queryKey: ['specializations'],
-        queryFn: () => getSpecializations(),
-    });
+    // const { data: specializations } = useQuery({
+    //     queryKey: ['specializations'],
+    //     queryFn: () => getSpecializations(),
+    // });
 
     // mutation for register
     const { mutate: registerMutation, isPending: registerLoading } = useMutation({
@@ -211,7 +210,7 @@ const Register = () => {
                                 },
                             }}
                         />
-                        <Button variant='contained' type='submit' fullWidth loading={loading}>
+                        <Button variant='contained' type='submit' fullWidth loading={registerLoading}>
                             إنشاء حساب
                         </Button>
                         {/* divider in middle word or */}

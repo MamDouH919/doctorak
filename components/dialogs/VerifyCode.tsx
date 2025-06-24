@@ -53,14 +53,14 @@ const VerifyCode = ({
             otp: data.otp
         }, {
             onSuccess: async (response) => {
-                toast.success(response.message);
+                toast.success("تم التحقق من البريد الإلكتروني بنجاح");
                 dispatch(changeUser({
-                    id: response.data.id,
-                    name: response.data.name,
-                    email: response.data.email,
-                    role: response.data.role,
-                    ...(response.data.role === "user" && { accountId: response.data?.account._id }),
-                    isPremium: response.data.account.isPremium
+                    id: response.data.user.id,
+                    name: response.data.user.name,
+                    email: response.data.user.email,
+                    role: response.data.user.role,
+                    ...(response.data.user.role === "user" && { accountId: response.data?.user?.account._id }),
+                    isPremium: response.data?.user?.account.isPremium
                 }));
                 handleClose()
                 router.push('/dashboard')

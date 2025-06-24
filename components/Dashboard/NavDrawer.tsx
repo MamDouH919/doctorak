@@ -279,6 +279,7 @@ const NavDrawer: React.FC = () => {
                                         [classes.listItemFocus]:
                                             e?.regex?.test(pathname)
                                     })}
+                                    key={e.primary}
                                     disabled={!isPremium}
                                 >
                                     <ListItemIcon className={classes.navSubItem}>

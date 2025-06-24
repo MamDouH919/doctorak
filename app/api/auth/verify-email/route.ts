@@ -28,7 +28,7 @@ const handler = async (req: Request) => {
 
     await dbConnect();
 
-    const user = await Users.findOne({ email });
+    const user = await Users.findOne({ email }).populate('account', '_id isPremium');
 
     if (!user) {
         throw new ValidationError([{ field: 'otp', message: 'رمز التحقق غير صحيح أو المستخدم غير موجود' }]);
@@ -57,7 +57,7 @@ const handler = async (req: Request) => {
         maxAge: 60 * 60 * 24, // 1 day
     });
 
-    return success({ message: 'تم التحقق من البريد الإلكتروني بنجاح', user });
+    return success({ user });
 };
 
 export const POST = withErrorHandler(handler);
