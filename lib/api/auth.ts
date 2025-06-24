@@ -2,13 +2,14 @@
 import { getToken } from "@/action/token";
 import api from "../api";
 
-interface User {
+export interface User {
     _id: number,
     name: string,
     email: string,
     role: string,
     account: {
         _id: string,
+        isPremium: boolean,
     },
 }
 
@@ -25,7 +26,7 @@ export const getMe = async (): Promise<User> => {
 };
 
 // signup
-export const signup = async (data: {
+export const register = async (data: {
     name: string,
     email: string,
     password: string,
@@ -49,6 +50,37 @@ export const login = async (data: {
     const token = await getToken();
 
     const response = await api.post('/api/auth/login', data, {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        },
+    })
+
+    return response.data;
+};
+
+// verify-email
+export const verifyEmail = async (data: {
+    email: string,
+    otp: number,
+}) => {
+    const token = await getToken();
+
+    const response = await api.post('/api/auth/verify-email', data, {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        },
+    })
+
+    return response.data;
+};
+
+// resend-otp
+export const resendOtp = async (data: {
+    email: string,
+}) => {
+    const token = await getToken();
+
+    const response = await api.post('/api/auth/resend-otp', data, {
         headers: {
             'Authorization': `Bearer ${token}`,
         },

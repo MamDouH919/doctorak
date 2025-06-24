@@ -10,6 +10,7 @@ interface User {
     email: string,
     role: string,
     accountId?: string,
+    isPremium: boolean,
 }
 
 export interface AuthState {

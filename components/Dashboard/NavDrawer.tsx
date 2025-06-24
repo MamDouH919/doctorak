@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import {
+    Chip,
     Collapse,
     Divider,
     Drawer,
@@ -80,10 +81,9 @@ const Root = styled(Drawer)(({ theme }) => ({
 
 
     [`& .${classes.listItemFocus}`]: {
-        backgroundColor: theme.palette.primary.main,
-        color: theme.palette.getContrastText(theme.palette.primary.main),
+        color: theme.palette.primary.main,
         "& svg": {
-            color: theme.palette.getContrastText(theme.palette.primary.main),
+            color: theme.palette.primary.main,
         },
     },
     [`& .${classes.firstLetterCapital}`]: {
@@ -96,16 +96,16 @@ const Root = styled(Drawer)(({ theme }) => ({
 const ItemButtonStyle = styled(ListItemButton)(({ theme }) => ({
     padding: theme.spacing(0.5, 1),
     borderRadius: theme.spacing(0, 2, 2, 0),
-    transition: "all 0.3s ease", // <--- Add transition here
-    "& svg, & span": {
-        transition: "color 0.3s ease", // <--- Optional: smooth color transition
-    },
+    // transition: "all 0.3s ease", // <--- Add transition here
+    // "& svg, & span": {
+    //     transition: "color 0.3s ease", // <--- Optional: smooth color transition
+    // },
 
     ["&:hover"]: {
-        backgroundColor: theme.palette.primary.main,
-        color: theme.palette.getContrastText(theme.palette.primary.main),
+        // backgroundColor: theme.palette.primary.main,
+        color: theme.palette.primary.main,
         "& svg": {
-            color: theme.palette.getContrastText(theme.palette.primary.main),
+            color: theme.palette.primary.main,
         },
     },
 }));
@@ -114,16 +114,15 @@ const ItemButtonStyle2 = styled(ListItemButton)(({ theme }) => ({
     padding: theme.spacing(0, 1.5),
     borderRadius: theme.spacing(0, 2, 2, 0),
     margin: theme.spacing(1, 0),
-    transition: "all 0.3s ease", // <--- Add transition here
-    "& svg, & span": {
-        fontSize: 16,
-        transition: "color 0.3s ease", // <--- Optional: smooth color transition
-    },
+    // transition: "all 0.3s ease", // <--- Add transition here
+    // "& svg, & span": {
+    //     fontSize: 16,
+    //     transition: "color 0.3s ease", // <--- Optional: smooth color transition
+    // },
     ["&:hover"]: {
-        backgroundColor: theme.palette.primary.main,
-        color: theme.palette.getContrastText(theme.palette.primary.main),
+        color: theme.palette.primary.main,
         "& svg": {
-            color: theme.palette.getContrastText(theme.palette.primary.main),
+            color: theme.palette.primary.main,
         },
     },
 }));
@@ -246,8 +245,11 @@ const NavDrawer: React.FC = () => {
                                 </Stack>
                             )
                         } else {
-                            return (
-                                <Link
+                            console.log(e.isPremium)
+
+                            const isPremium = e.isPremium === undefined && !e.isPremium
+                            if (isPremium) {
+                                return <Link
                                     href={e.pathname || ""}
                                     className={clsx(classes.navLink)}
                                     key={e.primary}
@@ -258,13 +260,36 @@ const NavDrawer: React.FC = () => {
                                             [classes.listItemFocus]:
                                                 e?.regex?.test(pathname)
                                         })}
+                                        disabled={!isPremium}
                                     >
                                         <ListItemIcon className={classes.navSubItem}>
                                             {e.icon && <e.icon />}
                                         </ListItemIcon>
-                                        <ListItemText primary={e.primary} />
+                                        <Stack direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
+                                            <ListItemText primary={e.primary} />
+                                            {!isPremium && <Chip label="Premium" size="small" color="primary" />}
+                                        </Stack>
                                     </ItemButtonStyle>
                                 </Link>
+                            }
+                            return (
+
+                                <ItemButtonStyle
+                                    className={clsx({
+                                        [classes.listItemFocus]:
+                                            e?.regex?.test(pathname)
+                                    })}
+                                    disabled={!isPremium}
+                                >
+                                    <ListItemIcon className={classes.navSubItem}>
+                                        {e.icon && <e.icon />}
+                                    </ListItemIcon>
+                                    <Stack flexGrow={1} direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
+                                        <ListItemText primary={e.primary} />
+                                        {!isPremium && <Chip label="Premium" size="small" color="primary" />}
+                                    </Stack>
+                                </ItemButtonStyle>
+
                             )
                         }
                     })}

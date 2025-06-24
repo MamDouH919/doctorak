@@ -558,12 +558,12 @@ const Accounts = ({ id }: { id?: string }) => {
 
                                 </Stack>
                             </Grid>
-                            <Grid size={{ xs: 12 }} >
+                            {/* <Grid size={{ xs: 12 }} >
                                 <Typography variant="h6" fontWeight="bold" color="primary.main" gutterBottom>
                                     المواعيد
                                 </Typography>
-                                {/* <Appointments /> */}
-                            </Grid>
+                                <Appointments />
+                            </Grid> */}
 
                             <Grid size={{ xs: 12 }} >
                                 <Button variant='contained' type='submit' fullWidth loading={updateAccountLoading || isLoading}>

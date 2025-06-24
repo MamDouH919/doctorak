@@ -36,7 +36,7 @@ export async function GET(req: Request) {
       .select('role _id email name') // select only these fields from Users
       .populate({
         path: 'account',
-        select: '_id' // select only _id from the populated account
+        select: '_id isPremium', // select only _id from the populated account
       });
 
     if (!user) {

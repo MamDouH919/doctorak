@@ -65,7 +65,8 @@
     "sonner": "^2.0.3",
     "stylis": "^4.3.6",
     "stylis-plugin-rtl": "^2.1.1",
-    "uuid": "^11.1.0"
+    "uuid": "^11.1.0",
+    "zod": "^3.25.67"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

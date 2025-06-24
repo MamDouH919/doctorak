@@ -19,9 +19,12 @@ import { toast } from "sonner";
 import AuthLayout from "@/layouts/auth";
 import VerifyCode from "@/components/dialogs/VerifyCode";
 import Link from "next/link";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { getSpecializations } from "@/lib/api/website";
 import ListSpecializations from "@/components/customAutoCompolete/ListSpecializations";
+import { register } from "@/lib/api/auth";
+import axios from "axios";
+import { forEach } from "lodash";
 // import ListGovernorate from "@/components/customAutoCompolete/ListGovernorate";
 
 
@@ -47,7 +50,7 @@ const Root = styled(Stack)(({ theme }) => ({
 }));
 
 const Register = () => {
-    const { control, handleSubmit, setError, watch } = useForm({
+    const { control, handleSubmit, setError, watch, formState: { errors } } = useForm({
         mode: "onChange",
     });
     const { t } = useTranslation();
@@ -61,47 +64,49 @@ const Register = () => {
         queryFn: () => getSpecializations(),
     });
 
-    const onSubmit = async (data: any) => {
-        try {
-            setLoading(true);
-            const response = await fetch('/api/auth/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    name: data.name,
-                    email: data.email,
-                    password: data.password,
-                    specialization: data.specialization,
-                    specialization_needed: data.specialization_needed,
-                }),
-            });
-
-
-
-            const result = await response.json();
-            if (result.typeError === 'validation') {
-                if (result.field === 'email') {
-                    setError("email", { type: "manual", message: result.message });
-                }
-                return
-            }
-
-            if (response.type === 'error') {
-                toast.error(result.message);
-            } else {
-                toast.success("تم إنشاء حساب بنجاح");
-                setVerifyCodeOpen(true);
-            }
-
-
-            // Registration successful
-            // router.push('/login'); // Redirect to login page after successful registration
-        } catch (err: any) {
-        } finally {
-            setLoading(false);
+    // mutation for register
+    const { mutate: registerMutation, isPending: registerLoading } = useMutation({
+        mutationFn: (data: { name: string, email: string, password: string, specialization: string, specialization_needed: string }) =>
+            register(data),
+        onError(error) {
+            console.log(error);
         }
+    });
+
+    console.log(errors);
+
+
+    const onSubmit = async (data: any) => {
+        registerMutation({
+            name: data.name,
+            email: data.email,
+            password: data.password,
+            specialization: data.specialization,
+            specialization_needed: data.specialization_needed,
+        }, {
+            onSuccess: () => {
+                toast.success("تم اضافة الحساب بنجاح");
+                setVerifyCodeOpen(true);
+                // router.push('/login'); // Redirect to login page after successful registration
+            },
+            onError(error) {
+                if (axios.isAxiosError(error) && error.response?.data?.type === "validation-server") {
+                    console.log();
+                    error.response.data.errors.forEach((value: any) => {
+                        setError(value.field, {
+                            type: "validate",
+                            message: value.message,
+                        });
+                    });
+                    // console.log(error.);
+
+                    // console.log('errors' in error && error.errors);
+
+                } else {
+                    toast.error("حدث خطأ أثناء إضافة الحساب");
+                }
+            }
+        })
     };
 
     return (

@@ -1,61 +1,77 @@
-import { NextResponse } from 'next/server';
-import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
-import Users from '@/models/Users';
-import dbConnect from '@/lib/dbConnect';
+import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
+import { z } from 'zod';
 
-export async function POST(req: Request) {
-    try {
-        const { email, password } = await req.json();
+import dbConnect from '@/lib/dbConnect';
+import Users from '@/models/Users';
+import { withErrorHandler } from '@/lib/api/withErrorHandler';
+import { ValidationError, AppError } from '@/lib/api/errors';
+import { success } from '@/lib/api/response';
 
-        if (!email || !password) {
-            return NextResponse.json({ message: 'Email and password are required' }, { status: 400 });
-        }
+const LoginSchema = z.object({
+    email: z.string().email('البريد الإلكتروني غير صالح'),
+    password: z.string().min(1, 'كلمة المرور مطلوبة'),
+});
 
-        await dbConnect();
+const handler = async (req: Request) => {
+    const body = await req.json();
 
-        const user = await Users.findOne({ email: email.toLowerCase() });
-
-        if (!user) {
-            return NextResponse.json({ message: 'Invalid credentials' }, { status: 401 });
-        }
-
-
-        const isPasswordMatch = await bcrypt.compare(password, user.password);
-
-        if (!isPasswordMatch) {
-            return NextResponse.json({ message: 'Invalid credentials' }, { status: 401 });
-        }
-
-        if (!user.verified) {
-            return NextResponse.json({
-                message: 'البريد الإلكتروني غير مفعل',
-                typeError: "NotVerified",
-                type: "error"
-            }, { status: 401 });
-        }
-
-        const token = jwt.sign(
-            { id: user._id.toString(), email: user.email, role: user.role, accountId: user.account },
-            process.env.JWT_SECRET!,
-            { expiresIn: '1d' }
-        );
-
-        user.token = token;
-        await user.save();
-
-        const cookieStore = cookies();
-        (await cookieStore).set('token', token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            path: '/',
-            maxAge: 86400, // 1 day in seconds
-        });
-
-        return NextResponse.json({ message: 'Logged in successfully', type: "success", data: user });
-    } catch (error) {
-        console.error('Login Error:', error);
-        return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
+    const parsed = LoginSchema.safeParse(body);
+    if (!parsed.success) {
+        const errors = parsed.error.issues.map(issue => ({
+            field: issue.path.join('.'),
+            message: issue.message,
+        }));
+        throw new ValidationError(errors);
     }
-}
+
+    const { email, password } = parsed.data;
+
+    await dbConnect();
+
+    const user = await Users.findOne({ email: email.toLowerCase() });
+
+    if (!user) {
+        const errors = [{ field: 'email', message: 'البريد الإلكتروني غير صحيح' }];
+        throw new ValidationError(errors);
+    }
+
+    const isPasswordMatch = await bcrypt.compare(password, user.password);
+    if (!isPasswordMatch) {
+        const errors = [{ field: 'password', message: 'كلمة المرور غير صحيحة' }];
+        throw new ValidationError(errors);
+    }
+
+    if (!user.verified) {
+        throw new AppError('البريد الإلكتروني غير مفعل', 400, 'custom');
+    }
+    
+    const account = await user.populate('account', '_id isPremium');
+
+    const token = jwt.sign(
+        {
+            id: user._id.toString(),
+            email: user.email,
+            role: user.role,
+            accountId: user.account,
+        },
+        process.env.JWT_SECRET!,
+        { expiresIn: '1d' }
+    );
+
+    user.token = token;
+    await user.save();
+
+    const cookieStore = cookies();
+    (await cookieStore).set('token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        path: '/',
+        maxAge: 86400,
+    });
+
+    return success({ user });
+};
+
+export const POST = withErrorHandler(handler);

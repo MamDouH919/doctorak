@@ -1,37 +1,40 @@
-import { NextResponse } from 'next/server';
-import jwt from 'jsonwebtoken';
-import { cookies } from 'next/headers';
+// app/api/register/route.ts
+import { NextRequest } from 'next/server';
+import mongoose from 'mongoose';
 import Users from '@/models/Users';
+import Accounts from '@/models/Accounts';
 import dbConnect from '@/lib/dbConnect';
-import bcrypt from 'bcryptjs';
 import { OTPEmail } from '@/lib/mail';
 import { hashPassword } from '@/lib/hash-passwords';
-import Accounts from '@/models/Accounts';
-import mongoose from 'mongoose';
 
-export async function POST(req: Request) {
+import { withErrorHandler } from '@/lib/api/withErrorHandler';
+import { success } from '@/lib/api/response';
+import { ValidationError, DuplicateEmailError } from '@/lib/api/errors';
+import { RegisterUserSchema } from '@/schemas/auth';
+
+const handler = async (req: Request) => {
     const session = await mongoose.startSession();
+    await dbConnect();
 
     try {
-        const { name, email, password, specialization, specialization_needed } = await req.json();
+        const json = await req.json();
+        const parsed = RegisterUserSchema.safeParse(json);
 
-        if (!name || !email || !password || !(specialization || specialization_needed)) {
-            return NextResponse.json({
-                message: "الاسم، البريد الإلكتروني وكلمة المرور والتخصص مطلوبين",
-                type: "error"
-            }, { status: 400 });
+        if (!parsed.success) {
+            const fieldErrors = parsed.error.issues.map(issue => ({
+                field: issue.path.join('.'), // handles nested paths
+                message: issue.message,
+            }));
+
+            throw new ValidationError(fieldErrors);
         }
 
-        await dbConnect();
+        const { name, email, password, specialization, specialization_needed } = parsed.data;
 
         const existingUser = await Users.findOne({ email: email.toLowerCase() });
         if (existingUser) {
-            return NextResponse.json({
-                message: 'البريد الإلكتروني مسجل بالفعل',
-                field: 'email',
-                typeError: "validation",
-                type: "error"
-            }, { status: 400 });
+            const fieldErrors = [{ field: 'email', message: 'البريد الإلكتروني مسجل بالفعل' }];
+            throw new ValidationError(fieldErrors);
         }
 
         const hashedPassword = await hashPassword(password);
@@ -62,13 +65,10 @@ export async function POST(req: Request) {
             await OTPEmail(user.email, otp);
         });
 
-
-        return NextResponse.json({ message: 'Registered successfully', type: "success" });
-
-    } catch (error) {
-        console.error('Register Error:', error);
-        return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
+        return success({ message: '' });
     } finally {
         session.endSession();
     }
-}
+};
+
+export const POST = withErrorHandler(handler);

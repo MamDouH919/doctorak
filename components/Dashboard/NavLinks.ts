@@ -17,11 +17,12 @@ interface LinkItem {
     regex?: RegExp;
     collapse?: string;
     show?: boolean;
+    isPremium?: boolean;
 }
 
 export const useLinksList = () => {
     // ✅ Correct usage: Only select the auth slice
-    const auth = useAppSelector((state) => state.auth);
+    const auth = useAppSelector((state) => state.auth);    
 
     const linksList: LinkItem[] = [
         ...(auth?.user?.role === 'admin' ? [
@@ -67,6 +68,7 @@ export const useLinksList = () => {
             pathname: "/dashboard/testimonials",
             primary: "اراء العملاء",
             icon: Settings,
+            isPremium: auth.user?.isPremium,
         },
     ];
 

@@ -9,6 +9,9 @@ import { getToken } from '@/action/token'
 import ControlMUITextField from '../MUI/ControlMUItextField'
 import { useAppDispatch } from '@/Store/store'
 import { changeUser } from '@/Store/slices/auth'
+import { resendOtp, verifyEmail } from '@/lib/api/auth'
+import { useMutation } from '@tanstack/react-query'
+import axios from 'axios'
 
 interface PropsType {
     open: boolean
@@ -21,81 +24,78 @@ const VerifyCode = ({
     handleClose,
     email
 }: PropsType) => {
-    const [loading, setLoading] = useState(false)
     const [resendLoading, setResendLoading] = useState(false)
     const router = useRouter()
     const dispatch = useAppDispatch()
     const { handleSubmit, control, setError } = useForm()
 
-    const onSubmit = async (data: any) => {
-        setLoading(true)
-        try {
-            const response = await fetch('/api/auth/verify-email', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    email: email,
-                    otp: data.otp
-                })
-            })
-
-            const result = await response.json();
-
-            if (result.typeError === 'validation') {
-                if (result.field === 'email') {
-                    setError("email", { type: "manual", message: result.message });
-                }
-                return
-            }
-
-            if (response.type === 'error') {
-                toast.error(result.message);
-            } else {
-                toast.success("تم تسجيل الدخول بنجاح");
-                handleClose()
-                dispatch(changeUser({
-                    id: result.data._id,
-                    name: result.data.name,
-                    email: result.data.email,
-                    role: result.data.role,
-                    ...(result.data.role === "user" && { accountId: result.data?.account._id })
-                }));
-                router.push('/dashboard')
-            }
-
-            setLoading(false)
-        } catch (error) {
-            setLoading(false)
+    // mutation for verify email
+    const { mutate: verifyEmailMutation, isPending: verifyEmailLoading } = useMutation({
+        mutationFn: (data: { email: string, otp: number }) =>
+            verifyEmail(data),
+        onError(error) {
+            console.log(error);
         }
+    });
+
+    // resendOtp mutation
+    const { mutate: resendOtpMutation, isPending: resendOtpLoading } = useMutation({
+        mutationFn: (data: { email: string }) =>
+            resendOtp(data),
+        onError(error) {
+            console.log(error);
+        }
+    });
+
+    const onSubmit = async (data: any) => {
+        verifyEmailMutation({
+            email: email,
+            otp: data.otp
+        }, {
+            onSuccess: async (response) => {
+                toast.success(response.message);
+                dispatch(changeUser({
+                    id: response.data.id,
+                    name: response.data.name,
+                    email: response.data.email,
+                    role: response.data.role,
+                    ...(response.data.role === "user" && { accountId: response.data?.account._id }),
+                    isPremium: response.data.account.isPremium
+                }));
+                handleClose()
+                router.push('/dashboard')
+            },
+            onError: async (error) => {
+                if (axios.isAxiosError(error) && error.response?.data?.type === "validation-server") {
+                    error.response.data.errors.forEach((value: any) => {
+                        setError(value.field, {
+                            type: "validate",
+                            message: value.message,
+                        });
+                    });
+                }
+                console.log(error)
+            }
+        })
     }
     const onResend = async () => {
-        setResendLoading(true)
-        try {
-            const response = await fetch('/api/auth/resend-otp', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    email: email
-                })
-            })
-
-            const result = await response.json();
-
-            if (response.type === 'error') {
-                toast.error(result.message);
-                setResendLoading(false)
-            } else {
-                toast.success(result.message);
-                setResendLoading(false)
+        resendOtpMutation({ email: email }, {
+            onSuccess: async (response) => {
+                toast.success(response.message);
+            },
+            onError: async (error) => {
+                if (axios.isAxiosError(error) && error.response?.data?.type === "validation-server") {
+                    error.response.data.errors.forEach((value: any) => {
+                        setError(value.field, {
+                            type: "validate",
+                            message: value.message,
+                        });
+                    });
+                } else {
+                    toast.error("حدث خطأ أثناء إعادة إرسال رمز التحقق")
+                }
             }
-
-        } catch (error) {
-            setResendLoading(false)
-        }
+        })
     }
     return (
         <CustomDialog
@@ -106,8 +106,13 @@ const VerifyCode = ({
                 onSubmit: handleSubmit(onSubmit),
                 noValidate: true
             }}
+            title={
+                <Stack direction={"row"} alignItems={"center"} spacing={1}>
+                    <Typography variant='body1'>{"التحقق من البريد الإلكتروني"}</Typography>
+                </Stack>
+            }
             content={
-                <Stack py={2}>
+                <Stack spacing={1} mt={2}>
                     <ControlMUITextField
                         control={control}
                         name='otp'
@@ -116,18 +121,26 @@ const VerifyCode = ({
                             required: "الرمز المرسل إليك مطلوب",
                         }}
                     />
+                    <Stack alignItems={"flex-start"}>
+                        <Button
+                            disabled={verifyEmailLoading}
+                            onClick={onResend}
+                            variant='text'
+                            loading={resendOtpLoading}
+                        >
+                            {"إعادة آرسال"}
+                        </Button>
+                    </Stack>
                 </Stack>
             }
             buttonAction={
                 <Stack direction={"row"} spacing={1} alignItems={"center"}>
-                    <Button loading={loading} disabled={resendLoading} type='submit' variant='contained'>{"تأكيد"}</Button>
                     <Button
-                        disabled={loading}
-                        onClick={onResend}
-                        variant='contained'
-                        loading={resendLoading}
+                        loading={verifyEmailLoading}
+                        disabled={resendOtpLoading}
+                        type='submit' variant='contained'
                     >
-                        {"إعادة آرسال"}
+                        {"تأكيد"}
                     </Button>
                 </Stack>
             }

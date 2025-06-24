@@ -21,7 +21,8 @@ const GetMe = ({ children, token }: { children: React.ReactNode, token?: string 
                 name: data.name,
                 email: data.email,
                 role: data.role,
-                ...(data.role === "user" && { accountId: data?.account._id })
+                ...(data.role === "user" && { accountId: data?.account._id }),
+                isPremium: data.role === "user" ? data.account.isPremium : true,
             }));
             // context?.dispatch({ type: "UPDATE_STATE", payload: { user: data.user } });
         }

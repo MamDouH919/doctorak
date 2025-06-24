@@ -16,12 +16,14 @@ import { useState } from "react";
 import ControlMUITextField from "../../components/MUI/ControlMUItextField";
 import { toast } from "sonner";
 import AuthLayout from "@/layouts/auth";
-import { hashPassword } from "@/lib/hash-passwords";
 import Link from "next/link";
 import VerifyCode from "@/components/dialogs/VerifyCode";
 import { useRouter } from "next/navigation";
 import { changeUser } from "@/Store/slices/auth";
 import { useAppDispatch } from "@/Store/store";
+import { login } from "@/lib/api/auth";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 
 
 const PREFIX = "Login";
@@ -53,43 +55,49 @@ const Login = () => {
     const [verifyCodeOpen, setVerifyCodeOpen] = useState(false);
     const dispatch = useAppDispatch();
     const router = useRouter();
+
+    // mutation for login
+    const { mutate: loginMutation, isPending: loginLoading } = useMutation({
+        mutationFn: (data: { email: string, password: string }) =>
+            login(data),
+        onError(error) {
+            console.log(error);
+        }
+    });
+
     const onSubmit = async (data: any) => {
-        setLoading(true);
-        const response = await fetch("/api/auth/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
+        loginMutation({
+            email: data.email,
+            password: data.password
+        }, {
+            onSuccess: async (response) => {
+                toast.success("تم تسجيل الدخول بنجاح");
+                dispatch(changeUser({
+                    id: response.data.user.id,
+                    name: response.data.user.name,
+                    email: response.data.user.email,
+                    role: response.data.user.role,
+                    ...(response.data.user.role === "user" && { accountId: response.data.user?.account._id }),
+                    isPremium: response.data.user.role === "user" ?
+                        response.data.user.account.isPremium : true,
+                }));
+                router.push('/dashboard')
             },
-            body: JSON.stringify(data),
-        });
-        const result = await response.json();
-        if (result.typeError === 'validation') {
-            if (result.field === 'email') {
-                setError("email", { type: "manual", message: result.message });
+            onError: async (error) => {
+                if (axios.isAxiosError(error) && error.response?.data?.type === "validation-server") {
+                    error.response.data.errors.forEach((value: any) => {
+                        setError(value.field, {
+                            type: "validate",
+                            message: value.message,
+                        });
+                    });
+                }
+                if (axios.isAxiosError(error) && error.response?.data?.type === "custom") {
+                    toast.error(error.response.data.message);
+                    setVerifyCodeOpen(true);
+                }
             }
-            return
-        }
-
-        if (result.type === 'error') {
-            setLoading(false);
-            if (result.typeError === 'NotVerified') {
-                toast.error(result.message);
-                setVerifyCodeOpen(true);
-                return
-            }
-            toast.error(result.message);
-        } else {
-            setLoading(false);
-            dispatch(changeUser({
-                id: result.data._id,
-                name: result.data.name,
-                email: result.data.email,
-                role: result.data.role,
-                ...(result.data.role === "user" && { accountId: result.data?.account._id })
-            }));
-            router.push('/dashboard');
-        }
-
+        })
     };
 
     return (
@@ -154,7 +162,7 @@ const Login = () => {
                                 },
                             }}
                         />
-                        <Button variant='contained' type='submit' fullWidth loading={loading}>
+                        <Button variant='contained' type='submit' fullWidth loading={loginLoading}>
                             تسجيل الدخول
                         </Button>
                         {/* divider in middle word or */}
