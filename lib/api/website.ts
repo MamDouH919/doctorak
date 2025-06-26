@@ -30,20 +30,6 @@ export interface Doctors {
     // Add more fields as needed
 }
 
-export interface City {
-    en: string;
-    ar: string;
-}
-export interface Governorate {
-    _id: string;
-    governorate: {
-        en: string;
-        ar: string;
-    };
-    cities: City[];
-    // Add more fields as needed
-}
-
 interface FetchParams {
     limit?: number;
 }
@@ -88,14 +74,6 @@ export const getDoctors = async (
     if (params.specialty) queryParams.append('specialty', params.specialty);
 
     const response = await api.get(`/api/website/doctors?${queryParams.toString()}`);
-
-    return response.data;
-};
-
-export const getGovernorate = async (): Promise<{
-    data: Governorate[];
-}> => {
-    const response = await api.get(`/api/website/governorate`);
 
     return response.data;
 };

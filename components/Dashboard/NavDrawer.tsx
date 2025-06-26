@@ -245,10 +245,10 @@ const NavDrawer: React.FC = () => {
                                 </Stack>
                             )
                         } else {
-                            console.log(e.isPremium)
 
                             const isPremium = e.isPremium === undefined && !e.isPremium
-                            if (isPremium) {
+                            const isSoon = e.soon
+                            if (isPremium && !isSoon) {
                                 return <Link
                                     href={e.pathname || ""}
                                     className={clsx(classes.navLink)}
@@ -280,13 +280,14 @@ const NavDrawer: React.FC = () => {
                                             e?.regex?.test(pathname)
                                     })}
                                     key={e.primary}
-                                    disabled={!isPremium}
+                                    disabled={!isPremium || isSoon}
                                 >
                                     <ListItemIcon className={classes.navSubItem}>
                                         {e.icon && <e.icon />}
                                     </ListItemIcon>
                                     <Stack flexGrow={1} direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
                                         <ListItemText primary={e.primary} />
+                                        {isSoon && <Chip label="قريبا" size="small" color="primary" />}
                                         {!isPremium && <Chip label="Premium" size="small" color="primary" />}
                                     </Stack>
                                 </ItemButtonStyle>

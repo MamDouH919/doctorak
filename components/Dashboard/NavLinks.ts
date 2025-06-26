@@ -2,9 +2,9 @@ import { useAppSelector } from "@/Store/store";
 import {
     Inventory2Outlined,
     PeopleOutlineOutlined,
-    Settings
+    Settings,
+    ThumbUp
 } from "@mui/icons-material";
-
 interface LinkItem {
     pathname?: string;
     primary: string;
@@ -18,6 +18,7 @@ interface LinkItem {
     collapse?: string;
     show?: boolean;
     isPremium?: boolean;
+    soon?: boolean;
 }
 
 export const useLinksList = () => {
@@ -62,13 +63,20 @@ export const useLinksList = () => {
                     icon: Inventory2Outlined,
                     regex: /\/articles(\/|$)/,
                 },
+                {
+                    pathname: "/dashboard/clinics",
+                    primary: "العيادات والمستشفيات",
+                    icon: Inventory2Outlined,
+                    regex: /\/clinics(\/|$)/,
+                },
             ]
         },
         {
             pathname: "/dashboard/testimonials",
-            primary: "اراء العملاء",
-            icon: Settings,
-            isPremium: auth.user?.isPremium,
+            primary: "التقيمات",
+            icon: ThumbUp,
+            soon: true,
+            // isPremium: auth.user?.isPremium,
         },
     ];
 

@@ -33,8 +33,8 @@ const selectOptions = [
     { value: "website", key: "Website", disabled: false },
 ]
 
-const getTime = (time: string | Date) => moment(time).locale("en").format('HH:mm');
-const stringFormatToDate = (date: string) => moment(date, "HH:mm").locale("en").toDate();
+// const getTime = (time: string | Date) => moment(time).locale("en").format('HH:mm');
+// const stringFormatToDate = (date: string) => moment(date, "HH:mm").locale("en").toDate();
 
 // const Days = [
 //     'الاثنين',
@@ -128,11 +128,11 @@ const Accounts = ({ id }: { id?: string }) => {
             data: {
                 ...data,
                 userId: id! ?? auth.user?.id!,
-                appointments: data.appointments.filter(e => e.checked).map(e => ({
-                    day: e.day,
-                    timeFrom: getTime(e.timeFrom),
-                    timeTo: getTime(e.timeTo)
-                })),
+                // appointments: data.appointments.filter(e => e.checked).map(e => ({
+                //     day: e.day,
+                //     timeFrom: getTime(e.timeFrom),
+                //     timeTo: getTime(e.timeTo)
+                // })),
                 ...(typeof data.image !== "string" && { image: data.image }),
                 phone: "+20" + data.phone,
                 whatsApp: "+20" + data.whatsApp,

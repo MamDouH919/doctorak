@@ -1,56 +1,59 @@
-import { NextResponse } from 'next/server';
+// app/api/faqs/route.ts
+import { NextRequest } from 'next/server';
+import { z } from 'zod';
+
 import dbConnect from '@/lib/dbConnect';
 import FAQ from '@/models/Faqs';
 import Accounts from '@/models/Accounts';
+
 import { withAuth } from '@/lib/withAuth';
-import { NextRequest } from 'next/server';
+import { withErrorHandler } from '@/lib/api/withErrorHandler';
+import { success } from '@/lib/api/response';
+import { ValidationError, AppError } from '@/lib/api/errors';
 
-async function handler(req: NextRequest, user: any) {
-    try {
-        // Get request body
-        const { question, answer, account } = await req.json();
+// ✅ Zod validation schema
+const FAQSchema = z.object({
+    question: z.string().min(1, 'Question is required'),
+    answer: z.string().min(1, 'Answer is required'),
+    account: z.string().min(1, 'Account ID is required'),
+});
 
-        // Validate required fields
-        if (!question || !answer || !account) {
-            return NextResponse.json({
-                message: 'Question, answer, and account are required',
-                type: 'validation'
-            }, { status: 400 });
-        }
+// ✅ Actual handler function
+const handler = async (req: NextRequest) => {
+    const body = await req.json();
+    const parsed = FAQSchema.safeParse(body);
 
-        await dbConnect();
-
-        // Check if account exists and belongs to user
-        const accountDoc = await Accounts.findOne({ _id: account });
-        if (!accountDoc) {
-            return NextResponse.json({
-                message: 'Account not found or unauthorized',
-                type: 'validation'
-            }, { status: 404 });
-        }
-
-        // Create FAQ
-        const faq = new FAQ({
-            question,
-            answer,
-            account,
-        });
-
-        await faq.save();
-
-        return NextResponse.json({
-            message: 'FAQ created successfully',
-            type: 'success',
-            data: faq
-        });
-
-    } catch (error: any) {
-        console.error('Create FAQ Error:', error);
-        return NextResponse.json({
-            message: 'Internal Server Error',
-            type: 'error'
-        }, { status: 500 });
+    if (!parsed.success) {
+        const errors = parsed.error.issues.map(issue => ({
+            field: issue.path.join('.'),
+            message: issue.message,
+        }));
+        throw new ValidationError(errors);
     }
-}
 
-export const POST = (req: NextRequest) => withAuth(req, handler, { allowRoles: ['admin', 'user'] });
+    const { question, answer, account } = parsed.data;
+
+    await dbConnect();
+
+    const accountDoc = await Accounts.findById(account);
+    if (!accountDoc) {
+        throw new AppError('Account not found or unauthorized', 404, 'custom');
+    }
+
+    const faq = await FAQ.create({
+        question,
+        answer,
+        account,
+    });
+
+    return success({
+        message: 'FAQ created successfully',
+        data: faq,
+    });
+};
+
+// ✅ Wrap with auth and error handling
+export const POST = (req: NextRequest) =>
+    withAuth(req, withErrorHandler(handler), {
+        allowRoles: ['admin', 'user'],
+    });

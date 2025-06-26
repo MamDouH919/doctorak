@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
-import FAQ from '@/models/Faqs';
+import Clinics from '@/models/Clinics';
 
 import { withAuth } from '@/lib/withAuth';
 import { withErrorHandler } from '@/lib/api/withErrorHandler';
@@ -11,19 +11,19 @@ const handler = async (req: NextRequest) => {
   const id = req.nextUrl.pathname.split('/').pop();
 
   if (!id) {
-    throw new ValidationError([{ field: 'id', message: 'FAQ ID is required' }]);
+    throw new ValidationError([{ field: 'id', message: 'Clinics ID is required' }]);
   }
 
   await dbConnect();
 
-  const faq = await FAQ.findById(id);
-  if (!faq) {
-    throw new AppError('FAQ not found', 404, 'custom');
+  const clinics = await Clinics.findById(id);
+  if (!clinics) {
+    throw new AppError('Clinics not found', 404, 'custom');
   }
 
-  await faq.deleteOne();
+  await clinics.deleteOne();
 
-  return success({ message: 'FAQ deleted successfully' });
+  return success({ message: 'Clinics deleted successfully' });
 };
 
 export const DELETE = (req: NextRequest) =>

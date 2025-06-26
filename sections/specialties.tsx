@@ -45,7 +45,6 @@ const IconWrapper = styled(Box)(({ theme }) => ({
 }));
 
 
-
 export default function SpecialtiesSection({
     limit,
     fromPage = false

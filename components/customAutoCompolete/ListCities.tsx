@@ -1,41 +1,40 @@
 import { FieldValues } from "react-hook-form";
 import AutoCompleteComponent, { IProps as AutoCompleteComponentIProps } from "../MUI/AutoCompleteComponent";
-import { listServicesDropDown } from "@/lib/api/accounts";
 import { useQuery } from "@tanstack/react-query";
-import { getSpecializations } from "@/lib/api/website";
+import { getCities } from "@/lib/api/dropdown";
 
-const ListSpecializations = <T extends FieldValues>({
+const ListCities = <T extends FieldValues>({
   name,
   label,
   control,
   skip = false,
   rules,
   disabled,
-  ...props
+  governorateId
 }: Omit<AutoCompleteComponentIProps<T>, "options" | "loading" | "valueKey"> & {
   skip?: boolean;
   disabled?: boolean;
   rules?: any;
+  governorateId?: string;
 }) => {
 
   const { data, isLoading } = useQuery({
-    queryKey: ["specializations"],
-    queryFn: () => getSpecializations(),
-    enabled: !skip,
+    queryKey: ["cities", governorateId],
+    queryFn: () => getCities(governorateId!),
+    enabled: !skip && !!governorateId,
   });
 
   return (
     <AutoCompleteComponent
-      {...props}
       control={control}
       rules={rules}
       label={label}
       name={name}
       disabled={disabled}
       options={
-        (data?.data.map((item) => ({
+        (data?.data.cities.map((item) => ({
           id: item._id,
-          name: item.name,
+          name: item.name.ar,
         })) ?? []) as any
       }
       renderOption={(props, option) => (
@@ -53,4 +52,4 @@ const ListSpecializations = <T extends FieldValues>({
   );
 };
 
-export default ListSpecializations;
+export default ListCities;

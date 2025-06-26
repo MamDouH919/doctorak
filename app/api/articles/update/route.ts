@@ -1,47 +1,56 @@
-import { NextResponse } from 'next/server';
-import dbConnect from '@/lib/dbConnect';
-import ARTICLES from '@/models/Articles';
-import { withAuth } from '@/lib/withAuth';
+import { z } from 'zod';
 import { NextRequest } from 'next/server';
 
-async function handler(req: NextRequest) {
-    try {
-        const { id, title, content, account } = await req.json();
+import dbConnect from '@/lib/dbConnect';
+import Articles from '@/models/Articles';
+import { withAuth } from '@/lib/withAuth';
+import { withErrorHandler } from '@/lib/api/withErrorHandler';
+import { ValidationError, AppError } from '@/lib/api/errors';
+import { success } from '@/lib/api/response';
 
-        // Validate required fields
-        if (!id || !title || !content) {
-            return NextResponse.json(
-                { message: 'ID, title, and content are required', type: 'validation' },
-                { status: 400 }
-            );
-        }
+// ✅ Zod Schema
+const ArticlesUpdateSchema = z.object({
+    id: z.string().min(1, 'ID is required'),
+    title: z.string().min(1, 'Title is required'),
+    content: z.string().min(1, 'Content is required'),
+    account: z.string().min(1, 'Account ID is required'),
+});
 
-        await dbConnect();
+// ✅ Handler Logic
+const handler = async (req: NextRequest) => {
+    const body = await req.json();
+    const parsed = ArticlesUpdateSchema.safeParse(body);
 
-        const articles = await ARTICLES.findOne({ _id: id, account: account });
-        if (!articles) {
-            return NextResponse.json(
-                { message: 'Articles not found or unauthorized', type: 'error' },
-                { status: 404 }
-            );
-        }
-
-        articles.title = title;
-        articles.content = content;
-        await articles.save();
-
-        return NextResponse.json(
-            { message: 'Articles updated successfully', type: 'success', data: articles },
-            { status: 200 }
-        );
-
-    } catch (error: any) {
-        console.error('Update Articles Error:', error);
-        return NextResponse.json(
-            { message: 'Internal Server Error', type: 'error' },
-            { status: 500 }
-        );
+    if (!parsed.success) {
+        const errors = parsed.error.issues.map(issue => ({
+            field: issue.path.join('.'),
+            message: issue.message,
+        }));
+        throw new ValidationError(errors);
     }
-}
 
-export const PUT = (req: NextRequest) => withAuth(req, handler, { allowRoles: ['admin', 'user'] });
+    const { id, title, content, account } = parsed.data;
+
+    await dbConnect();
+
+    const articles = await Articles.findOne({ _id: id, account });
+
+    if (!articles) {
+        throw new AppError('Article not found or unauthorized', 404, 'custom');
+    }
+
+    articles.title = title;
+    articles.content = content;
+    await articles.save();
+
+    return success({
+        message: 'Article updated successfully',
+        data: articles,
+    });
+};
+
+// ✅ Export with auth + error handling
+export const PUT = (req: NextRequest) =>
+    withAuth(req, withErrorHandler(handler), {
+        allowRoles: ['admin', 'user'],
+    });

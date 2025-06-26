@@ -1,35 +1,32 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
-import ARTICLES from '@/models/Articles';
+import Article from '@/models/Articles';
+
 import { withAuth } from '@/lib/withAuth';
+import { withErrorHandler } from '@/lib/api/withErrorHandler';
+import { success } from '@/lib/api/response';
+import { AppError, ValidationError } from '@/lib/api/errors';
 
-async function handler(req: NextRequest) {
-  try {
-    const url = new URL(req.url);
-    const id = url.pathname.split('/').pop(); // manually extract id from path
+const handler = async (req: NextRequest) => {
+  const id = req.nextUrl.pathname.split('/').pop();
 
-    if (!id) {
-      return NextResponse.json({ message: 'ID is required' }, { status: 400 });
-    }
-
-    await dbConnect();
-
-    const articles = await ARTICLES.findById(id);
-
-    if (!articles) {
-      return NextResponse.json({ message: 'articles not found' }, { status: 404 });
-    }
-
-    await articles.deleteOne();
-
-    return NextResponse.json({ message: 'articles deleted successfully' }, { status: 200 });
-  } catch (error: any) {
-    console.error('Delete articles Error:', error);
-    return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
+  if (!id) {
+    throw new ValidationError([{ field: 'id', message: 'Article ID is required' }]);
   }
-}
+
+  await dbConnect();
+
+  const article = await Article.findById(id);
+  if (!article) {
+    throw new AppError('Article not found', 404, 'custom');
+  }
+
+  await article.deleteOne();
+
+  return success({ message: 'Article deleted successfully' });
+};
 
 export const DELETE = (req: NextRequest) =>
-  withAuth(req, (req, user) => handler(req), {
+  withAuth(req, withErrorHandler(handler), {
     allowRoles: ['admin', 'user'],
   });

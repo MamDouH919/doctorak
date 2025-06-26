@@ -1,8 +1,7 @@
 import { FieldValues } from "react-hook-form";
 import AutoCompleteComponent, { IProps as AutoCompleteComponentIProps } from "../MUI/AutoCompleteComponent";
-import { listServicesDropDown } from "@/lib/api/accounts";
 import { useQuery } from "@tanstack/react-query";
-import { getSpecializations } from "@/lib/api/website";
+import { getGovernorate } from "@/lib/api/dropdown";
 
 const ListGovernorate = <T extends FieldValues>({
   name,
@@ -18,8 +17,8 @@ const ListGovernorate = <T extends FieldValues>({
 }) => {
 
   const { data, isLoading } = useQuery({
-    queryKey: ["listSpecializationsDropDown"],
-    queryFn: () => getSpecializations(),
+    queryKey: ["governorate"],
+    queryFn: () => getGovernorate(),
     enabled: !skip,
   });
 
@@ -31,9 +30,9 @@ const ListGovernorate = <T extends FieldValues>({
       name={name}
       disabled={disabled}
       options={
-        (data?.data.map((item) => ({
+        (data?.data.governorates.map((item) => ({
           id: item._id,
-          name: item.name,
+          name: item.name.ar,
         })) ?? []) as any
       }
       renderOption={(props, option) => (
