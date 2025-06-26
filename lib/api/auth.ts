@@ -29,15 +29,24 @@ export const getMe = async (): Promise<User> => {
 export const register = async (data: {
     name: string,
     email: string,
+    phone: string,
     password: string,
+    specialization?: string,
+    specialization_needed?: string,
+    image: File,
 }) => {
     const token = await getToken();
 
-    const response = await api.post('/api/auth/register', data, {
-        headers: {
-            'Authorization': `Bearer ${token}`,
-        },
-    })
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("phone", data.phone);
+    formData.append("email", data.email);
+    formData.append("password", data.password);
+    if (data.specialization) formData.append("specialization", data.specialization);
+    if (data.specialization_needed) formData.append("specialization_needed", data.specialization_needed);
+    formData.append("image", data.image);
+
+    const response = await api.post('/api/auth/register', formData)
 
     return response.data;
 };

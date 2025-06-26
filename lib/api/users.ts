@@ -30,3 +30,18 @@ export const fetchListUsers = async (
 
     return response.data;
 };
+
+// active-user
+export const toggleUser = async (data: {
+    id: string,
+}) => {
+    const token = await getToken();
+
+    const response = await api.post('/api/users/active-user', data, {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        },
+    })
+
+    return response.data;
+};

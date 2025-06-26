@@ -1,7 +1,8 @@
+import { NextRequest } from 'next/server';
 import { AppError, ValidationError } from './errors';
 
-export function withErrorHandler(handler: (req: Request) => Promise<Response>) {
-    return async (req: Request): Promise<Response> => {
+export function withErrorHandler(handler: (req: NextRequest) => Promise<Response>) {
+    return async (req: NextRequest): Promise<Response> => {
         try {
             return await handler(req);
         } catch (err: any) {
@@ -27,6 +28,7 @@ export function withErrorHandler(handler: (req: Request) => Promise<Response>) {
                         success: false,
                         type: err.type,
                         message: err.message,
+                        errorCode: err.errorCode,
                     }),
                     {
                         status: err.statusCode,

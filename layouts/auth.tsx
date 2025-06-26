@@ -1,6 +1,6 @@
 
 import SiteLogo from '@/components/SiteLogo'
-import {  Grid } from '@mui/material'
+import { Grid } from '@mui/material'
 
 import Link from 'next/link'
 import { styled } from '@mui/material/styles';
@@ -33,7 +33,13 @@ const AuthLayout = ({
             <BoxLink href={"/"}  >
                 <SiteLogo />
             </BoxLink>
-            <Grid size={{ xs: 12, sm: 6, }}>
+            <Grid size={{ xs: 12, sm: 6, }}
+                height={"100vh"}
+                overflow={"auto"}
+                justifyContent={"center"}
+                alignItems={"center"}
+                display={"flex"}
+            >
                 {children}
             </Grid>
             <Grid

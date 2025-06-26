@@ -15,6 +15,9 @@ const UsersSchema = new mongoose.Schema({
   otp: { type: String, required: false, default: "" },
   token: { type: String, required: false, default: "" },
   account: { type: mongoose.Schema.Types.ObjectId, ref: 'Accounts' },
+  image: { type: String, required: true, default: "" },
+  active: { type: Boolean, default: false },
+  phone: { type: String, default: "" },
 }, {
   timestamps: true,
   versionKey: false,

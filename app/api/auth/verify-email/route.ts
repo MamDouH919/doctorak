@@ -39,25 +39,25 @@ const handler = async (req: Request) => {
     }
 
     user.verified = true;
-
-    const token = jwt.sign(
-        { id: user._id.toString(), email: user.email, role: user.role },
-        process.env.JWT_SECRET!,
-        { expiresIn: '1d' }
-    );
-
-    user.token = token;
     await user.save();
+    // const token = jwt.sign(
+    //     { id: user._id.toString(), email: user.email, role: user.role },
+    //     process.env.JWT_SECRET!,
+    //     { expiresIn: '1d' }
+    // );
 
-    const cookieStore = cookies();
-    (await cookieStore).set('token', token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        path: '/',
-        maxAge: 60 * 60 * 24, // 1 day
-    });
+    // user.token = token;
+    // await user.save();
 
-    return success({ user });
+    // const cookieStore = cookies();
+    // (await cookieStore).set('token', token, {
+    //     httpOnly: true,
+    //     secure: process.env.NODE_ENV === 'production',
+    //     path: '/',
+    //     maxAge: 60 * 60 * 24, // 1 day
+    // });
+
+    return success({ message: "done" });
 };
 
 export const POST = withErrorHandler(handler);

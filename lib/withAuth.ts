@@ -9,7 +9,7 @@ type AuthOptions = {
 
 export async function withAuth(
     req: NextRequest,
-    handler: (req: NextRequest, user: any) => Promise<NextResponse>,
+    handler: (req: NextRequest, user: any) => Promise<Response>,
     options: AuthOptions = { allowRoles: ['admin'] } // default: only admins allowed
 ) {
     const token = req.cookies.get('token')?.value;

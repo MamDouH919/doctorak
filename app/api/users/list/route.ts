@@ -14,7 +14,7 @@ async function handler(req: NextRequest) {
         await dbConnect();
 
         const [users, total] = await Promise.all([
-            Users.find({}).skip(skip).limit(limit),
+            Users.find({}).sort({ createdAt: -1 }).skip(skip).limit(limit),
             Users.countDocuments(),
         ]);
 

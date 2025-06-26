@@ -47,6 +47,15 @@ const handler = async (req: Request) => {
         throw new AppError('البريد الإلكتروني غير مفعل', 400, 'custom');
     }
 
+    console.log('user.account', user);
+    
+
+    if (!user.active) {
+        throw new AppError('الحساب غير مفعل', 400, 'custom', "account-not-active");
+    }
+
+    
+
     const token = jwt.sign(
         {
             id: user._id.toString(),
@@ -57,9 +66,6 @@ const handler = async (req: Request) => {
         process.env.JWT_SECRET!,
         { expiresIn: '1d' }
     );
-
-    user.token = token;
-    await user.save();
 
     const cookieStore = cookies();
     (await cookieStore).set('token', token, {

@@ -1,11 +1,18 @@
 import { z } from 'zod';
 
+const fileSchema = z.instanceof(File, { message: "required" })
+const imageSchema = fileSchema.refine(
+    file => file.size === 0 || file.type.startsWith("image/")
+)
+
 export const RegisterUserSchema = z.object({
     name: z.string().min(1, "الاسم مطلوب"),
     email: z.string().email("البريد الإلكتروني غير صالح"),
     password: z.string().min(6, "كلمة المرور يجب ألا تقل عن 6 أحرف"),
+    phone: z.string().min(1, "رقم الهاتف مطلوب"),
     specialization: z.string().optional(),
     specialization_needed: z.string().optional(),
+    image: imageSchema.refine(file => file.size < 250 * 1024 && file.size > 0, "FileSize")
 }).superRefine((data, ctx) => {
     if (!data.specialization && !data.specialization_needed) {
         ctx.addIssue({

@@ -1,12 +1,14 @@
 export class AppError extends Error {
     statusCode: number;
     type: 'custom' | 'validation-server' | 'internal';
+    errorCode?: string;
 
-    constructor(message: string, statusCode = 500, type: AppError['type'] = 'internal') {
+    constructor(message: string, statusCode = 500, type: AppError['type'] = 'internal', errorCode?: string) {
         super(message);
         this.name = this.constructor.name;
         this.statusCode = statusCode;
         this.type = type;
+        this.errorCode = errorCode; // Optional error code can be set later if needed
         Error.captureStackTrace(this, this.constructor);
     }
 }

@@ -10,7 +10,8 @@ const ListSpecializations = <T extends FieldValues>({
   control,
   skip = false,
   rules,
-  disabled
+  disabled,
+  ...props
 }: Omit<AutoCompleteComponentIProps<T>, "options" | "loading" | "valueKey"> & {
   skip?: boolean;
   disabled?: boolean;
@@ -25,6 +26,7 @@ const ListSpecializations = <T extends FieldValues>({
 
   return (
     <AutoCompleteComponent
+      {...props}
       control={control}
       rules={rules}
       label={label}

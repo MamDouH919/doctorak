@@ -1,10 +1,12 @@
 "use client";
 import { styled } from "@mui/material/styles";
 import {
+    Alert,
     Avatar,
     Button,
     Container,
     Divider,
+    Grid,
     IconButton,
     Stack,
     Tooltip,
@@ -25,6 +27,7 @@ import ListSpecializations from "@/components/customAutoCompolete/ListSpecializa
 import { register } from "@/lib/api/auth";
 import axios from "axios";
 import { forEach } from "lodash";
+import UploadFile from "@/components/MUI/UploadFile";
 // import ListGovernorate from "@/components/customAutoCompolete/ListGovernorate";
 
 
@@ -50,7 +53,7 @@ const Root = styled(Stack)(({ theme }) => ({
 }));
 
 const Register = () => {
-    const { control, handleSubmit, setError, watch, formState: { errors } } = useForm({
+    const { control, handleSubmit, setError, watch, setValue, clearErrors } = useForm({
         mode: "onChange",
     });
     const { t } = useTranslation();
@@ -65,23 +68,30 @@ const Register = () => {
 
     // mutation for register
     const { mutate: registerMutation, isPending: registerLoading } = useMutation({
-        mutationFn: (data: { name: string, email: string, password: string, specialization: string, specialization_needed: string }) =>
+        mutationFn: (data: {
+            name: string,
+            email: string,
+            password: string,
+            phone: string,
+            specialization: string,
+            specialization_needed: string,
+            image: File,
+        }) =>
             register(data),
         onError(error) {
             console.log(error);
         }
     });
 
-    console.log(errors);
-
-
     const onSubmit = async (data: any) => {
         registerMutation({
             name: data.name,
             email: data.email,
+            phone: data.phone,
             password: data.password,
             specialization: data.specialization,
             specialization_needed: data.specialization_needed,
+            image: data.image,
         }, {
             onSuccess: () => {
                 toast.success("تم اضافة الحساب بنجاح");
@@ -128,88 +138,125 @@ const Register = () => {
                         <Avatar className={classes.avatar}>
                             <LockOpen fontSize='large' />
                         </Avatar>
-                        <Typography variant='h1' fontSize={40}>
-                            إنشا حساب جديد
+                        <Typography variant='h6' fontSize={40}>
+                            إنشاء حساب جديد
                         </Typography>
-                        <ControlMUITextField
-                            control={control}
-                            name='name'
-                            label={"الاسم"}
-                            rules={{
-                                required: "هذا الحقل مطلوب",
-                            }}
-                        />
-                        {/* <ListGovernorate
-                            control={control}
-                            name='governorate'
-                            label={"المحافظة"}
-                            rules={{
-                                required: "هذا الحقل مطلوب",
-                            }}
-                        /> */}
-                        <ListSpecializations
-                            control={control}
-                            name='specialization'
-                            label={"التخصص"}
-                            rules={{
-                                required: watch('specialization_needed') ? false : "هذا الحقل مطلوب",
-                            }}
-                            disabled={!!watch('specialization_needed')}
-                        />
-                        <ControlMUITextField
-                            control={control}
-                            name='specialization_needed'
-                            label={"التخصص المطلوب"}
-                            rules={{
-                                required: watch('specialization') ? false : "هذا الحقل مطلوب",
-                            }}
-                            disabled={!!watch('specialization')}
-                            InputProps={{
-                                endAdornment: (
-                                    <Tooltip title={"إذا لم تجد تخصصك، يمكنك كتابته وسنقوم بإضافته لاحقًا."}>
-                                        <Info />
-                                    </Tooltip>
-                                ),
-                            }}
-                        />
-                        <ControlMUITextField
-                            control={control}
-                            name='email'
-                            label={"البريد الإلكتروني"}
-                            rules={{
-                                required: "هذا الحقل مطلوب",
-                            }}
-                        />
-                        <ControlMUITextField
-                            name='password'
-                            label={"كلمة المرور"}
-                            type={passType}
-                            control={control}
-                            rules={{
-                                required: "هذا الحقل مطلوب",
-                            }}
-                            slotProps={{
-                                input: {
-                                    endAdornment: (
-                                        <IconButton
-                                            size='small'
-                                            onClick={() =>
-                                                setPassType(
-                                                    passType === "password" ? "text" : "password"
-                                                )
-                                            }
-                                        >
-                                            {passType === "password" && (
-                                                <VisibilityOff color='primary' fontSize='inherit' />
-                                            )}
-                                            {passType === "text" && (
-                                                <Visibility color='primary' fontSize='inherit' />
-                                            )}
-                                        </IconButton>
-                                    ),
-                                },
-                            }}
-                        />
+                        <Grid container spacing={2} width={"100%"}>
+                            <Grid size={{ xs: 12, sm: 6 }}>
+                                <ControlMUITextField
+                                    control={control}
+                                    name='name'
+                                    label={"الاسم"}
+                                    rules={{
+                                        required: "هذا الحقل مطلوب",
+                                    }}
+                                />
+                            </Grid>
+                            <Grid size={{ xs: 12, sm: 6 }}>
+                                <ControlMUITextField
+                                    control={control}
+                                    name='phone'
+                                    label={"رقم الهاتف"}
+                                    rules={{
+                                        required: "هذا الحقل مطلوب",
+                                    }}
+                                />
+                            </Grid>
+                            <Grid size={{ xs: 12, sm: 6 }}>
+                                <ListSpecializations
+                                    control={control}
+                                    name='specialization'
+                                    label={"التخصص"}
+                                    rules={{
+                                        required: watch('specialization_needed') ? false : "هذا الحقل مطلوب",
+                                    }}
+
+                                    disabled={!!watch('specialization_needed')}
+                                />
+                            </Grid>
+                            <Grid size={{ xs: 12, sm: 6 }}>
+                                <ControlMUITextField
+                                    control={control}
+                                    name='specialization_needed'
+                                    label={"التخصص المطلوب"}
+                                    disabled={!!watch('specialization')}
+                                    onChange={() => {
+                                        clearErrors('specialization')
+                                    }}
+                                    InputProps={{
+                                        endAdornment: (
+                                            <Tooltip title={"إذا لم تجد تخصصك، يمكنك كتابته وسنقوم بإضافته لاحقًا."}>
+                                                <Info />
+                                            </Tooltip>
+                                        ),
+                                    }}
+                                />
+                            </Grid>
+                            <Grid size={{ xs: 12 }}>
+                                <ControlMUITextField
+                                    control={control}
+                                    name='email'
+                                    label={"البريد الإلكتروني"}
+                                    rules={{
+                                        required: "هذا الحقل مطلوب",
+                                    }}
+                                />
+                            </Grid>
+                            <Grid size={{ xs: 12 }}>
+                                <ControlMUITextField
+                                    name='password'
+                                    label={"كلمة المرور"}
+                                    type={passType}
+                                    control={control}
+                                    rules={{
+                                        required: "هذا الحقل مطلوب",
+                                    }}
+                                    slotProps={{
+                                        input: {
+                                            endAdornment: (
+                                                <IconButton
+                                                    size='small'
+                                                    onClick={() =>
+                                                        setPassType(
+                                                            passType === "password" ? "text" : "password"
+                                                        )
+                                                    }
+                                                >
+                                                    {passType === "password" && (
+                                                        <VisibilityOff color='primary' fontSize='inherit' />
+                                                    )}
+                                                    {passType === "text" && (
+                                                        <Visibility color='primary' fontSize='inherit' />
+                                                    )}
+                                                </IconButton>
+                                            ),
+                                        },
+                                    }}
+                                />
+                            </Grid>
+                            <Grid size={{ xs: 12 }}>
+                                <UploadFile
+                                    control={control}
+                                    setValue={setValue}
+                                    name="image"
+                                    icon={"add_photo_alternate"}
+                                    label={"الكارنية"}
+                                    accept=".png,.jpg,.svg,.jpeg,.webp,.avif"
+                                    maxSize={900 * 1024}
+                                    rules={{
+                                        required: "هذا الحقل مطلوب",
+                                    }}
+                                />
+                            </Grid>
+                        </Grid>
+                        <Stack width={"100%"} spacing={1}>
+                            <Alert severity="warning">
+                                يرجى إرفاق كارنية التخصص أو أي إثبات للتخصص
+                            </Alert>
+                            <Alert severity="info">
+                                بعد إنشاء الحساب، سيتم إرسال رمز التحقق إلى بريدك الإلكتروني. يرجى التحقق من بريدك الإلكتروني لإكمال عملية التسجيل.
+                            </Alert>
+                        </Stack>
                         <Button variant='contained' type='submit' fullWidth loading={registerLoading}>
                             إنشاء حساب
                         </Button>

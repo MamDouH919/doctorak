@@ -52,18 +52,20 @@ const VerifyCode = ({
             email: email,
             otp: data.otp
         }, {
-            onSuccess: async (response) => {
-                toast.success("تم التحقق من البريد الإلكتروني بنجاح");
-                dispatch(changeUser({
-                    id: response.data.user.id,
-                    name: response.data.user.name,
-                    email: response.data.user.email,
-                    role: response.data.user.role,
-                    ...(response.data.user.role === "user" && { accountId: response.data?.user?.account._id }),
-                    isPremium: response.data?.user?.account.isPremium
-                }));
+            onSuccess: async () => {
+                toast.success("سيتم مراجعة بياناتك في أقرب وقت ممكن، وسيتم التواصل معك عبر البريد الإلكتروني لتأكيد الحساب.", {
+                    duration: 5000,
+                });
+                // dispatch(changeUser({
+                //     id: response.data.user.id,
+                //     name: response.data.user.name,
+                //     email: response.data.user.email,
+                //     role: response.data.user.role,
+                //     ...(response.data.user.role === "user" && { accountId: response.data?.user?.account._id }),
+                //     isPremium: response.data?.user?.account.isPremium
+                // }));
                 handleClose()
-                router.push('/dashboard')
+                router.push('/')
             },
             onError: async (error) => {
                 if (axios.isAxiosError(error) && error.response?.data?.type === "validation-server") {

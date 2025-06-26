@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
                 const buffer = Buffer.from(arrayBuffer);
                 const extension = file.name.split('.').pop();
                 const filename = `${uuidv4()}.${extension}`;
-                const storageRef = ref(storage, `images/${filename}`);
+                const storageRef = ref(storage, `dakatrah/profile-images/${filename}`);
 
                 await uploadBytes(storageRef, buffer, {
                     contentType: file.type,

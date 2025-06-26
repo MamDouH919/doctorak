@@ -93,6 +93,10 @@ const Login = () => {
                     });
                 }
                 if (axios.isAxiosError(error) && error.response?.data?.type === "custom") {
+                    if (error.response.data.errorCode === "account-not-active") {
+                        toast.error("يتم مراجعة بياناتك في أقرب وقت ممكن، وسيتم التواصل معك عبر البريد الإلكتروني لتأكيد الحساب.");
+                        return;
+                    } 
                     toast.error(error.response.data.message);
                     setVerifyCodeOpen(true);
                 }
@@ -113,7 +117,7 @@ const Login = () => {
                 <Root spacing={3} alignItems={"center"}>
                     <Stack
                         component={"form"}
-                        spacing={3}
+                        spacing={2}
                         alignItems={"center"}
                         onSubmit={handleSubmit(onSubmit)}
                         width={"100%"}

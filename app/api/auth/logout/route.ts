@@ -1,34 +1,13 @@
-// handle logout
-import { NextResponse } from 'next/server';
-import jwt from 'jsonwebtoken';
+// app/api/logout/route.ts
 import { cookies } from 'next/headers';
-import Users from '@/models/Users';
-import dbConnect from '@/lib/dbConnect';
+import { withErrorHandler } from '@/lib/api/withErrorHandler';
+import { success } from '@/lib/api/response';
 
-export async function POST(req: Request) {
-    try {
-        const { token } = await req.json();
+export const POST = withErrorHandler(async (_req: Request) => {
+  const cookieStore = cookies();
 
-        if (!token) {
-            return NextResponse.json({ message: 'Token is required' }, { status: 400 });
-        }
+  // Delete token cookie
+  (await cookieStore).delete('token');
 
-        await dbConnect();
-
-        const user = await Users.findOne({ token: token });
-        
-        if (!user) {
-            return NextResponse.json({ message: 'Invalid token' }, { status: 401 });
-        }
-
-        user.token = null;
-        await user.save();
-
-        (await cookies()).delete('token');
-
-        return NextResponse.json({ message: 'Logged out successfully' });
-    } catch (error) {
-        console.error('Logout Error:', error);
-        return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
-    }
-}
+  return success({ message: 'تم تسجيل الخروج بنجاح' });
+});
