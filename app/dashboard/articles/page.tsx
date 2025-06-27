@@ -44,7 +44,7 @@ export default function ListArticles() {
             </Button>
           </Stack>,
         breadcrumbLinks: [
-          { label: "الأسئلة الشائعة" },
+          { label: "المقالات" },
         ],
       },
     });

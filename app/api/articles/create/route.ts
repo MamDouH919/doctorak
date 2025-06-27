@@ -10,6 +10,7 @@ import { withAuth } from '@/lib/withAuth';
 import { withErrorHandler } from '@/lib/api/withErrorHandler';
 import { success } from '@/lib/api/response';
 import { ValidationError, AppError } from '@/lib/api/errors';
+import { syncRelation } from '@/lib/relationManager';
 
 // ✅ Zod schema
 const ArticleSchema = z.object({
@@ -44,6 +45,14 @@ const handler = async (req: NextRequest) => {
         title,
         content,
         account,
+    });
+
+    await syncRelation({
+        model: Accounts,
+        docId: account,
+        field: 'articles',
+        value: article._id,
+        action: 'add',
     });
 
     return success({

@@ -15,13 +15,12 @@ export default function ThemeRegistry({
   children: React.ReactNode;
 }) {
   const { i18n } = useTranslation();
-  const isRtl = i18n.dir() === 'rtl';
-  const cache = useMemo(() => createEmotionCache(isRtl), [isRtl]);
+  const cache = useMemo(() => createEmotionCache(), []);
 
   const theme = useMemo(() => getTheme({
     primary: "#880808",
     secondary: "#87af2a",
-    dir: isRtl ? "rtl" : "ltr"
+    dir: "rtl"
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }), []);
 

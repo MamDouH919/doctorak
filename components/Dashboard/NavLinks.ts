@@ -1,5 +1,6 @@
 import { useAppSelector } from "@/Store/store";
 import {
+    BookmarkAdded,
     Inventory2Outlined,
     PeopleOutlineOutlined,
     Settings,
@@ -75,6 +76,13 @@ export const useLinksList = () => {
             pathname: "/dashboard/testimonials",
             primary: "التقيمات",
             icon: ThumbUp,
+            soon: true,
+            // isPremium: auth.user?.isPremium,
+        },
+        {
+            pathname: "/dashboard/testimonials",
+            primary: "الحجوزات",
+            icon: BookmarkAdded,
             soon: true,
             // isPremium: auth.user?.isPremium,
         },

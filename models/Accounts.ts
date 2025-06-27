@@ -37,6 +37,7 @@ const AccountsSchema = new mongoose.Schema({
   articles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Article' }],
   testimonials: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Testimonial' }],
   expertise: { type: mongoose.Schema.Types.ObjectId, ref: 'Expertise' },
+  clinics: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Clinics' }],
   videos: [VideosSchema],
   social: [SocialSchema],
   // appointments: [AppointmentSchema],

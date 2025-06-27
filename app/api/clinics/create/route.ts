@@ -9,6 +9,7 @@ import { withAuth } from '@/lib/withAuth';
 import { withErrorHandler } from '@/lib/api/withErrorHandler';
 import { success } from '@/lib/api/response';
 import { ValidationError, AppError } from '@/lib/api/errors';
+import { syncRelation } from '@/lib/relationManager';
 
 
 // name: string,
@@ -73,6 +74,14 @@ const handler = async (req: NextRequest) => {
         city,
         appointments,
         account,
+    });
+
+    await syncRelation({
+        model: Accounts,
+        docId: account,
+        field: 'clinics',
+        value: clinic._id,
+        action: 'add',
     });
 
     return success({

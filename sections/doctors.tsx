@@ -6,6 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getDoctors } from '@/lib/api/website';
 import { TbWorld } from 'react-icons/tb';
 import DoctorCardSkeleton from '@/loading/DoctorCard';
+import Link from 'next/link';
 
 const GradientSection = styled(Box)(({ theme }) => ({
     padding: theme.spacing(8, 2),
@@ -225,9 +226,11 @@ const FeaturedDoctorsSection = ({
                                             </Stack>
                                         </Stack>
                                         <Tooltip title="البروفايل">
-                                            <Button variant="contained" color="info" sx={{ minWidth: 40 }}>
-                                                <TbWorld size={20} />
-                                            </Button>
+                                            <Link href={doctor.domain} passHref target='_blank' rel="noreferrer">
+                                                <Button variant="contained" color="info" sx={{ minWidth: 40 }}>
+                                                    <TbWorld size={20} />
+                                                </Button>
+                                            </Link>
                                         </Tooltip>
                                     </Stack>
                                 </CardContent>

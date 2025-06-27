@@ -76,10 +76,6 @@ export async function PUT(req: NextRequest) {
                 account.active = active;
                 account.showInHomePage = showInHomePage;
                 account.isPremium = isPremium;
-                // Optional: Reset these fields
-                account.faqs = [];
-                account.articles = [];
-                account.testimonials = [];
 
                 await account.save();
 

@@ -45,7 +45,7 @@ const FormDialog = ({
         }
     });
 
-    const { handleSubmit, control, reset, setValue, watch } = useForm()
+    const { handleSubmit, control, reset, watch } = useForm()
     const { fields, append, remove } =
         useFieldArray({ control: control, name: "appointments" });
 
@@ -72,7 +72,7 @@ const FormDialog = ({
                 onSuccess: () => {
                     toast.success("تم تعديل العيادة بنجاح")
                     queryClient.invalidateQueries({
-                        queryKey: ['faqs'],
+                        queryKey: ['clinics'],
                     });
                     handleClose()
                 },
@@ -100,8 +100,9 @@ const FormDialog = ({
                 onSuccess: () => {
                     toast.success("تم اضافة العيادة بنجاح")
                     queryClient.invalidateQueries({
-                        queryKey: ['faqs'],
+                        queryKey: ['clinics'],
                     });
+                    handleClose()
                 },
                 onError(error) {
                     toast.error("خطأ في الاضافة العيادة")
@@ -284,7 +285,7 @@ const FormDialog = ({
                 </Stack>
             }
             buttonAction={
-                <Button loading={createFaqsLoading} type='submit' variant='contained'>{"تاكيد"}</Button>
+                <Button loading={createFaqsLoading || updateFaqsLoading} type='submit' variant='contained'>{"تاكيد"}</Button>
             }
         />
     )

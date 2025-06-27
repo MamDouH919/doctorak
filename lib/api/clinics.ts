@@ -17,8 +17,8 @@ export interface createClinic {
 
     appointments: {
         day: string,
-        start_time: string,
-        end_time: string
+        timeFrom: string,
+        timeTo: string
     }[],
     account: string
 }

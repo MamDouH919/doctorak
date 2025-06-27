@@ -34,7 +34,7 @@ export default async function RootLayout({
   const token = await getToken();
   // wait one second 
   return (
-    <html lang="en">
+    <html lang="en" dir="rtl">
       <head>
         <link
           href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&display=swap"

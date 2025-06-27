@@ -116,7 +116,9 @@ const FormDialog = ({
             }}
             title={
                 <Stack direction={"row"} spacing={1} justifyContent={"space-between"} alignItems={"center"}>
-                    <Typography variant='h6'>{"إضافة سؤال"}</Typography>
+                    <Typography variant='h6'>
+                        {oldData? "تعديل السؤال" : "إضافة سؤال"}
+                    </Typography>
                     {!oldData && <FormControl component="fieldset" variant="standard">
                         <FormControlLabel
                             labelPlacement="start"
@@ -169,7 +171,7 @@ const FormDialog = ({
                 </Stack>
             }
             buttonAction={
-                <Button loading={createFaqsLoading} type='submit' variant='contained'>{"تاكيد"}</Button>
+                <Button loading={createFaqsLoading || updateFaqsLoading} type='submit' variant='contained'>{"تاكيد"}</Button>
             }
         />
     )
