@@ -14,6 +14,8 @@ import '@/models/Faqs';
 import '@/models/Articles';
 import '@/models/Users';
 import '@/models/Specialization';
+import '@/models/Images';
+import '@/models/Governorate';
 
 const querySchema = z.object({
     domain: z.string().min(1, 'Domain is required'),
@@ -46,11 +48,14 @@ const handler = async (req: NextRequest) => {
             ]
         })
         .populate('specialization')
+        .populate('image')
+        // populate user and select _id and name and active
+        .populate({
+            path: 'user',
+            select: '_id name active',
+        })
 
     console.log(doctor);
-
-
-
 
     if (!doctor) {
         throw new AppError('Doctor not found', 404, 'custom', 'DoctorNotFound');
