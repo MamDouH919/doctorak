@@ -16,6 +16,7 @@ import '@/models/Users';
 import '@/models/Specialization';
 import '@/models/Images';
 import '@/models/Governorate';
+import '@/models/Cities';
 
 const querySchema = z.object({
     domain: z.string().min(1, 'Domain is required'),
