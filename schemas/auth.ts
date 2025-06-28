@@ -12,7 +12,8 @@ export const RegisterUserSchema = z.object({
     phone: z.string().min(1, "رقم الهاتف مطلوب"),
     specialization: z.string().optional(),
     specialization_needed: z.string().optional(),
-    image: imageSchema.refine(file => file.size < 250 * 1024 && file.size > 0, "FileSize")
+    // 1 mg
+    image: imageSchema.refine(file => file.size < 1 * 1024 * 1024 && file.size > 0, "FileSize")
 }).superRefine((data, ctx) => {
     if (!data.specialization && !data.specialization_needed) {
         ctx.addIssue({
