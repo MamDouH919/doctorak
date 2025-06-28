@@ -17,8 +17,8 @@ const SiteLogo = ({
     color?: string
 }) => {
     return (
-        <Stack direction="row" spacing={1} justifyContent="flex-start">
-            <img src="/logo.webp" alt="logo" width={"100%"} height={45} />
+        <Stack direction="row" spacing={1} justifyContent="flex-start" alignItems={"flex-start"}>
+            <img src="/logo.webp" alt="logo" height={45} />
             {/* <StethoscopeIcon />
             <TypographyStyle
                 variant="h6"
