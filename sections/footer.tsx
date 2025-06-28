@@ -36,8 +36,10 @@ export default function Footer() {
             <Container>
                 <Grid container spacing={4}>
                     {/* Company Info */}
-                    <Grid size={{ xs: 12, md: 6 }}>
-                        <SiteLogo color="#fff" />
+                    <Grid size={{ xs: 12, md: 6 }} display={"flex"} gap={1} flexDirection={"column"}>
+                        <Stack alignItems={"flex-start"}>
+                            <SiteLogo color="#fff" />
+                        </Stack>
                         <Typography variant="body2" color="grey.500" mb={2}>
                             منصة طبية شاملة تجمع أفضل الدكاترة في مكان واحد لتسهيل الوصول إلى الرعاية الصحية المناسبة.
                         </Typography>
@@ -114,7 +116,7 @@ export default function Footer() {
 
                 <Divider sx={{ borderColor: 'grey.800', my: 4 }} />
                 <Typography variant="body2" color="grey.500" align="center">
-                    © 2024 دكتورك. جميع الحقوق محفوظة.
+                    © 2024 دكاترة. جميع الحقوق محفوظة.
                 </Typography>
             </Container>
         </Box>

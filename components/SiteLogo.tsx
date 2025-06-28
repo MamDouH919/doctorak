@@ -18,14 +18,15 @@ const SiteLogo = ({
 }) => {
     return (
         <Stack direction="row" spacing={1} justifyContent="flex-start">
-            <StethoscopeIcon />
+            <img src="/logo.webp" alt="logo" width={"100%"} height={45} />
+            {/* <StethoscopeIcon />
             <TypographyStyle
                 variant="h6"
                 fontWeight="bold"
                 sx={color ? { color } : undefined}
             >
-                دكتورك
-            </TypographyStyle>
+                دكاترة
+            </TypographyStyle> */}
         </Stack>
     )
 }
