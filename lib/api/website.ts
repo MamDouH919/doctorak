@@ -27,6 +27,18 @@ export interface Doctors {
         _id: string;
         name: string;
     }
+    governorates: {
+        _id: string;
+        name: {
+            ar: string;
+        }
+    }[];
+    cities: {
+        _id: string;
+        name: {
+            ar: string;
+        }
+    }[];
     // Add more fields as needed
 }
 
@@ -38,6 +50,8 @@ interface FetchAccountsParams {
     showInHomePage?: boolean;
     name?: string;
     specialty?: string;
+    governorate?: string;
+    city?: string;
 }
 
 export interface GetSpecializationsResponse {
@@ -64,6 +78,8 @@ export const getDoctors = async (
         showInHomePage: undefined,
         name: undefined,
         specialty: undefined,
+        governorate: undefined,
+        city: undefined,
     }
 ): Promise<{
     data: Doctors[];
@@ -72,6 +88,8 @@ export const getDoctors = async (
     if (params.showInHomePage !== undefined) queryParams.append('showInHomePage', String(params.showInHomePage));
     if (params.name) queryParams.append('name', params.name);
     if (params.specialty) queryParams.append('specialty', params.specialty);
+    if (params.governorate) queryParams.append('governorate', params.governorate);
+    if (params.city) queryParams.append('city', params.city);
 
     const response = await api.get(`/api/website/doctors?${queryParams.toString()}`);
 

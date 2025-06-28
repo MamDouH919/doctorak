@@ -10,8 +10,8 @@ const Page = () => {
     return (
         <>
             <Banner />
-            <FeaturedDoctorsSection />
-            <SpecialtiesSection />
+            <FeaturedDoctorsSection showInHomePage={false} />
+            <SpecialtiesSection limit={9} />
             <StatisticsSection />
         </>
     )

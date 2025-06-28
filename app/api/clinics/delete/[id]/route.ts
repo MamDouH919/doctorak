@@ -30,7 +30,23 @@ const handler = async (req: NextRequest) => {
     value: clinics._id,
     action: 'remove',
   });
-  
+
+  await syncRelation({
+    model: Accounts,
+    docId: clinics.account,
+    field: 'governorates',
+    value: clinics.governorate,
+    action: 'remove',
+  });
+
+  await syncRelation({
+    model: Accounts,
+    docId: clinics.account,
+    field: 'cities',
+    value: clinics.city,
+    action: 'remove',
+  });
+
   await clinics.deleteOne();
 
   return success({ message: 'Clinics deleted successfully' });

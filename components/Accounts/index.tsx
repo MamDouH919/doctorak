@@ -99,7 +99,11 @@ const Accounts = ({ id }: { id?: string }) => {
             methods.setValue('specialization', account.data?.specialization)
             methods.setValue('specialization_needed', account.data?.specialization_needed)
 
-            methods.setValue('image', account.data?.image?.url)
+            console.log(account.data?.image?.url);
+
+            if (account.data?.image?.url) {
+                methods.setValue('image', account.data?.image?.url)
+            }
 
 
             const appointmentsFromBackend = account.data.appointments || [];
@@ -203,6 +207,7 @@ const Accounts = ({ id }: { id?: string }) => {
                                     control={methods.control}
                                     accountId={id! ?? auth.user?.accountId}
                                     alt={account?.data.user.name}
+                                    queryKey={['account', id ?? auth.user?.accountId!]}
                                 />
                             </Grid>
                             {auth.user?.role === 'admin' &&
@@ -489,10 +494,15 @@ const Accounts = ({ id }: { id?: string }) => {
                                                     rules={{
                                                         ...rules,
                                                         validate: {
-                                                            url: (value: string) =>
-                                                                /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/.test(value) ||
-                                                                "يجب أن يكون رابط صحيحا",
-                                                        },
+                                                            url: (value: string) => {
+                                                                try {
+                                                                    new URL(value);
+                                                                    return true;
+                                                                } catch {
+                                                                    return "يجب أن يكون رابط صحيحا";
+                                                                }
+                                                            }
+                                                        }
                                                     }}
                                                 />
                                                 <IconButton onClick={() => remove(index)}>

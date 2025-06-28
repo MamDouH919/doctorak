@@ -84,6 +84,22 @@ const handler = async (req: NextRequest) => {
         action: 'add',
     });
 
+    await syncRelation({
+        model: Accounts,
+        docId: account,
+        field: 'governorates',
+        value: governorate,
+        action: 'add',
+    });
+
+    await syncRelation({
+        model: Accounts,
+        docId: account,
+        field: 'cities',
+        value: city,
+        action: 'add',
+    });
+
     return success({
         message: 'clinics created successfully',
         data: clinic,

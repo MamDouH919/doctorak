@@ -33,6 +33,9 @@ const AccountsSchema = new mongoose.Schema({
   specialization_needed: { type: String, },
   visitors: { type: Number, default: 0 },
 
+  governorates: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Governorate' }],
+  cities: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Cities' }],
+
   faqs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'FAQ' }],
   articles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Article' }],
   testimonials: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Testimonial' }],

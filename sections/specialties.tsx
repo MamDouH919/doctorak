@@ -54,7 +54,7 @@ export default function SpecialtiesSection({
 }) {
     const router = useRouter()
     const { data: specializations, isLoading } = useQuery({
-        queryKey: ['specializations'],
+        queryKey: ['specializations', limit],
         queryFn: () => getSpecializations({
             limit: limit ?? 9
         }),

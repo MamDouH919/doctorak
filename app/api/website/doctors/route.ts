@@ -14,19 +14,27 @@ export async function GET(req: NextRequest) {
         const showInHomePage = searchParams.get('showInHomePage');
         const name = searchParams.get('name');
         const specializationId = searchParams.get('specialty');
+        const governorateId = searchParams.get('governorate');
+        const cityId = searchParams.get('city');
 
         const match: any = {
             active: true,
         };
 
-        // Optional filters
         if (showInHomePage !== null) {
             match.showInHomePage = showInHomePage === 'true';
         }
 
-        // 🔍 Add specialization filter
         if (specializationId && mongoose.Types.ObjectId.isValid(specializationId)) {
             match.specialization = new mongoose.Types.ObjectId(specializationId);
+        }
+
+        if (governorateId && mongoose.Types.ObjectId.isValid(governorateId)) {
+            match.governorates = { $in: [new mongoose.Types.ObjectId(governorateId)] };
+        }
+
+        if (cityId && mongoose.Types.ObjectId.isValid(cityId)) {
+            match.cities = { $in: [new mongoose.Types.ObjectId(cityId)] };
         }
 
         const pipeline: any[] = [
@@ -81,6 +89,23 @@ export async function GET(req: NextRequest) {
             },
 
             {
+                $lookup: {
+                    from: 'governorates',
+                    localField: 'governorates',
+                    foreignField: '_id',
+                    as: 'governorates',
+                },
+            },
+            {
+                $lookup: {
+                    from: 'cities',
+                    localField: 'cities',
+                    foreignField: '_id',
+                    as: 'cities',
+                },
+            },
+
+            {
                 $project: {
                     _id: 1,
                     domain: 1,
@@ -89,7 +114,14 @@ export async function GET(req: NextRequest) {
                     description: 1,
                     image: { _id: 1, url: 1, alt: 1 },
                     user: { _id: 1, name: 1 },
-                    specialization: 1,
+                    specialization: {
+                        _id: 1,
+                        name: 1,
+                        name_en: 1,
+                        slug: 1,
+                    },
+                    governorates: 1,
+                    cities: 1,
                 },
             },
         ];
@@ -101,7 +133,7 @@ export async function GET(req: NextRequest) {
             data: accounts,
         });
     } catch (error) {
-        console.error('Get Specializations Error:', error);
+        console.error('Get Accounts Error:', error);
         return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
     }
 }

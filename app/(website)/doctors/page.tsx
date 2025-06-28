@@ -9,6 +9,8 @@ const Doctors = () => {
   const searchParams = useSearchParams()
   const name = searchParams.get('name')
   const specialty = searchParams.get('specialty')
+  const governorate = searchParams.get('governorate')
+  const city = searchParams.get('city')
   return (
     <>
       <Container>
@@ -19,6 +21,8 @@ const Doctors = () => {
       <FeaturedDoctorsSection
         name={name}
         specialty={specialty}
+        governorate={governorate}
+        city={city}
         showInHomePage={false}
         fromPage
       />

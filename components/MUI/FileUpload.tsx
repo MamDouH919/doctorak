@@ -8,6 +8,7 @@ import {
     IconButton,
     Typography,
 } from '@mui/material';
+import { useQueryClient } from '@tanstack/react-query';
 import * as React from 'react';
 import Dropzone, { FileRejection } from 'react-dropzone';
 import { useController, Control, RegisterOptions } from 'react-hook-form';
@@ -24,6 +25,7 @@ interface SingleImageUploaderProps {
     loading?: boolean;
     accountId: string;
     alt: string;
+    queryKey?: string[];
 }
 
 export function SingleImageUploader({
@@ -37,6 +39,7 @@ export function SingleImageUploader({
     loading = false,
     accountId,
     alt,
+    queryKey
 }: SingleImageUploaderProps) {
     const {
         field: { value, onChange },
@@ -47,6 +50,8 @@ export function SingleImageUploader({
         rules,
     });
 
+    const queryClient = useQueryClient(); // Use this to access queryClient
+
     const [preview, setPreview] = React.useState<string | null>(null);
     const [hovered, setHovered] = React.useState(false);
     const [uploading, setUploading] = React.useState(false);
@@ -55,10 +60,14 @@ export function SingleImageUploader({
         async (acceptedFiles: File[], rejectedFiles: FileRejection[]) => {
             const image = acceptedFiles[0];
             if (!image) return;
-
+            
             rejectedFiles.forEach(({ file, errors }) => {
                 errors.forEach(err => {
-                    toast.error(`خطأ: ${file.name} - ${err.message}`);
+                    if (err.code === 'file-too-large') {
+                        toast.error(`الملف "${file.name}" يتجاوز الحد الأقصى (${formatBytes(maxSize)})`);
+                    } else {
+                        toast.error(`خطأ: ${file.name} - ${err.message}`);
+                    }
                 });
             });
 
@@ -72,6 +81,11 @@ export function SingleImageUploader({
                 toast.success('تم رفع الصورة بنجاح');
                 setPreview(res.data.url);
                 onChange(res.data.url);
+                if (queryKey) {
+                    queryClient.invalidateQueries({
+                        queryKey: [queryKey],
+                    });
+                }
                 // setLocalProgress(100); // mark as complete
             } catch (err) {
                 console.error(err);
@@ -91,6 +105,11 @@ export function SingleImageUploader({
             toast.success('تم حذف الصورة بنجاح');
             setPreview(null);
             onChange(null);
+            if (queryKey) {
+                queryClient.invalidateQueries({
+                    queryKey: [queryKey],
+                });
+            }
         } catch (err) {
             console.error(err);
             toast.error('فشل حذف الصورة');

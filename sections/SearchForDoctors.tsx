@@ -15,6 +15,8 @@ import { useForm } from 'react-hook-form';
 import ControlMUITextField from '@/components/MUI/ControlMUItextField';
 import { useRouter, useSearchParams } from 'next/navigation';
 import ListSpecializations from '@/components/customAutoCompolete/ListSpecializations';
+import ListGovernorate from '@/components/customAutoCompolete/ListGovernorate';
+import ListCities from '@/components/customAutoCompolete/ListCities';
 
 
 const StyledPaper = styled(Paper)`
@@ -34,11 +36,16 @@ const SearchForDoctors = ({
     const searchParams = useSearchParams()
     const name = searchParams.get('name')
     const specialty = searchParams.get('specialty')
+    const governorate = searchParams.get('governorate')
+    const city = searchParams.get('city')
 
-    const { control, handleSubmit } = useForm({
+
+    const { control, handleSubmit, watch } = useForm({
         defaultValues: {
             name: name ?? '',
             specialty: specialty ?? '',
+            governorate: governorate ?? '',
+            city: city ?? '',
         },
     })
     const router = useRouter()
@@ -76,11 +83,30 @@ const SearchForDoctors = ({
                         }}
                     />
                 </Grid>
-                <ListSpecializations
-                    control={control}
-                    name='specialty'
-                    label={"التخصصات"}
-                />
+                <Grid size={{ xs: 12 }}>
+                    <ListSpecializations
+                        control={control}
+                        name='specialty'
+                        label={"التخصصات"}
+                    />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                    <ListGovernorate
+                        control={control}
+                        name='governorate'
+                        label={"المحافظة"}
+                    />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                    <ListCities
+                        skip={!watch('governorate')}
+                        disabled={!watch('governorate')}
+                        governorateId={watch('governorate')}
+                        control={control}
+                        name='city'
+                        label={"المدينة"}
+                    />
+                </Grid>
                 <Grid size={{ xs: 12 }}>
                     <Button
                         type="submit"

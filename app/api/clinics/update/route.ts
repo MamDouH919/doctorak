@@ -8,6 +8,9 @@ import { withAuth } from '@/lib/withAuth';
 import { withErrorHandler } from '@/lib/api/withErrorHandler';
 import { ValidationError, AppError } from '@/lib/api/errors';
 import { success } from '@/lib/api/response';
+import { syncRelation } from '@/lib/relationManager';
+
+import Accounts from '@/models/Accounts';
 
 // ✅ Zod Schema
 const ClinicUpdateSchema = z.object({
@@ -60,6 +63,9 @@ const handler = async (req: NextRequest) => {
         throw new AppError('FAQ not found or unauthorized', 404, 'custom');
     }
 
+    const oldGovernorate = clinics.governorate._id;
+    const oldCity = clinics.city._id;
+
     clinics.name = name;
     clinics.phone = phone;
     clinics.address = address;
@@ -69,6 +75,44 @@ const handler = async (req: NextRequest) => {
     clinics.appointments = appointments;
 
     await clinics.save();
+
+    if (governorate !== oldGovernorate) {
+        console.log(governorate);
+        console.log(oldGovernorate);
+        
+        await syncRelation({
+            model: Accounts,
+            docId: clinics.account,
+            field: 'governorates',
+            value: oldGovernorate,
+            action: 'remove',
+        });
+        await syncRelation({
+            model: Accounts,
+            docId: account,
+            field: 'governorates',
+            value: governorate,
+            action: 'add',
+        });
+    }
+
+    if (city !== oldCity) {
+        await syncRelation({
+            model: Accounts,
+            docId: clinics.account,
+            field: 'cities',
+            value: oldCity,
+            action: 'remove',
+        });
+
+        await syncRelation({
+            model: Accounts,
+            docId: account,
+            field: 'cities',
+            value: city,
+            action: 'add',
+        });
+    }
 
     return success({
         message: 'FAQ updated successfully',
