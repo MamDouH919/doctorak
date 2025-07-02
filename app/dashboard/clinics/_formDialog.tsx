@@ -14,6 +14,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import moment from 'moment'
 import React, { useEffect } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
 const getTime = (time: string | Date) => moment(time).locale("en").format('HH:mm');
@@ -28,6 +29,7 @@ const FormDialog = ({
     handleClose: () => void,
     oldData: any
 }) => {
+    const { t } = useTranslation()
     const { auth } = useAppSelector((state) => state)
     const { mutate: createFaqsMutation, isPending: createFaqsLoading } = useMutation({
         mutationFn: (data: createClinic) =>
@@ -70,7 +72,7 @@ const FormDialog = ({
                 }))
             }, {
                 onSuccess: () => {
-                    toast.success("تم تعديل العيادة بنجاح")
+                    toast.success(t("common.saveSuccess"))
                     queryClient.invalidateQueries({
                         queryKey: ['clinics'],
                     });
@@ -148,7 +150,7 @@ const FormDialog = ({
             title={
                 <Stack direction={"row"} spacing={1} justifyContent={"space-between"} alignItems={"center"}>
                     <Typography variant='h6'>
-                        {oldData ? "تعديل العيادة" : "إضافة العيادة"}
+                        {oldData ? t("adminPages.editClinic") : t("adminPages.addClinic")}
                     </Typography>
                 </Stack>
             }
@@ -160,9 +162,9 @@ const FormDialog = ({
                                 <ListAccounts
                                     control={control}
                                     name='accountId'
-                                    label={"الحساب"}
+                                    label={t("adminPages.account")}
                                     rules={{
-                                        required: "هذا الحقل مطلوب",
+                                        required: t("common.required")
                                     }}
                                     disabled={!!oldData}
                                 />
@@ -172,9 +174,9 @@ const FormDialog = ({
                             <ControlMUITextField
                                 control={control}
                                 name='name'
-                                label={"اسم العيادة أو المستشفي"}
+                                label={t("adminPages.name")}
                                 rules={{
-                                    required: "هذا الحقل مطلوب",
+                                    required: t("common.required")
                                 }}
                             />
                         </Grid>
@@ -182,9 +184,9 @@ const FormDialog = ({
                             <ControlMUITextField
                                 control={control}
                                 name='phone'
-                                label={"رقم الهاتف"}
+                                label={t("adminPages.phone")}
                                 rules={{
-                                    required: "هذا الحقل مطلوب",
+                                    required: t("common.required")
                                 }}
                             />
                         </Grid>
@@ -192,9 +194,9 @@ const FormDialog = ({
                             <ControlMUITextField
                                 control={control}
                                 name='mobile'
-                                label={"رقم الموبايل"}
+                                label={t("adminPages.mobile")}
                                 rules={{
-                                    required: "هذا الحقل مطلوب",
+                                    required: t("common.required")
                                 }}
                             />
                         </Grid>
@@ -202,9 +204,9 @@ const FormDialog = ({
                             <ListGovernorate
                                 control={control}
                                 name='governorate'
-                                label={"المحافظة"}
+                                label={t("adminPages.governorate")}
                                 rules={{
-                                    required: "هذا الحقل مطلوب",
+                                    required: t("common.required")
                                 }}
                             />
                         </Grid>
@@ -215,9 +217,9 @@ const FormDialog = ({
                                 governorateId={watch('governorate')}
                                 control={control}
                                 name='city'
-                                label={"المدينة"}
+                                label={t("adminPages.city")}
                                 rules={{
-                                    required: "هذا الحقل مطلوب",
+                                    required: t("common.required")
                                 }}
                             />
                         </Grid>
@@ -225,9 +227,9 @@ const FormDialog = ({
                             <ControlMUITextField
                                 control={control}
                                 name='address'
-                                label={"العنوان"}
+                                label={t("adminPages.address")}
                                 rules={{
-                                    required: "هذا الحقل مطلوب",
+                                    required: t("common.required")
                                 }}
                                 rows={3}
                             />
@@ -236,14 +238,14 @@ const FormDialog = ({
                             <Stack spacing={2}>
                                 <Stack direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
                                     <Typography variant='h6' fontWeight='bold' color='primary.main' gutterBottom>
-                                        المواعيد
+                                        {t("adminPages.appointments")}
                                     </Typography>
                                     <Button
                                         variant='outlined'
                                         startIcon={<Add />}
                                         onClick={() => append({ day: "", timeFrom: "", timeTo: "" })}
                                     >
-                                        إضافة
+                                        {t("common.add")}
                                     </Button>
                                 </Stack>
                                 <Stack spacing={2}>
@@ -253,23 +255,23 @@ const FormDialog = ({
                                                 <Stack key={item.id} direction={"row"} spacing={2} alignItems="center">
                                                     <ListDays
                                                         name={`appointments.${index}.day`}
-                                                        label="اليوم"
+                                                        label={t("adminPages.day")}
                                                         control={control}
                                                         rules={{
-                                                            required: "هذا الحقل مطلوب",
+                                                            required: t("common.required")
                                                         }}
                                                     />
                                                     <MuiTimePicker
                                                         control={control}
                                                         name={`appointments.${index}.timeFrom`}
-                                                        label="من الساعة"
-                                                        rules={{ required: "هذا الحقل مطلوب" }}
+                                                        label={t("adminPages.fromTime")}
+                                                        rules={{ required: t("common.required") }}
                                                     />
                                                     <MuiTimePicker
                                                         control={control}
                                                         name={`appointments.${index}.timeTo`}
-                                                        label="إلى الساعة"
-                                                        rules={{ required: "هذا الحقل مطلوب" }}
+                                                        label={t("adminPages.toTime")}
+                                                        rules={{ required: t("common.required") }}
                                                     />
                                                     <IconButton onClick={() => remove(index)}>
                                                         <Delete />

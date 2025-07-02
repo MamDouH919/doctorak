@@ -17,6 +17,8 @@ i18n
         detection: {
             order: ['cookie', 'localStorage', 'navigator'],
             caches: ['localStorage', 'cookie'], // cache the language in localStorage and cookies
+            lookupCookie: 'i18next',
+            lookupLocalStorage: 'i18next',
         },
         interpolation: {
             escapeValue: false, // React already escapes by default

@@ -7,6 +7,7 @@ import { Button, FormControl, FormControlLabel, Stack, Switch, Typography } from
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
 const FormDialog = ({
@@ -18,6 +19,7 @@ const FormDialog = ({
     handleClose: () => void,
     oldData: any
 }) => {
+    const { t } = useTranslation()
     const { auth } = useAppSelector((state) => state)
     const { mutate: createArticlesMutation, isPending: createArticlesLoading } = useMutation({
         mutationFn: (data: { title: string, content: string, account: string }) =>
@@ -54,14 +56,14 @@ const FormDialog = ({
                 content: data.content
             }, {
                 onSuccess: () => {
-                    toast.success("تم تعديل المقال بنجاح")
+                    toast.success(t("common.saveSuccess"))
                     queryClient.invalidateQueries({
                         queryKey: ['articles'],
                     });
                     handleClose()
                 },
                 onError(error) {
-                    toast.error("خطأ في تعديل المقال")
+                    toast.error(t("common.errorMessage"))
                     console.log(error);
                 }
             })
@@ -73,7 +75,7 @@ const FormDialog = ({
                 content: data.content
             }, {
                 onSuccess: () => {
-                    toast.success("تم اضافة المقال بنجاح")
+                    toast.success(t("common.saveSuccess"))
                     queryClient.invalidateQueries({
                         queryKey: ['articles'],
                     });
@@ -87,7 +89,7 @@ const FormDialog = ({
                     }
                 },
                 onError(error) {
-                    toast.error("خطأ في الاضافة المقال")
+                    toast.error(t("common.errorMessage"))
                     console.log(error);
                 }
             })
@@ -115,7 +117,7 @@ const FormDialog = ({
             title={
                 <Stack direction={"row"} spacing={1} justifyContent={"space-between"} alignItems={"center"}>
                     <Typography variant='h6'>
-                        {oldData ? "تعديل المقال" : "إضافة مقال"}
+                        {oldData ? t("adminPages.editArticle") : t("adminPages.addArticle")}
                     </Typography>
                     {!oldData && <FormControl component="fieldset" variant="standard">
                         <FormControlLabel
@@ -128,7 +130,7 @@ const FormDialog = ({
 
                                 />
                             }
-                            label="إضافة مرة آخري"
+                            label={t("adminPages.addAnother")}
                         />
                     </FormControl>}
                 </Stack>
@@ -139,9 +141,9 @@ const FormDialog = ({
                         <ListAccounts
                             control={control}
                             name='accountId'
-                            label={"الحساب"}
+                            label={t("adminPages.account")}
                             rules={{
-                                required: "هذا الحقل مطلوب",
+                                required: t("common.required"),
                             }}
                             disabled={!!oldData}
                         />
@@ -149,27 +151,29 @@ const FormDialog = ({
                     <ControlMUITextField
                         control={control}
                         name='title'
-                        label={"العنوان"}
+                        label={t("adminPages.title")}
                         rows={3}
                         multiline
                         rules={{
-                            required: "هذا الحقل مطلوب",
+                            required: t("common.required"),
                         }}
                     />
                     <ControlMUITextField
                         control={control}
                         name='content'
-                        label={"المحتوى"}
+                        label={t("adminPages.content")}
                         rows={4}
                         multiline
                         rules={{
-                            required: "هذا الحقل مطلوب",
+                            required: t("common.required"),
                         }}
                     />
                 </Stack>
             }
             buttonAction={
-                <Button loading={createArticlesLoading || updateArticlesLoading} type='submit' variant='contained'>{"تاكيد"}</Button>
+                <Button loading={createArticlesLoading || updateArticlesLoading} type='submit' variant='contained'>
+                    {t("common.submit")}
+                </Button>
             }
         />
     )

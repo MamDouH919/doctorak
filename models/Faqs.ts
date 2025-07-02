@@ -2,8 +2,26 @@
 import mongoose from 'mongoose';
 
 const faqSchema = new mongoose.Schema({
-    question: { type: String, required: true },
-    answer: { type: String, required: true },
+    question: {
+        ar: {
+            type: String,
+            required: true
+        },
+        en: {
+            type: String,
+            required: true
+        }
+    },
+    answer: {
+        ar: {
+            type: String,
+            required: true
+        },
+        en: {
+            type: String,
+            required: true
+        }
+    },
     account: { type: mongoose.Schema.Types.ObjectId, ref: 'Accounts', required: true }
 });
 

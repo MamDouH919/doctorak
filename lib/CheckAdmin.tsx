@@ -4,7 +4,7 @@ import { useAppSelector } from '@/Store/store';
 import React from 'react'
 
 const CheckAdmin = ({ children }: { children: React.ReactNode }) => {
-    const { auth } = useAppSelector(state => state);
+    const auth = useAppSelector(state => state.auth);
 
     if (auth.user?.role !== "admin") {
         return <CantAccess />

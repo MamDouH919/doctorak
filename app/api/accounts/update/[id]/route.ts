@@ -12,8 +12,13 @@ export async function PUT(req: NextRequest) {
             try {
                 await dbConnect();
 
+                // get lang from header
+
                 const url = new URL(req.url);
                 const id = url.pathname.split('/').pop(); // Get last part of URL path
+
+                const requestLang = req.headers.get('Language') || 'en';
+                console.log('requestLang', requestLang);
 
                 if (!id) {
                     return NextResponse.json(
@@ -36,7 +41,6 @@ export async function PUT(req: NextRequest) {
                     whatsApp,
                     description,
                     color,
-                    lang,
                     about,
                     domain,
                     active,
@@ -44,7 +48,6 @@ export async function PUT(req: NextRequest) {
                     userId,
                     social,
                     videos,
-                    // appointments,
                     showInHomePage,
                     isPremium,
                     siteName,
@@ -52,13 +55,45 @@ export async function PUT(req: NextRequest) {
                     specialization_needed,
                 } = await req.json();
 
-                if (title) account.title = title;
+                if (title) {
+                    if (!account.title.ar && !account.title.en) {
+                        account.title.ar = title;
+                        account.title.en = title;
+                    } else {
+                        account.title[requestLang] = title;
+                    }
+                };
+
+                if (description) {
+                    if (!account.description.ar && !account.description.en) {
+                        account.description.ar = description;
+                        account.description.en = description;
+                    } else {
+                        account.description[requestLang] = description;
+                    }
+                };
+
+                if (about) {
+                    if (!account.about.ar && !account.about.en) {
+                        account.about.ar = about;
+                        account.about.en = about;
+                    } else {
+                        account.about[requestLang] = about;
+                    }
+                };
+
+                if (siteName) {
+                    if (!account.siteName.ar && !account.siteName.en) {
+                        account.siteName.ar = siteName;
+                        account.siteName.en = siteName;
+                    } else {
+                        account.siteName[requestLang] = siteName;
+                    }
+                };
+
                 if (phone) account.phone = phone;
                 if (whatsApp) account.whatsApp = whatsApp;
-                if (description) account.description = description;
                 if (color) account.color = color;
-                if (lang) account.lang = lang;
-                if (about) account.about = about;
                 if (domain) {
                     account.domain = domain;
                 } else {
@@ -68,11 +103,10 @@ export async function PUT(req: NextRequest) {
                 if (userId) account.userId = userId;
                 if (social) account.social = social;
                 if (videos) account.videos = videos;
-                if (siteName) account.siteName = siteName;
-                // if (appointments) account.appointments = appointments;
 
                 if (specialization) account.specialization = specialization;
                 if (specialization_needed) account.specialization_needed = specialization_needed;
+
                 account.active = active;
                 account.showInHomePage = showInHomePage;
                 account.isPremium = isPremium;

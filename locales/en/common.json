@@ -1,0 +1,12 @@
+{
+    "submit": "Submit",
+    "reset": "Reset",
+    "required": "This field is required",
+    "saveSuccess": "Changes saved successfully !",
+    "errorMessage": "An error occurred while enabling the account, please try again.",
+    "cancel": "Cancel",
+    "add": "Add",
+    "delete": "Delete",
+    "or": "Or",
+    "search": "Search"
+}

@@ -17,6 +17,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import ListSpecializations from '@/components/customAutoCompolete/ListSpecializations';
 import ListGovernorate from '@/components/customAutoCompolete/ListGovernorate';
 import ListCities from '@/components/customAutoCompolete/ListCities';
+import { useTranslation } from 'react-i18next';
 
 
 const StyledPaper = styled(Paper)`
@@ -33,6 +34,7 @@ const SearchForDoctors = ({
 }: {
     searchInSamePage?: boolean
 }) => {
+    const { t } = useTranslation()
     const searchParams = useSearchParams()
     const name = searchParams.get('name')
     const specialty = searchParams.get('specialty')
@@ -50,14 +52,14 @@ const SearchForDoctors = ({
     })
     const router = useRouter()
     const onSubmit = async (data: any) => {
-        if (Object.keys(data).length === 0) {
-            return
-        }
         const cleaned = Object.fromEntries(
             Object.entries(data)
                 .filter(([_, v]) => v !== undefined && v !== '')
                 .map(([k, v]) => [k, String(v)])
         );
+        if (Object.keys(cleaned).length === 0) {
+            return
+        }
         const params = new URLSearchParams(cleaned).toString();
 
         if (searchInSamePage) {
@@ -73,7 +75,7 @@ const SearchForDoctors = ({
                     <ControlMUITextField
                         control={control}
                         name='name'
-                        label={"اسم الدكتور"}
+                        label={t("website.searchForDoctors.name")}
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">
@@ -87,14 +89,14 @@ const SearchForDoctors = ({
                     <ListSpecializations
                         control={control}
                         name='specialty'
-                        label={"التخصصات"}
+                        label={t("website.searchForDoctors.specialty")}
                     />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
                     <ListGovernorate
                         control={control}
                         name='governorate'
-                        label={"المحافظة"}
+                        label={t("website.searchForDoctors.governorate")}
                     />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
@@ -104,7 +106,7 @@ const SearchForDoctors = ({
                         governorateId={watch('governorate')}
                         control={control}
                         name='city'
-                        label={"المدينة"}
+                        label={t("website.searchForDoctors.city")}
                     />
                 </Grid>
                 <Grid size={{ xs: 12 }}>
@@ -115,7 +117,7 @@ const SearchForDoctors = ({
                         color="primary"
                         startIcon={<SearchIcon />}
                     >
-                        بحث
+                        {t("common.search")}
                     </Button>
                 </Grid>
             </Grid>

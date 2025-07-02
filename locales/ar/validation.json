@@ -1,0 +1,11 @@
+{
+    "required": "هذا الحقل مطلوب",
+    "invalidEmail": "البريد الإلكتروني غير صحيح",
+    "invalidPassword": "كلمة السر غير صحيحة",    
+    "invalidImageSize1mb": "الصورة يجب أن تكون أصغر من 1 ميغابايت",
+    "emailAlreadyExists": "البريد الإلكتروني مسجل بالفعل",
+    "incorrectEmail": "البريد الإلكتروني غير صحيح",
+    "incorrectPassword": "كلمة السر غير صحيحة",
+    "emailNotVerified": "البريد الإلكتروني غير مفعل",
+    "accountNotActive": "الحساب غير مفعل"
+}

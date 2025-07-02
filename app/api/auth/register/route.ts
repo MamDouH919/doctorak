@@ -16,6 +16,7 @@ import { NextRequest } from 'next/server';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { storage } from '@/firebase';
 
+const folderName = process.env.NEXT_PUBLIC_FIREBASE_STORAGE_FOLDER;
 export const POST = withErrorHandler(async (req: NextRequest) => {
     await dbConnect();
     const session = await mongoose.startSession();
@@ -53,7 +54,7 @@ export const POST = withErrorHandler(async (req: NextRequest) => {
 
         const existingUser = await Users.findOne({ email: email.toLowerCase() });
         if (existingUser) {
-            throw new ValidationError([{ field: 'email', message: 'البريد الإلكتروني مسجل بالفعل' }]);
+            throw new ValidationError([{ field: 'email', message: "emailAlreadyExists" }]);
         }
 
         const file = form.get('image') as File;
@@ -62,7 +63,7 @@ export const POST = withErrorHandler(async (req: NextRequest) => {
         const buffer = Buffer.from(arrayBuffer);
         const extension = file.name.split('.').pop();
         const filename = `${uuidv4()}.${extension}`;
-        const storageRef = ref(storage, `dakatrah/register-images/${filename}`);
+        const storageRef = ref(storage, `${folderName}/register-images/${filename}`);
 
         await uploadBytes(storageRef, buffer, {
             contentType: file.type,
@@ -74,7 +75,10 @@ export const POST = withErrorHandler(async (req: NextRequest) => {
 
         await session.withTransaction(async () => {
             const user = new Users({
-                name,
+                name: {
+                    ar: name,
+                    en: name,
+                },
                 email: email.toLowerCase(),
                 password: hashedPassword,
                 role: 'user',

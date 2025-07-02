@@ -24,11 +24,10 @@ const VerifyCode = ({
     handleClose,
     email
 }: PropsType) => {
-    const [resendLoading, setResendLoading] = useState(false)
     const router = useRouter()
-    const dispatch = useAppDispatch()
+    // const dispatch = useAppDispatch()
     const { handleSubmit, control, setError } = useForm()
-
+    const { t } = useTranslation()
     // mutation for verify email
     const { mutate: verifyEmailMutation, isPending: verifyEmailLoading } = useMutation({
         mutationFn: (data: { email: string, otp: number }) =>
@@ -53,7 +52,7 @@ const VerifyCode = ({
             otp: data.otp
         }, {
             onSuccess: async () => {
-                toast.success("سيتم مراجعة بياناتك في أقرب وقت ممكن، وسيتم التواصل معك عبر البريد الإلكتروني لتأكيد الحساب.", {
+                toast.success(t("website.verifyCode.success"), {
                     duration: 5000,
                 });
                 // dispatch(changeUser({
@@ -94,7 +93,7 @@ const VerifyCode = ({
                         });
                     });
                 } else {
-                    toast.error("حدث خطأ أثناء إعادة إرسال رمز التحقق")
+                    toast.error(t("website.verifyCode.error"))
                 }
             }
         })
@@ -110,7 +109,7 @@ const VerifyCode = ({
             }}
             title={
                 <Stack direction={"row"} alignItems={"center"} spacing={1}>
-                    <Typography variant='body1'>{"التحقق من البريد الإلكتروني"}</Typography>
+                    <Typography variant='body1'>{t("website.verifyCode.title")}</Typography>
                 </Stack>
             }
             content={
@@ -118,9 +117,9 @@ const VerifyCode = ({
                     <ControlMUITextField
                         control={control}
                         name='otp'
-                        label={"الرمز المرسل إليك"}
+                        label={t("website.verifyCode.otp")}
                         rules={{
-                            required: "الرمز المرسل إليك مطلوب",
+                            required: t("common.required"),
                         }}
                     />
                     <Stack alignItems={"flex-start"}>
@@ -130,7 +129,7 @@ const VerifyCode = ({
                             variant='text'
                             loading={resendOtpLoading}
                         >
-                            {"إعادة آرسال"}
+                            {t("website.verifyCode.resend")}
                         </Button>
                     </Stack>
                 </Stack>
@@ -142,7 +141,7 @@ const VerifyCode = ({
                         disabled={resendOtpLoading}
                         type='submit' variant='contained'
                     >
-                        {"تأكيد"}
+                        {t("common.submit")}
                     </Button>
                 </Stack>
             }

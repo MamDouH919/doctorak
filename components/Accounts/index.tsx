@@ -6,18 +6,17 @@ import { fetchAccount, updateAccount } from "@/lib/api/accounts"
 import { useAppSelector } from "@/Store/store"
 import { CreateAccount } from "@/types/account"
 import { Add, ColorLens, Delete, Info } from "@mui/icons-material"
-import { Box, Button, Grid, IconButton, Paper, Popover, Stack, TextField, Tooltip, Typography } from "@mui/material"
+import { Box, Button, CircularProgress, Grid, IconButton, Paper, Popover, Stack, Tooltip, Typography } from "@mui/material"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
 import { FormProvider, useFieldArray, useForm, useWatch } from "react-hook-form"
 import { toast } from "sonner"
-import moment from "moment"
-// import { Appointments } from "./Appointments"
 import { HexColorPicker } from "react-colorful"
 import useDashboard from "@/hooks/useDashboard"
 import MuiSwitch from "../MUI/MuiSwitch"
 import ListSpecializations from "../customAutoCompolete/ListSpecializations"
 import { SingleImageUploader } from "../MUI/FileUpload"
+import { useTranslation } from "react-i18next"
 
 // import Details from "@/Sections/Details"
 
@@ -33,30 +32,11 @@ const selectOptions = [
     { value: "website", key: "Website", disabled: false },
 ]
 
-// const getTime = (time: string | Date) => moment(time).locale("en").format('HH:mm');
-// const stringFormatToDate = (date: string) => moment(date, "HH:mm").locale("en").toDate();
-
-// const Days = [
-//     'الاثنين',
-//     'الثلاثاء',
-//     'الأربعاء',
-//     'الخميس',
-//     'الجمعة',
-//     'السبت',
-//     'الأحد',
-// ];
-
 const Accounts = ({ id }: { id?: string }) => {
     const context = useDashboard();
-
+    const { t, i18n } = useTranslation()
     const methods = useForm<CreateAccount>({
         defaultValues: {
-            // appointments: Days.map(day => ({
-            //     day,
-            //     timeFrom: undefined,
-            //     timeTo: undefined,
-            //     checked: false,
-            // })),
             color: '#FFFFFF',
         }
     })
@@ -82,24 +62,22 @@ const Accounts = ({ id }: { id?: string }) => {
 
     useEffect(() => {
         if (account) {
-            methods.setValue('title', account.data.title)
+            methods.setValue('title', account.data.title?.[i18n.language])
             methods.setValue('phone', account.data.phone ? account.data.phone.replace("+20", "") : "")
             methods.setValue('whatsApp', account.data.whatsApp ? account.data.whatsApp.replace("+20", "") : "")
-            methods.setValue('description', account.data.description)
+            methods.setValue('description', account.data.description?.[i18n.language])
             methods.setValue('color', account.data.color)
-            methods.setValue('lang', account.data.lang)
-            methods.setValue('about', account.data.about)
+            // methods.setValue('lang', account.data.lang)
+            methods.setValue('about', account.data.about?.[i18n.language])
             methods.setValue('showInHomePage', account.data.showInHomePage)
             methods.setValue('isPremium', account.data.isPremium)
             methods.setValue('domain', account.data.domain)
             methods.setValue('social', account.data.social)
             methods.setValue('videos', account.data.videos)
             methods.setValue('active', account.data.active)
-            methods.setValue('siteName', account.data.siteName)
+            methods.setValue('siteName', account.data.siteName?.[i18n.language])
             methods.setValue('specialization', account.data?.specialization)
             methods.setValue('specialization_needed', account.data?.specialization_needed)
-
-            console.log(account.data?.image?.url);
 
             if (account.data?.image?.url) {
                 methods.setValue('image', account.data?.image?.url)
@@ -107,22 +85,10 @@ const Accounts = ({ id }: { id?: string }) => {
 
 
             const appointmentsFromBackend = account.data.appointments || [];
-
-            // const updatedAppointments = Days.map((day) => {
-            //     const matched = appointmentsFromBackend.find((a: any) => a.day === day);
-            //     return {
-            //         day,
-            //         timeFrom: stringFormatToDate(matched?.timeFrom) || undefined,
-            //         timeTo: stringFormatToDate(matched?.timeTo) || undefined,
-            //         checked: !!matched,
-            //     };
-            // });
-
-            // methods.setValue('appointments', updatedAppointments);
         }
 
         return () => { }
-    }, [account])
+    }, [account, t])
 
 
     const onSubmit = async (data: CreateAccount) => {
@@ -132,11 +98,6 @@ const Accounts = ({ id }: { id?: string }) => {
             data: {
                 ...data,
                 userId: id! ?? auth.user?.id!,
-                // appointments: data.appointments.filter(e => e.checked).map(e => ({
-                //     day: e.day,
-                //     timeFrom: getTime(e.timeFrom),
-                //     timeTo: getTime(e.timeTo)
-                // })),
                 ...(typeof data.image !== "string" && { image: data.image }),
                 phone: "+20" + data.phone,
                 whatsApp: "+20" + data.whatsApp,
@@ -144,10 +105,10 @@ const Accounts = ({ id }: { id?: string }) => {
             }
         }, {
             onSuccess: () => {
-                toast.success("تم تعديل الحساب بنجاح")
+                toast.success(t("common.saveSuccess"))
             },
             onError(error) {
-                toast.error("خطأ في تعديل الحساب")
+                toast.error(t("common.errorMessage"))
                 console.log(error);
             }
         })
@@ -157,16 +118,16 @@ const Accounts = ({ id }: { id?: string }) => {
         context?.dispatch({
             type: "SET_BREADCRUMB_LINKS",
             payload: [
-                { label: "حسابك" }
+                { label: t("breadCrumb.yourAccount") }
             ],
         });
 
         return () => { context?.dispatch({ type: "RESET_STATE" }) }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [t])
 
     const rules = {
-        required: "هذا الحقل مطلوب",
+        required: t("common.required"),
     }
 
     const watchedItems = useWatch({
@@ -186,7 +147,14 @@ const Accounts = ({ id }: { id?: string }) => {
     const open = Boolean(anchorEl);
 
     if (isLoading) {
-        return <div>loading...</div>
+        return <Stack
+            height={"100%"}
+            width={"100%"}
+            justifyContent={"center"}
+            alignItems={"center"}
+        >
+            <CircularProgress />
+        </Stack>
     }
 
 
@@ -198,7 +166,7 @@ const Accounts = ({ id }: { id?: string }) => {
                         <Grid container spacing={2}>
                             <Grid size={{ xs: 12 }} >
                                 <Typography variant="h6" fontWeight="bold" color="primary.main" gutterBottom>
-                                    بيانات الحساب
+                                    {t("adminPages.accountData")}
                                 </Typography>
                             </Grid>
                             <Grid size={{ xs: 12, }} >
@@ -215,7 +183,7 @@ const Accounts = ({ id }: { id?: string }) => {
                                     <ControlMUITextField
                                         control={methods.control}
                                         name='domain'
-                                        label={"النطاق"}
+                                        label={t("adminPages.domain")}
                                         rules={rules}
                                     />
                                 </Grid>}
@@ -224,7 +192,7 @@ const Accounts = ({ id }: { id?: string }) => {
                                     <MuiSwitch
                                         control={methods.control}
                                         name='active'
-                                        label={"فعال"}
+                                        label={t("adminPages.active")}
                                     />
                                 </Grid>}
                             {auth.user?.role === 'admin' &&
@@ -232,7 +200,7 @@ const Accounts = ({ id }: { id?: string }) => {
                                     <MuiSwitch
                                         control={methods.control}
                                         name='showInHomePage'
-                                        label={"اظهار في الصفحة الرئيسية"}
+                                        label={t("adminPages.showInHomePage")}
                                     />
                                 </Grid>}
 
@@ -241,7 +209,7 @@ const Accounts = ({ id }: { id?: string }) => {
                                     <MuiSwitch
                                         control={methods.control}
                                         name='isPremium'
-                                        label={"حساب مميز"}
+                                        label={t("adminPages.isPremium")}
                                     />
                                 </Grid>}
                             {auth.user?.role === 'admin' &&
@@ -249,7 +217,7 @@ const Accounts = ({ id }: { id?: string }) => {
                                     <ListSpecializations
                                         control={methods.control}
                                         name='specialization'
-                                        label={"التخصص"}
+                                        label={t("adminPages.specialization")}
                                         rules={{
                                             required: methods.watch('specialization_needed') ? false : rules.required,
                                         }}
@@ -262,7 +230,7 @@ const Accounts = ({ id }: { id?: string }) => {
                                     <ControlMUITextField
                                         control={methods.control}
                                         name='specialization_needed'
-                                        label={"التخصص المطلوب"}
+                                        label={t("adminPages.specialization_needed")}
                                         rules={{
                                             required: methods.watch('specialization') ? false : rules.required,
                                         }}
@@ -281,7 +249,7 @@ const Accounts = ({ id }: { id?: string }) => {
                                 <ControlMUITextField
                                     control={methods.control}
                                     name='siteName'
-                                    label={"اسم الموقع"}
+                                    label={t("adminPages.siteName")}
                                     rules={rules}
                                     InputProps={{
                                         endAdornment: (
@@ -303,7 +271,7 @@ const Accounts = ({ id }: { id?: string }) => {
                                 <ControlMUITextField
                                     control={methods.control}
                                     name='title'
-                                    label={"العنوان"}
+                                    label={t("adminPages.title")}
                                     rules={rules}
                                     InputProps={{
                                         endAdornment: (
@@ -320,7 +288,7 @@ const Accounts = ({ id }: { id?: string }) => {
                                 <ControlMUITextField
                                     control={methods.control}
                                     name='phone'
-                                    label={"رقم الهاتف"}
+                                    label={t("adminPages.phone")}
                                     rules={{
                                         ...rules,
                                         validate: {
@@ -333,7 +301,7 @@ const Accounts = ({ id }: { id?: string }) => {
                                 <ControlMUITextField
                                     control={methods.control}
                                     name='whatsApp'
-                                    label={"الواتس اب"}
+                                    label={t("adminPages.whatsApp")}
                                     rules={{
                                         ...rules,
                                         validate: {
@@ -376,7 +344,7 @@ const Accounts = ({ id }: { id?: string }) => {
                                 <ControlMUITextField
                                     control={methods.control}
                                     name='color'
-                                    label="اللون"
+                                    label={t("adminPages.color")}
                                     rules={{
                                         required: rules.required,
                                         validate: {
@@ -404,23 +372,23 @@ const Accounts = ({ id }: { id?: string }) => {
                                 />
                             </Grid>
 
-                            <Grid size={{ xs: 12, sm: 6, md: 4 }} >
+                            {/* <Grid size={{ xs: 12, sm: 6, md: 4 }} >
                                 <MuiSelect
                                     control={methods.control}
                                     name='lang'
-                                    label={"اللغة"}
+                                    label={t("adminPages.lang")}
                                     data={[
                                         { value: "ar", key: "العربية" },
                                         { value: "en", key: "الإنجليزية" },
                                     ]}
                                     rules={rules}
                                 />
-                            </Grid>
+                            </Grid> */}
                             <Grid size={{ xs: 12 }} >
                                 <ControlMUITextField
                                     control={methods.control}
                                     name='about'
-                                    label={"المعلومات الشاملة"}
+                                    label={t("adminPages.about")}
                                     rules={rules}
                                     multiline
                                     rows={5}
@@ -439,7 +407,7 @@ const Accounts = ({ id }: { id?: string }) => {
                                 <ControlMUITextField
                                     control={methods.control}
                                     name='description'
-                                    label={"الوصف"}
+                                    label={t("adminPages.description")}
                                     rules={rules}
                                     multiline
                                     rows={5}
@@ -458,7 +426,7 @@ const Accounts = ({ id }: { id?: string }) => {
                                 <Stack spacing={2}>
                                     <Stack direction="row" justifyContent={"space-between"} alignItems={"center"}>
                                         <Typography variant="h6" fontWeight="bold" color="primary.main" gutterBottom>
-                                            التواصل الاجتماعي
+                                            {t("adminPages.social")}
                                         </Typography>
                                         <Button
                                             variant="outlined"
@@ -466,7 +434,7 @@ const Accounts = ({ id }: { id?: string }) => {
                                             onClick={() => append({ type: "", link: "" })}
                                             disabled={fields.length === selectOptions.length}
                                         >
-                                            إضافة
+                                            {t("common.add")}
                                         </Button>
                                     </Stack>
                                     {fields.map((item, index) => {
@@ -481,14 +449,14 @@ const Accounts = ({ id }: { id?: string }) => {
                                             <Stack key={item.id} direction="row" spacing={2} alignItems="center">
                                                 <MuiSelect
                                                     name={`social.${index}.type`}
-                                                    label="النوع"
+                                                    label={t("adminPages.type")}
                                                     control={methods.control}
                                                     variant="filled"
                                                     data={filterSelectOptions}
                                                     rules={rules}
                                                 />
                                                 <ControlMUITextField
-                                                    label="الرابط"
+                                                    label={t("adminPages.link")}
                                                     control={methods.control}
                                                     name={`social.${index}.link`}
                                                     rules={{
@@ -518,14 +486,14 @@ const Accounts = ({ id }: { id?: string }) => {
                                 <Stack spacing={2}>
                                     <Stack direction="row" justifyContent={"space-between"} alignItems={"center"}>
                                         <Typography variant="h6" fontWeight="bold" color="primary.main" gutterBottom>
-                                            الفديوهات
+                                            {t("adminPages.videos")}
                                         </Typography>
                                         <Button
                                             variant="outlined"
                                             startIcon={<Add />}
                                             onClick={() => appendVideos({ type: "", link: "" })}
                                         >
-                                            إضافة
+                                            {t("common.add")}
                                         </Button>
                                     </Stack>
                                     {videosFields.map((item, index) => {
@@ -540,14 +508,14 @@ const Accounts = ({ id }: { id?: string }) => {
                                             <Stack key={item.id} direction="row" spacing={2} alignItems="center">
                                                 <MuiSelect
                                                     name={`videos.${index}.type`}
-                                                    label="النوع"
+                                                    label={t("adminPages.type")}
                                                     control={methods.control}
                                                     variant="filled"
                                                     data={selectOptions}
                                                     rules={rules}
                                                 />
                                                 <ControlMUITextField
-                                                    label="الرابط"
+                                                    label={t("adminPages.link")}
                                                     control={methods.control}
                                                     name={`videos.${index}.link`}
                                                     rules={{
@@ -555,7 +523,7 @@ const Accounts = ({ id }: { id?: string }) => {
                                                         validate: {
                                                             url: (value: string) =>
                                                                 /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/.test(value) ||
-                                                                "يجب أن يكون رابط صحيحا",
+                                                                t("validation.url"),
                                                         },
                                                     }}
                                                 />
@@ -577,7 +545,7 @@ const Accounts = ({ id }: { id?: string }) => {
 
                             <Grid size={{ xs: 12 }} >
                                 <Button variant='contained' type='submit' fullWidth loading={updateAccountLoading || isLoading}>
-                                    إنشاء حساب
+                                    {t("common.submit")}
                                 </Button>
                             </Grid>
                         </Grid>

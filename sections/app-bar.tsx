@@ -8,6 +8,8 @@ import { useAppSelector } from '@/Store/store';
 import HeaderLink from '@/components/Accounts/HeaderLink';
 import SiteLogo from '@/components/SiteLogo';
 import LogoutDialog from '@/components/dialogs/LogoutDialog';
+import LanguageMenu from '@/components/Language';
+import { useTranslation } from 'react-i18next';
 
 const AppBarStyle = styled(AppBar)(({ theme }) => ({
     position: 'sticky',
@@ -26,6 +28,7 @@ const AppBarStyle = styled(AppBar)(({ theme }) => ({
 
 
 const AppBarComponent = () => {
+    const { t } = useTranslation()
     const auth = useAppSelector(state => state.auth);
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
     const [logoutDialog, setLogoutDialog] = useState(false)
@@ -64,19 +67,24 @@ const AppBarComponent = () => {
                             <SiteLogo />
                         </Stack>
                         <Box sx={{ display: { xs: "none", md: "flex" }, gap: 2 }} justifyContent={"center"}>
-                            <HeaderLink href="/doctors">الدكاترة</HeaderLink>
-                            <HeaderLink href="/specialties">التخصصات</HeaderLink>
+                            <HeaderLink href="/doctors">
+                                {t("website.appBar.doctors")}
+                            </HeaderLink>
+                            <HeaderLink href="/specialties">
+                                {t("website.appBar.specialties")}
+                            </HeaderLink>
                         </Box>
                         <Stack direction={"row"} spacing={1} alignItems={"center"}>
+                            <LanguageMenu />
                             {auth.user ?
                                 <Button color="primary" variant="outlined" sx={{ ml: 2 }}
                                     onClick={() => setLogoutDialog(true)}
                                 >
-                                    تسجيل الخروج
+                                    {t("website.appBar.logout")}
                                 </Button> :
                                 <Link href="/login" passHref>
                                     <Button color="primary" variant="outlined" sx={{ ml: 2 }}>
-                                        تسجيل الدخول
+                                        {t("website.appBar.login")}
                                     </Button>
                                 </Link>}
                             {auth.user &&
@@ -114,10 +122,14 @@ const AppBarComponent = () => {
                                     sx={{ display: { xs: 'block', md: 'none' } }}
                                 >
                                     <MenuItem>
-                                        <HeaderLink href="/doctors">الدكاترة</HeaderLink>
+                                        <HeaderLink href="/doctors">
+                                            {t("website.appBar.doctors")}
+                                        </HeaderLink>
                                     </MenuItem>
                                     <MenuItem onClick={() => { scrollToSection("faq") }}>
-                                        <HeaderLink href="/specialties">التخصصات</HeaderLink>
+                                        <HeaderLink href="/specialties">
+                                            {t("website.appBar.specialties")}
+                                        </HeaderLink>
                                     </MenuItem>
                                 </Menu>
                             </Box>

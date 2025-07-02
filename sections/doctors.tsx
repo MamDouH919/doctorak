@@ -7,6 +7,7 @@ import { getDoctors } from '@/lib/api/website';
 import { TbWorld } from 'react-icons/tb';
 import DoctorCardSkeleton from '@/loading/DoctorCard';
 import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
 
 const GradientSection = styled(Box)(({ theme }) => ({
     padding: theme.spacing(8, 2),
@@ -148,7 +149,7 @@ const FeaturedDoctorsSection = ({
     governorate?: string | null
     city?: string | null
 }) => {
-
+    const { t, i18n } = useTranslation()
     const { data: doctors, isLoading } = useQuery({
         queryKey: ['doctors', name, specialty, governorate, city],
         queryFn: () => getDoctors({
@@ -165,10 +166,10 @@ const FeaturedDoctorsSection = ({
             <Box maxWidth="lg" mx="auto">
                 <Box textAlign="center" mb={6}>
                     <Typography variant="h4" fontWeight={700} color="primary" gutterBottom>
-                        الدكاترة
+                        {t("website.banner.title")}
                     </Typography>
                     <Typography variant="h6" color="textSecondary">
-                        أفضل الدكاترة المتخصصين في مختلف المجالات الطبية
+                        {t("website.banner.subtitle")}
                     </Typography>
                 </Box>
 
@@ -183,40 +184,40 @@ const FeaturedDoctorsSection = ({
                             <DoctorCard className='doctor-card'>
                                 <Box position="relative" display="flex" alignItems="center" justifyContent="center" height={200} bgcolor="#dbeafe">
                                     <AvatarStyle
-                                        src={doctor.image.url}
-                                        alt={doctor.image.alt}
+                                        src={doctor.image?.url || "/doctor-not-found.png"}
+                                        alt={doctor.image?.alt || doctor.user.name[i18n.language as "ar" | "en"]}
 
                                     />
                                     {<AvailabilityBadge>
-                                        {doctor.visitors} زيارة للصفحة
+                                        {t("website.doctor.visits", { count: doctor.visitors })}
                                     </AvailabilityBadge>}
                                 </Box>
 
                                 <CardContent>
                                     <Stack spacing={2}>
                                         <Typography variant="h3" fontWeight={700} fontSize={20} textAlign="center">
-                                            {doctor.user.name}
+                                            {doctor.user.name[i18n.language as "ar" | "en"]}
                                         </Typography>
 
                                         <Box textAlign="center">
                                             <ChipStyle
-                                                label={doctor.specialization.name}
+                                                label={doctor.specialization.name[i18n.language as "ar" | "en"]}
                                                 color='primary'
 
                                             />
                                         </Box>
 
 
-                                        <Stack>
+                                        {doctor.governorates.length > 0 && <Stack>
                                             <Typography variant="body2" color="textPrimary" textAlign={"center"} fontWeight={"bold"}>
-                                                أماكن تواجد الدكتور
+                                                {t("website.doctor.DoctorsLocations")}
                                             </Typography>
                                             {doctor.governorates.map((governorate, index) => (
                                                 <Typography key={index} variant="body2" color="textSecondary" ml={1} textAlign={"center"}>
-                                                    {governorate.name.ar + " - " + doctor.cities[index].name.ar}
+                                                    {governorate.name[i18n.language as "ar" | "en"] + " - " + doctor.cities[index].name[i18n.language as "ar" | "en"]}
                                                 </Typography>
                                             ))}
-                                        </Stack>
+                                        </Stack>}
 
                                         {/* <IconLabel icon={Room} label={doctor.city} /> */}
 
@@ -235,7 +236,7 @@ const FeaturedDoctorsSection = ({
                                             color='textSecondary'
                                             mb={1}
                                         >
-                                            {doctor.description}
+                                            {doctor.description[i18n.language as "ar" | "en"]}
                                         </TypographyTwoLine>
 
                                         {/* {doctor.available && (
@@ -243,11 +244,11 @@ const FeaturedDoctorsSection = ({
                                     )} */}
                                         <Link href={"https://" + doctor.domain} passHref target='_blank' rel="noreferrer">
                                             <Button variant='outlined' color='primary' fullWidth endIcon={<TbWorld />}>
-                                                تفاصيل أكتر عن الدكتور
+                                                {t("website.doctor.moreInfo")}
                                             </Button>
                                         </Link>
                                         <Typography variant="body2" color="error" textAlign={"center"} fontStyle={"italic"} fontWeight={"bold"}>
-                                            * الحجز قريبا *
+                                            {t("website.doctor.soon")}
                                         </Typography>
                                     </Stack>
                                 </CardContent>
@@ -257,14 +258,14 @@ const FeaturedDoctorsSection = ({
                     {!isLoading && doctors?.data.length === 0 &&
                         <Box textAlign="center" mt={8} width={"100%"}>
                             <Typography variant="h6" color="text.secondary" textAlign={"center"}>
-                                لا يوجد دكاترة مطابقة للبحث المحدد
+                                {t("website.doctor.noResults")}
                             </Typography>
                         </Box>}
                 </Grid>
 
                 {!fromPage && <Box textAlign="center" mt={8}>
                     <Button variant="contained" color="primary" size="large">
-                        عرض جميع الدكاترة
+                        {t("website.doctor.viewAll")}
                     </Button>
                 </Box>}
             </Box>

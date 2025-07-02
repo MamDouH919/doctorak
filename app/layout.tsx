@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import { I18nProvider } from "./i18n-provider";
 import Providers from "@/lib/Providers";
 import { getToken } from "@/action/token";
-// import { seedSpecializations } from "@/scripts/seedSpecializations";
+import { getLang } from "@/action/lang";
+import { seedSpecializations } from "@/scripts/seedSpecializations";
 // import { seedGovernorate } from "@/scripts/seedGovernorates";
-// import dbConnect from "@/lib/dbConnect";
+import dbConnect from "@/lib/dbConnect";
 // import { seedCities } from "@/scripts/seedCities";
 
 export const metadata: Metadata = {
@@ -22,19 +23,20 @@ export default async function RootLayout({
   // get token from cookie
 
 
-  // async function initialize() {
-  //   await dbConnect();
-  //   await seedSpecializations();
-  //   await seedGovernorate();
-  //   await seedCities();
-  // }
+  async function initialize() {
+    await dbConnect();
+    await seedSpecializations();
+    // await seedGovernorate();
+    // await seedCities();
+  }
 
-  // initialize();
+  initialize();
 
   const token = await getToken();
+  const lang = await getLang();
   // wait one second 
   return (
-    <html lang="en" dir="rtl">
+    <html lang={lang} dir={lang === "ar" ? "rtl" : "ltr"}>
       <head>
         <link
           href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&display=swap"

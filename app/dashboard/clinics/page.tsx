@@ -11,8 +11,10 @@ import { ColumnDef } from '@tanstack/react-table';
 import DeleteDialog from './_deleteDialog';
 import { useAppSelector } from '@/Store/store';
 import { fetchListClinics } from '@/lib/api/clinics';
+import { useTranslation } from 'react-i18next';
 
 export default function ListClinics() {
+  const { t } = useTranslation()
   const context = useDashboard()
   const { auth } = useAppSelector((state) => state)
   const [createState, setCreateState] = React.useState<{ open: boolean, data: any }>({
@@ -44,20 +46,20 @@ export default function ListClinics() {
             </Button>
           </Stack>,
         breadcrumbLinks: [
-          { label: "العيادات والمستشفيات" },
+          { label: t("breadCrumb.clinics") },
         ],
       },
     });
     return () => { context?.dispatch({ type: "RESET_STATE" }) }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [t])
 
   const columns: ColumnDef<any>[] = [
     ...(auth?.user?.role === 'admin' ? [
       {
         accessorKey: "account",
-        header: "الحساب",
+        header: t("adminPages.account"),
         cell: ({ row }: { row: any }) => {
           return (
             <Stack direction={"row"} spacing={0.5}>
@@ -69,27 +71,27 @@ export default function ListClinics() {
     ] : []),
     {
       accessorKey: "name",
-      header: "الاسم",
+      header: t("adminPages.name"),
     },
     {
       accessorKey: "governorate.name.ar",
-      header: "المحافظة",
+      header: t("adminPages.governorate"),
     },
     {
       accessorKey: "city.name.ar",
-      header: "المدينة",
+      header: t("adminPages.city"),
     },
     {
       accessorKey: "address",
-      header: "العنوان",
+      header: t("adminPages.address"),
     },
     {
       accessorKey: "phone",
-      header: "الهاتف",
+      header: t("adminPages.phone"),
     },
     {
       accessorKey: "mobile",
-      header: "الموبايل",
+      header: t("adminPages.mobile"),
     },
 
     {

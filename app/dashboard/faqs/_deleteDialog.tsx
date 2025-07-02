@@ -4,6 +4,7 @@ import { Button, Typography } from '@mui/material'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import React from 'react'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
 const DeleteDialog = ({
@@ -15,6 +16,7 @@ const DeleteDialog = ({
     handleClose: () => void,
     id: string
 }) => {
+    const { t } = useTranslation()
     const { handleSubmit } = useForm()
 
     const { mutate: deleteFaqsMutation, isPending: deleteFaqsLoading } = useMutation({
@@ -29,14 +31,14 @@ const DeleteDialog = ({
     const onSubmit = async () => {
         deleteFaqsMutation(id, {
             onSuccess: () => {
-                toast.success("تم حذف السؤال بنجاح")
+                toast.success(t("common.deleteSuccess"))
                 queryClient.invalidateQueries({
                     queryKey: ['faqs'],
                 });
                 handleClose()
             },
             onError(error) {
-                toast.error("خطأ في حذف السؤال")
+                toast.error(t("common.errorMessage"))
                 console.log(error);
             }
         })
@@ -50,14 +52,15 @@ const DeleteDialog = ({
                 onSubmit: handleSubmit(onSubmit),
                 noValidate: true
             }}
+            title={t("common.delete")}
             content={
-                <Typography variant='body1' align='center'>
-                    هل أنت متأكد من أنك تريد حذف هذا السؤال؟
+                <Typography variant='body1'>
+                    {t("adminPages.confirmDeleteFaq")}
                 </Typography>
             }
             buttonAction={
                 <Button type='submit' loading={deleteFaqsLoading} variant='contained'>
-                    حذف
+                    {t("common.submit")}
                 </Button>
             }
         />

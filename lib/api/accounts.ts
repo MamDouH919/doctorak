@@ -58,10 +58,12 @@ export const listServicesDropDown = async () => {
 
 export const updateAccount = async (id: string, data: CreateAccount) => {
     const token = await getToken();
+    const lang = await getLang();
 
     const response = await api.put('/api/accounts/update/' + id, data, {
         headers: {
             'Authorization': `Bearer ${token}`,
+            'Language': lang,
         },
     })
 
@@ -69,6 +71,7 @@ export const updateAccount = async (id: string, data: CreateAccount) => {
 };
 
 import { AxiosProgressEvent } from 'axios';
+import { getLang } from "@/action/lang";
 
 interface UploadOptions {
     onUploadProgress?: (progressEvent: AxiosProgressEvent) => void;

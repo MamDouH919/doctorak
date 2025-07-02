@@ -71,7 +71,7 @@ const Login = () => {
             password: data.password
         }, {
             onSuccess: async (response) => {
-                toast.success("تم تسجيل الدخول بنجاح");
+                toast.success(t("website.login.success"))
                 dispatch(changeUser({
                     id: response.data.user.id,
                     name: response.data.user.name,
@@ -88,13 +88,13 @@ const Login = () => {
                     error.response.data.errors.forEach((value: any) => {
                         setError(value.field, {
                             type: "validate",
-                            message: value.message,
+                            message: t("validation." + value.message),
                         });
                     });
                 }
                 if (axios.isAxiosError(error) && error.response?.data?.type === "custom") {
                     if (error.response.data.errorCode === "account-not-active") {
-                        toast.error("يتم مراجعة بياناتك في أقرب وقت ممكن، وسيتم التواصل معك عبر البريد الإلكتروني لتأكيد الحساب.");
+                        toast.error(t("website.accountNotActive"));
                         return;
                     } 
                     toast.error(error.response.data.message);
@@ -126,23 +126,23 @@ const Login = () => {
                             <LockOpen fontSize='large' />
                         </Avatar>
                         <Typography variant='h1' fontSize={40}>
-                            تسجيل الدخول
+                            {t("website.login.title")}
                         </Typography>
                         <ControlMUITextField
                             control={control}
                             name='email'
-                            label={"البريد الإلكتروني"}
+                            label={t("website.login.email")}
                             rules={{
                                 required: t("auth.fieldIsRequired"),
                             }}
                         />
                         <ControlMUITextField
                             name='password'
-                            label={"كلمة المرور"}
+                            label={t("website.login.password")}
                             type={passType}
                             control={control}
                             rules={{
-                                required: t("auth.fieldIsRequired"),
+                                required: t("common.required"),
                             }}
                             slotProps={{
                                 input: {
@@ -167,16 +167,16 @@ const Login = () => {
                             }}
                         />
                         <Button variant='contained' type='submit' fullWidth loading={loginLoading}>
-                            تسجيل الدخول
+                            {t("website.login.submit")}
                         </Button>
                         {/* divider in middle word or */}
                         <Divider sx={{ margin: theme => theme.spacing(2, 0) }} variant="middle" flexItem>
-                            أو
+                            {t("common.or")}
                         </Divider>
                         {/* need to redirect to register page */}
                         <Link href="/register" style={{ display: "inline-block", width: "100%" }}>
                             <Button variant='outlined' fullWidth>
-                                إنشاء حساب
+                                {t("website.register.title")}
                             </Button>
                         </Link>
                     </Stack>

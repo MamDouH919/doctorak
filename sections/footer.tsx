@@ -11,23 +11,28 @@ import {
     Typography,
 } from '@mui/material';
 import { Stethoscope, Phone, MessageCircle, MapPin } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
-const FooterLinks = [
-    {
-        label: "جميع التخصصات",
-        link: "/specialties"
-    },
-    {
-        label: "جميع الدكاترة",
-        link: "/doctors"
-    },
-    {
-        label: "تسجيل دكتور جديد",
-        link: "/doctors"
-    }
-]
+
 export default function Footer() {
+    const { t } = useTranslation()
     const auth = useAppSelector((state) => state.auth)
+
+    const FooterLinks = [
+        {
+            label: t("website.footer.allSpecialties"),
+            link: "/specialties"
+        },
+        {
+            label: t("website.footer.allDoctors"),
+            link: "/doctors"
+        },
+        {
+            label: t("website.footer.createNewDoctor"),
+            link: "/doctors"
+        }
+    ]
+
     if (auth.user) {
         FooterLinks.pop()
     }
@@ -41,14 +46,14 @@ export default function Footer() {
                             <SiteLogo color="#fff" />
                         </Stack>
                         <Typography variant="body2" color="grey.500" mb={2}>
-                            منصة طبية شاملة تجمع أفضل الدكاترة في مكان واحد لتسهيل الوصول إلى الرعاية الصحية المناسبة.
+                            {t("website.footer.description")}
                         </Typography>
                     </Grid>
 
                     {/* Quick Links */}
                     <Grid size={{ xs: 12, md: 3 }}>
                         <Typography variant="subtitle1" fontWeight="bold" mb={2}>
-                            روابط سريعة
+                            {t("website.footer.quickLinks")}
                         </Typography>
 
 
@@ -116,7 +121,7 @@ export default function Footer() {
 
                 <Divider sx={{ borderColor: 'grey.800', my: 4 }} />
                 <Typography variant="body2" color="grey.500" align="center">
-                    © 2024 دكاترة. جميع الحقوق محفوظة.
+                    {t("website.footer.copyright")}
                 </Typography>
             </Container>
         </Box>

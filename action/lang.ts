@@ -6,3 +6,9 @@ export const setLang = async (lang: string) => {
     const cookieStore = cookies();
     (await cookieStore).set('i18next', lang);
 };
+
+export const getLang = async () => {
+    const cookieStore = cookies();
+    const token = (await cookieStore).get('i18next');
+    return token?.value;
+};

@@ -8,6 +8,7 @@ import { useState } from 'react';
 import useDashboard from '@/hooks/useDashboard';
 import LogoutDialog from '../dialogs/LogoutDialog';
 import SiteLogo from '../SiteLogo';
+import LanguageMenu from '../Language';
 // import LogoutDialog from '../dialogs/LogoutDialog';
 // import SiteLogo from '../SiteLogo';
 
@@ -57,7 +58,7 @@ const Header = () => {
                             {/* <ChangePassword /> */}
                         </Stack>
                         <Stack alignItems={"center"}>
-                            {/* <LanguageMenu /> */}
+                            <LanguageMenu />
                         </Stack>
                         <Stack alignItems={"center"}>
                             <IconButton

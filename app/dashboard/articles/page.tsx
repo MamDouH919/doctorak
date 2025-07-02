@@ -11,8 +11,10 @@ import FormDialog from './_formDialog';
 import { ColumnDef } from '@tanstack/react-table';
 import DeleteDialog from './_deleteDialog';
 import { useAppSelector } from '@/Store/store';
+import { useTranslation } from 'react-i18next';
 
 export default function ListArticles() {
+  const { t } = useTranslation()
   const context = useDashboard()
   const { auth } = useAppSelector((state) => state)
   const [createState, setCreateState] = React.useState<{ open: boolean, data: any }>({
@@ -44,20 +46,20 @@ export default function ListArticles() {
             </Button>
           </Stack>,
         breadcrumbLinks: [
-          { label: "المقالات" },
+          { label: t("breadCrumb.articles") },
         ],
       },
     });
     return () => { context?.dispatch({ type: "RESET_STATE" }) }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [t])
 
   const columns: ColumnDef<any>[] = [
     ...(auth?.user?.role === 'admin' ? [
       {
         accessorKey: "account",
-        header: "الحساب",
+        header: t("adminPages.account"),
         cell: ({ row }: { row: any }) => {
           return (
             <Stack direction={"row"} spacing={0.5}>
@@ -69,11 +71,11 @@ export default function ListArticles() {
     ] : []),
     {
       accessorKey: "title",
-      header: "العنوان",
+      header: t("adminPages.title"),
     },
     {
       accessorKey: "content",
-      header: "المحتوى",
+      header: t("adminPages.content"),
     },
     {
       header: "-",

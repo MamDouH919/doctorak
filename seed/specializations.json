@@ -1,157 +1,219 @@
 [
     {
-        "name": "الباطنة",
-        "name_en": "Internal Medicine",
+        "name": {
+            "ar": "الباطنة",
+            "en": "Internal Medicine"
+        },
         "slug": "internal-medicine"
     },
     {
-        "name": "الجراحة العامة",
-        "name_en": "General Surgery",
+        "name": {
+            "ar": "الجراحة العامة",
+            "en": "General Surgery"
+        },
         "slug": "general-surgery"
     },
     {
-        "name": "أمراض القلب",
-        "name_en": "Cardiology",
+        "name": {
+            "ar": "أمراض القلب",
+            "en": "Cardiology"
+        },
         "slug": "cardiology"
     },
     {
-        "name": "النساء والتوليد",
-        "name_en": "Obstetrics and Gynecology",
+        "name": {
+            "ar": "النساء والتوليد",
+            "en": "Obstetrics and Gynecology"
+        },
         "slug": "obstetrics-gynecology"
     },
     {
-        "name": "الأطفال",
-        "name_en": "Pediatrics",
+        "name": {
+            "ar": "الأطفال",
+            "en": "Pediatrics"
+        },
         "slug": "pediatrics"
     },
     {
-        "name": "الجلدية والتناسلية",
-        "name_en": "Dermatology and Venereology",
+        "name": {
+            "ar": "الجلدية والتناسلية",
+            "en": "Dermatology and Venereology"
+        },
         "slug": "dermatology-venereology"
     },
     {
-        "name": "الأنف والأذن والحنجرة",
-        "name_en": "ENT",
+        "name": {
+            "ar": "الأنف والأذن والحنجرة",
+            "en": "ENT"
+        },
         "slug": "ent"
     },
     {
-        "name": "العيون",
-        "name_en": "Ophthalmology",
+        "name": {
+            "ar": "العيون",
+            "en": "Ophthalmology"
+        },
         "slug": "ophthalmology"
     },
     {
-        "name": "العظام",
-        "name_en": "Orthopedics",
+        "name": {
+            "ar": "العظام",
+            "en": "Orthopedics"
+        },
         "slug": "orthopedics"
     },
     {
-        "name": "المخ والأعصاب",
-        "name_en": "Neurology",
+        "name": {
+            "ar": "المخ والأعصاب",
+            "en": "Neurology"
+        },
         "slug": "neurology"
     },
     {
-        "name": "المسالك البولية",
-        "name_en": "Urology",
+        "name": {
+            "ar": "المسالك البولية",
+            "en": "Urology"
+        },
         "slug": "urology"
     },
     {
-        "name": "الأسنان",
-        "name_en": "Dentistry",
+        "name": {
+            "ar": "الأسنان",
+            "en": "Dentistry"
+        },
         "slug": "dentistry"
     },
     {
-        "name": "الطب النفسي",
-        "name_en": "Psychiatry",
+        "name": {
+            "ar": "الطب النفسي",
+            "en": "Psychiatry"
+        },
         "slug": "psychiatry"
     },
     {
-        "name": "الطب الطبيعي والتأهيل",
-        "name_en": "Physical Medicine and Rehabilitation",
+        "name": {
+            "ar": "الطب الطبيعي والتأهيل",
+            "en": "Physical Medicine and Rehabilitation"
+        },
         "slug": "physical-medicine-rehabilitation"
     },
     {
-        "name": "الأورام",
-        "name_en": "Oncology",
+        "name": {
+            "ar": "الأورام",
+            "en": "Oncology"
+        },
         "slug": "oncology"
     },
     {
-        "name": "التحاليل الطبية",
-        "name_en": "Laboratory Medicine",
+        "name": {
+            "ar": "التحاليل الطبية",
+            "en": "Laboratory Medicine"
+        },
         "slug": "laboratory-medicine"
     },
     {
-        "name": "الأشعة",
-        "name_en": "Radiology",
+        "name": {
+            "ar": "الأشعة",
+            "en": "Radiology"
+        },
         "slug": "radiology"
     },
     {
-        "name": "الطوارئ",
-        "name_en": "Emergency Medicine",
+        "name": {
+            "ar": "الطوارئ",
+            "en": "Emergency Medicine"
+        },
         "slug": "emergency-medicine"
     },
     {
-        "name": "الصدرية",
-        "name_en": "Pulmonology",
+        "name": {
+            "ar": "الصدرية",
+            "en": "Pulmonology"
+        },
         "slug": "pulmonology"
     },
     {
-        "name": "أمراض الدم",
-        "name_en": "Hematology",
+        "name": {
+            "ar": "أمراض الدم",
+            "en": "Hematology"
+        },
         "slug": "hematology"
     },
     {
-        "name": "الغدد الصماء",
-        "name_en": "Endocrinology",
+        "name": {
+            "ar": "الغدد الصماء",
+            "en": "Endocrinology"
+        },
         "slug": "endocrinology"
     },
     {
-        "name": "الجهاز الهضمي",
-        "name_en": "Gastroenterology",
+        "name": {
+            "ar": "الجهاز الهضمي",
+            "en": "Gastroenterology"
+        },
         "slug": "gastroenterology"
     },
     {
-        "name": "الكلى",
-        "name_en": "Nephrology",
+        "name": {
+            "ar": "الكلى",
+            "en": "Nephrology"
+        },
         "slug": "nephrology"
     },
     {
-        "name": "جراحة المخ والأعصاب",
-        "name_en": "Neurosurgery",
+        "name": {
+            "ar": "جراحة المخ والأعصاب",
+            "en": "Neurosurgery"
+        },
         "slug": "neurosurgery"
     },
     {
-        "name": "جراحة القلب والصدر",
-        "name_en": "Cardiothoracic Surgery",
+        "name": {
+            "ar": "جراحة القلب والصدر",
+            "en": "Cardiothoracic Surgery"
+        },
         "slug": "cardiothoracic-surgery"
     },
     {
-        "name": "جراحة الأطفال",
-        "name_en": "Pediatric Surgery",
+        "name": {
+            "ar": "جراحة الأطفال",
+            "en": "Pediatric Surgery"
+        },
         "slug": "pediatric-surgery"
     },
     {
-        "name": "جراحة المسالك البولية",
-        "name_en": "Urologic Surgery",
+        "name": {
+            "ar": "جراحة المسالك البولية",
+            "en": "Urologic Surgery"
+        },
         "slug": "urologic-surgery"
     },
     {
-        "name": "جراحة التجميل",
-        "name_en": "Plastic Surgery",
+        "name": {
+            "ar": "جراحة التجميل",
+            "en": "Plastic Surgery"
+        },
         "slug": "plastic-surgery"
     },
     {
-        "name": "جراحة الأوعية الدموية",
-        "name_en": "Vascular Surgery",
+        "name": {
+            "ar": "جراحة الأوعية الدموية",
+            "en": "Vascular Surgery"
+        },
         "slug": "vascular-surgery"
     },
     {
-        "name": "أمراض الشيخوخة",
-        "name_en": "Geriatrics",
+        "name": {
+            "ar": "أمراض الشيخوخة",
+            "en": "Geriatrics"
+        },
         "slug": "geriatrics"
     },
     {
-        "name": "التخدير والعناية المركزة",
-        "name_en": "Anesthesiology and ICU",
+        "name": {
+            "ar": "التخدير والعناية المركزة",
+            "en": "Anesthesiology and ICU"
+        },
         "slug": "anesthesiology-icu"
     }
 ]

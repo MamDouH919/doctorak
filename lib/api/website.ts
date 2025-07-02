@@ -3,9 +3,11 @@ import api from "../api";
 //  get specializations
 export interface Specialization {
     _id: string;
-    name: string;
     slug: string;
-    name_en: string;
+    name: {
+        ar: string;
+        en: string;
+    };
     // Add more fields as needed
 }
 
@@ -13,30 +15,41 @@ export interface Doctors {
     _id: string;
     domain: string;
     visitors: number;
-    description: string;
-    image:{
+    description: {
+        ar: string;
+        en: string;
+    };
+    image: {
         url: string;
         alt: string;
     }
-    specialization:{
-        name: string;
+    specialization: {
+        name: {
+            ar: string;
+            en: string;
+        };
         slug: string;
     }
     siteName: string;
     user: {
         _id: string;
-        name: string;
+        name: {
+            ar: string;
+            en: string;
+        };
     }
     governorates: {
         _id: string;
         name: {
             ar: string;
+            en: string
         }
     }[];
     cities: {
         _id: string;
         name: {
             ar: string;
+            en: string
         }
     }[];
     // Add more fields as needed

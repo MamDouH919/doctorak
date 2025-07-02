@@ -6,6 +6,7 @@ import React from 'react';
 import { getIcon } from './getIcon';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
 
 
 const Section = styled(Box)(({ theme }) => ({
@@ -52,6 +53,7 @@ export default function SpecialtiesSection({
     limit?: number
     fromPage?: boolean
 }) {
+    const { t, i18n } = useTranslation()
     const router = useRouter()
     const { data: specializations, isLoading } = useQuery({
         queryKey: ['specializations', limit],
@@ -75,10 +77,10 @@ export default function SpecialtiesSection({
             <Container>
                 <Box textAlign="center" mb={6}>
                     <Typography variant="h4" fontWeight="bold" color="primary" gutterBottom>
-                        التخصصات الطبية
+                        {t("website.specialties.title")}
                     </Typography>
                     <Typography variant="body1" color="text.secondary">
-                        اختر التخصص المناسب لاحتياجاتك الصحية
+                        {t("website.specialties.subtitle")}
                     </Typography>
                 </Box>
 
@@ -103,7 +105,7 @@ export default function SpecialtiesSection({
                                         {getIcon(specialty.slug)}
                                     </IconWrapper>
                                     <Typography variant="body1" fontWeight={600} color="text.primary">
-                                        {specialty.name}
+                                        {specialty.name[i18n.language as "ar" | "en"]}
                                     </Typography>
                                 </SpecialtyCard>
                             </Grid>
@@ -114,7 +116,7 @@ export default function SpecialtiesSection({
                 {!fromPage && <Box textAlign="center" mt={8}>
                     <Link href="/specialties" passHref>
                         <Button variant="contained" color="primary" size="large">
-                            عرض جميع التخصصات
+                            {t("website.specialties.viewAll")}
                         </Button>
                     </Link>
                 </Box>}

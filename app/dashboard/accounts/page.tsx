@@ -5,17 +5,36 @@ import TankStackTable from '@/components/data-table/TankStackTable';
 import { PaginatorInfo } from '@/types';
 import { fetchListAccounts } from '@/lib/api/accounts';
 import { useQuery } from '@tanstack/react-query';
+import useDashboard from '@/hooks/useDashboard';
+import { useTranslation } from 'react-i18next';
+import { Typography } from '@mui/material';
 
 export default function ListUsers() {
-    const { data, isLoading } = useQuery({
+    const context = useDashboard();
+    const { t, i18n } = useTranslation();
+
+    const { data, isFetching } = useQuery({
         queryKey: ['accounts'],
         queryFn: () => fetchListAccounts(),
     });
 
+
+    React.useEffect(() => {
+        context?.dispatch({
+            type: "SET_BREADCRUMB_LINKS",
+            payload: [
+                { label: t("breadCrumb.accounts") },
+            ],
+        });
+        return () => { context?.dispatch({ type: "RESET_STATE" }) }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
     const columns = [
         {
             accessorKey: "domain",
-            header: "النطاق",
+            header: t("adminPages.domain"),
             cell: ({ row }: { row: any }) => (
                 <CellLink to={`/dashboard/accounts/${row?.original?._id}`}>
                     {row?.original?.domain}
@@ -24,11 +43,16 @@ export default function ListUsers() {
         },
         {
             accessorKey: "user.name",
-            header: "اسم المستخدم",
+            header: t("adminPages.userName"),
+            cell: ({ row }: { row: any }) => (
+                <Typography>
+                    {row?.original?.user?.name[i18n.language]}
+                </Typography>
+            ),
         },
         {
             accessorKey: "user.email",
-            header: "البريد الإلكتروني",
+            header: t("adminPages.email"),
         },
         // {
         //     accessorKey: "role",
@@ -52,7 +76,7 @@ export default function ListUsers() {
             columns={columns}
             data={data?.data ?? [] as any}
             paginatorInfo={data?.pagination as PaginatorInfo}
-            loading={isLoading}
+            loading={isFetching}
         />
     );
 }

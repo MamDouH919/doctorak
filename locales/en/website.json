@@ -1,27 +1,76 @@
 {
-    "facebook": "facebook",
-    "instagram": "instagram",
-    "twitter": "twitter",
-    "linkedin": "linkedin",
-    "website": "website",
-    "features": {
-        "fastDelivery": {
-            "title": "Fast Delivery",
-            "description": "We take care of the set-up process, aggregating all your existing online."
-        },
-        "onlineSupport": {
-            "title": "24/7 Online Support",
-            "description": "Respond and resolve your customer queries instantly by implementing live chat."
-        },
-        "ratings": {
-            "title": "4.9 Ratings",
-            "description": "Here's to the people who leave online reviews! So you can take your decision."
-        },
-        "yearsServices": {
-            "title": "10 Years Services",
-            "description": "Check out our years of service awards, program tips, and strategies to celebrate."
-        }
+    "banner": {
+        "title": "Search for a doctor that fits you",
+        "subtitle": "Find the best doctor in your area and book your appointment easily"
     },
-    "ShopNow": "Shop Now",
-    "WhyChooseUs": "Why choose us"
+    "doctor": {
+        "DoctorsLocations": "Doctor's locations",
+        "moreInfo": "More information",
+        "soon": "* Soon *",
+        "noResults": "No doctors found that match the search",
+        "viewAll": "View all doctors",
+        "visits": "{{count}} visits"
+    },
+    "register": {
+        "title": "Register",
+        "name": "Name",
+        "phone": "Phone",
+        "specialization": "Specialization",
+        "specialization_needed": "Specialization needed",
+        "specializationCard": "Specialization Card",
+        "email": "Email",
+        "password": "Password",
+        "submit": "Register",
+        "success": "Account created successfully",
+        "error": "An error occurred while registering",
+        "specialization_needed_tooltip": "If you can't get your specialization, you can write it and we will add it for you.",
+        "specializationCardWarning": "Please upload your specialization card or any proof of your specialization",
+        "emailWarning": "After creating your account, we will send a verification code to your email. Please check your email to complete the registration process."
+    },
+    "login": {
+        "title": "Login",
+        "email": "Email",
+        "password": "Password",
+        "submit": "Login",
+        "success": "Login successful",
+        "error": "An error occurred while logging in"
+    },
+    "verifyCode": {
+        "success": "We will review your information in as much time as possible, and we will contact you via email to confirm your account.",
+        "error": "An error occurred while resending the verification code",
+        "title": "Verify Email",
+        "otp": "OTP",
+        "resend": "Resend"
+    },
+    "specialties": {
+        "title": "Specialties",
+        "subtitle": "Choose the specialty that best fits your health needs",
+        "viewAll": "View all specialties"
+    },
+    "statistics": {
+        "doctors": "Doctors",
+        "satisfiedPatient": "Satisfied Patients",
+        "specialties": "Specialties",
+        "governorate": "Governorate"
+    },
+    "appBar": {
+        "doctors": "Doctors",
+        "specialties": "Specialties",
+        "logout": "Logout",
+        "login": "Login"
+    },
+    "footer": {
+        "allSpecialties": "All Specialties",
+        "allDoctors": "All Doctors",
+        "createNewDoctor": "Create New Doctor",
+        "quickLinks": "Quick Links",
+        "description": "A specialized healthcare website that collects the best doctors in one place to make it easy to access healthcare.",
+        "copyright": " © 2024 Dakatrh. All rights reserved."
+    },
+    "searchForDoctors": {
+        "name": "Name",
+        "specialty": "Specialty",
+        "governorate": "Governorate",
+        "city": "City"
+    }
 }

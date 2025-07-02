@@ -1,5 +1,6 @@
 import { Box, Container, Grid, Typography, styled } from '@mui/material';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 const StatsSection = styled(Box)(({ theme }) => ({
     backgroundColor: theme.palette.primary.main,
@@ -20,11 +21,12 @@ const StatLabel = styled(Typography)(({ theme }) => ({
 }));
 
 export default function StatisticsSection() {
+    const { t } = useTranslation()
     const stats = [
-        { value: '500+', label: 'طبيب متخصص' },
-        { value: '10,000+', label: 'مريض راضٍ' },
-        { value: '25+', label: 'تخصص طبي' },
-        { value: '15+', label: 'مدينة' },
+        { value: '500+', label: t("website.statistics.doctors") },
+        { value: '10,000+', label: t("website.statistics.satisfiedPatient") },
+        { value: '25+', label: t("website.statistics.specialties") },
+        { value: '26', label: t("website.statistics.governorate") },
     ];
 
     return (

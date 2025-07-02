@@ -7,12 +7,18 @@ const appointmentsSchema = new mongoose.Schema({
 });
 
 const ClinicsSchema = new mongoose.Schema({
-    name: { type: String, required: true },
+    name: {
+        ar: { type: String, required: true },
+        en: { type: String, required: true },
+    },
     phone: { type: String },
     mobile: { type: String },
     governorate: { type: mongoose.Schema.Types.ObjectId, ref: 'Governorate' },
     city: { type: mongoose.Schema.Types.ObjectId, ref: 'Cities' },
-    address: { type: String },
+    address: {
+        ar: { type: String, required: true },
+        en: { type: String, required: true },
+    },
 
     appointments: [appointmentsSchema],
     account: { type: mongoose.Schema.Types.ObjectId, ref: 'Accounts' },

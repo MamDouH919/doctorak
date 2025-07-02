@@ -17,14 +17,26 @@ const VideosSchema = new mongoose.Schema({
 // });
 
 const AccountsSchema = new mongoose.Schema({
-  siteName: { type: String, },
-  title: { type: String, },
+  siteName: { 
+      ar: { type: String, },
+      en: { type: String, },
+   },
+  title: {
+    ar: { type: String, },
+    en: { type: String, },
+  },
   phone: { type: String, },
   whatsApp: { type: String, },
-  description: { type: String, },
+  description: {
+      ar: { type: String, },
+      en: { type: String, },
+  },
   color: { type: String, },
-  lang: { type: String, enum: ["ar", "en"] },
-  about: { type: String, },
+  // lang: { type: String, enum: ["ar", "en"] },
+  about: {
+      ar: { type: String, },
+      en: { type: String, },
+  },
   domain: { type: String, unique: true },
   active: { type: Boolean, default: false },
   endDate: { type: String, },

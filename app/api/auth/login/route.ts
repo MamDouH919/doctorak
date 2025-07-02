@@ -8,11 +8,8 @@ import Users from '@/models/Users';
 import { withErrorHandler } from '@/lib/api/withErrorHandler';
 import { ValidationError, AppError } from '@/lib/api/errors';
 import { success } from '@/lib/api/response';
+import { LoginSchema } from '@/schemas/auth';
 
-const LoginSchema = z.object({
-    email: z.string().email('البريد الإلكتروني غير صالح'),
-    password: z.string().min(1, 'كلمة المرور مطلوبة'),
-});
 
 const handler = async (req: Request) => {
     const body = await req.json();
@@ -33,25 +30,22 @@ const handler = async (req: Request) => {
     const user = await Users.findOne({ email: email.toLowerCase() }).populate('account', '_id isPremium');
 
     if (!user) {
-        const errors = [{ field: 'email', message: 'البريد الإلكتروني غير صحيح' }];
+        const errors = [{ field: 'email', message: "incorrectEmail" }];
         throw new ValidationError(errors);
     }
 
     const isPasswordMatch = await bcrypt.compare(password, user.password);
     if (!isPasswordMatch) {
-        const errors = [{ field: 'password', message: 'كلمة المرور غير صحيحة' }];
+        const errors = [{ field: 'password', message: "incorrectPassword" }];
         throw new ValidationError(errors);
     }
 
     if (!user.verified) {
-        throw new AppError('البريد الإلكتروني غير مفعل', 400, 'custom');
+        throw new AppError('emailNotVerified', 400, 'custom');
     }
 
-    console.log('user.account', user);
-    
-
     if (!user.active) {
-        throw new AppError('الحساب غير مفعل', 400, 'custom', "account-not-active");
+        throw new AppError('accountNotActive', 400, 'custom', "account-not-active");
     }
 
     

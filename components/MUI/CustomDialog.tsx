@@ -5,6 +5,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Button, Paper, Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { useTranslation } from "react-i18next";
 
 interface propsInput {
   PaperProps?: any;
@@ -43,6 +44,7 @@ export default function CustomDialog(props: propsInput) {
     disableCancel
   } = props;
 
+  const { t } = useTranslation()
   return (
     <React.Fragment>
       <Dialog
@@ -73,7 +75,7 @@ export default function CustomDialog(props: propsInput) {
           >
             <Stack direction={"row"} spacing={1}>
               <Button onClick={handleClose} color='inherit' variant='contained' disabled={disableCancel}>
-                {"إلغاء"}
+                {t("common.cancel")}
               </Button>
               {buttonAction}
             </Stack>

@@ -6,25 +6,30 @@ const imageSchema = fileSchema.refine(
 )
 
 export const RegisterUserSchema = z.object({
-    name: z.string().min(1, "الاسم مطلوب"),
-    email: z.string().email("البريد الإلكتروني غير صالح"),
-    password: z.string().min(6, "كلمة المرور يجب ألا تقل عن 6 أحرف"),
-    phone: z.string().min(1, "رقم الهاتف مطلوب"),
+    name: z.string().min(1, "required"),
+    email: z.string().email("invalidEmail"),
+    password: z.string().min(6, "invalidPassword"),
+    phone: z.string().min(1, "required"),
     specialization: z.string().optional(),
     specialization_needed: z.string().optional(),
     // 1 mg
-    image: imageSchema.refine(file => file.size < 1 * 1024 * 1024 && file.size > 0, "FileSize")
+    image: imageSchema.refine(file => file.size < 1 * 1024 * 1024 && file.size > 0, "invalidImageSize1mb"),
 }).superRefine((data, ctx) => {
     if (!data.specialization && !data.specialization_needed) {
         ctx.addIssue({
             path: ['specialization'],
-            message: "التخصص مطلوب",
+            message: "required",
             code: z.ZodIssueCode.custom,
         });
     }
 });
 
 export const VerifyEmailSchema = z.object({
-    email: z.string().email("بريد إلكتروني غير صالح"),
-    otp: z.string({ invalid_type_error: 'رمز التحقق مطلوب' }),
+    email: z.string().email("invalidEmail"),
+    otp: z.string({ invalid_type_error: "required" }),
+});
+
+export const LoginSchema = z.object({
+    email: z.string().email("invalidEmail"),
+    password: z.string().min(1, "required"),
 });

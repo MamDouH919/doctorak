@@ -24,6 +24,8 @@ const formSchema = z.object({
   alt: z.string().optional(),
 });
 
+const folderName = process.env.NEXT_PUBLIC_FIREBASE_STORAGE_FOLDER;
+
 const handler = async (req: NextRequest) => {
   await dbConnect();
 
@@ -56,7 +58,7 @@ const handler = async (req: NextRequest) => {
   const buffer = Buffer.from(arrayBuffer);
   const extension = file.name.split('.').pop() || 'jpg';
   const filename = `${uuidv4()}.${extension}`;
-  const storageRef = ref(storage, `dakatrah/profile-images/${filename}`);
+  const storageRef = ref(storage, `${folderName}/profile-images/${filename}`);
 
   await uploadBytes(storageRef, buffer, { contentType: file.type });
   const url = await getDownloadURL(storageRef);

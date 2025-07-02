@@ -11,9 +11,11 @@ import FormDialog from './_formDialog';
 import { ColumnDef } from '@tanstack/react-table';
 import DeleteDialog from './_deleteDialog';
 import { useAppSelector } from '@/Store/store';
+import { useTranslation } from 'react-i18next';
 
 export default function ListFaqs() {
   const context = useDashboard()
+  const { t } = useTranslation()
   const { auth } = useAppSelector((state) => state)
   const [createState, setCreateState] = React.useState<{ open: boolean, data: any }>({
     open: false,
@@ -44,20 +46,20 @@ export default function ListFaqs() {
             </Button>
           </Stack>,
         breadcrumbLinks: [
-          { label: "الأسئلة الشائعة" },
+          { label: t("breadCrumb.faqs") },
         ],
       },
     });
     return () => { context?.dispatch({ type: "RESET_STATE" }) }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [t])
 
   const columns: ColumnDef<any>[] = [
     ...(auth?.user?.role === 'admin' ? [
       {
         accessorKey: "account",
-        header: "الحساب",
+        header: t("adminPages.account"),
         cell: ({ row }: { row: any }) => {
           return (
             <Stack direction={"row"} spacing={0.5}>
@@ -69,11 +71,11 @@ export default function ListFaqs() {
     ] : []),
     {
       accessorKey: "question",
-      header: "السؤال",
+      header: t("adminPages.question"),
     },
     {
       accessorKey: "answer",
-      header: "الجواب",
+      header: t("adminPages.answer"),
     },
     {
       header: "-",

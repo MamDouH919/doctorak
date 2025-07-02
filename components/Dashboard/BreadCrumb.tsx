@@ -5,6 +5,7 @@ import { styled } from "@mui/material/styles";
 import { Box, Stack } from "@mui/material";
 import Link from "next/link";
 import { DashboardContext } from "@/context/Contexts";
+import { useTranslation } from "react-i18next";
 
 
 const LinkStyle = styled(Link)(({ theme }) => ({
@@ -19,7 +20,7 @@ const LinkStyle = styled(Link)(({ theme }) => ({
 
 const Breadcrumb = () => {
     const context = React.useContext(DashboardContext);
-
+    const { t } = useTranslation()
     return (
         <Stack
             direction={"row"}
@@ -42,7 +43,7 @@ const Breadcrumb = () => {
                     color="inherit"
                     href="/dashboard"
                 >
-                    لوحة التحكم
+                    {t("breadCrumb.dashboard")}
                 </LinkStyle>
 
                 {context?.state.breadcrumbLinks && context?.state.breadcrumbLinks.map((value, index) => {

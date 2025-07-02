@@ -287,7 +287,7 @@ const NavDrawer: React.FC = () => {
                                     </ListItemIcon>
                                     <Stack flexGrow={1} direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
                                         <ListItemText primary={e.primary} />
-                                        {isSoon && <Chip label="قريبا" size="small" color="primary" />}
+                                        {isSoon && <Chip label={t("navDrawer.soon")} size="small" color="primary" />}
                                         {!isPremium && <Chip label="Premium" size="small" color="primary" />}
                                     </Stack>
                                 </ItemButtonStyle>

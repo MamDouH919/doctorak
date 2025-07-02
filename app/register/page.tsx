@@ -94,7 +94,7 @@ const Register = () => {
             image: data.image,
         }, {
             onSuccess: () => {
-                toast.success("تم اضافة الحساب بنجاح");
+                toast.success(t("website.register.success"))
                 setVerifyCodeOpen(true);
                 // router.push('/login'); // Redirect to login page after successful registration
             },
@@ -104,7 +104,7 @@ const Register = () => {
                     error.response.data.errors.forEach((value: any) => {
                         setError(value.field, {
                             type: "validate",
-                            message: value.message,
+                            message: t("validation." + value.message),
                         });
                     });
                     // console.log(error.);
@@ -112,7 +112,7 @@ const Register = () => {
                     // console.log('errors' in error && error.errors);
 
                 } else {
-                    toast.error("حدث خطأ أثناء إضافة الحساب");
+                    toast.error(t("website.register.error"))
                 }
             }
         })
@@ -139,16 +139,16 @@ const Register = () => {
                             <LockOpen fontSize='large' />
                         </Avatar>
                         <Typography variant='h6' fontSize={40}>
-                            إنشاء حساب جديد
+                            {t("website.register.title")}
                         </Typography>
                         <Grid container spacing={2} width={"100%"}>
                             <Grid size={{ xs: 12, sm: 6 }}>
                                 <ControlMUITextField
                                     control={control}
                                     name='name'
-                                    label={"الاسم"}
+                                    label={t("website.register.name")}
                                     rules={{
-                                        required: "هذا الحقل مطلوب",
+                                        required: t("common.required")
                                     }}
                                 />
                             </Grid>
@@ -156,9 +156,9 @@ const Register = () => {
                                 <ControlMUITextField
                                     control={control}
                                     name='phone'
-                                    label={"رقم الهاتف"}
+                                    label={t("website.register.phone")}
                                     rules={{
-                                        required: "هذا الحقل مطلوب",
+                                        required: t("common.required")
                                     }}
                                 />
                             </Grid>
@@ -166,9 +166,9 @@ const Register = () => {
                                 <ListSpecializations
                                     control={control}
                                     name='specialization'
-                                    label={"التخصص"}
+                                    label={t("website.register.specialization")}
                                     rules={{
-                                        required: watch('specialization_needed') ? false : "هذا الحقل مطلوب",
+                                        required: watch('specialization_needed') ? false : t("common.required")
                                     }}
 
                                     disabled={!!watch('specialization_needed')}
@@ -178,14 +178,14 @@ const Register = () => {
                                 <ControlMUITextField
                                     control={control}
                                     name='specialization_needed'
-                                    label={"التخصص المطلوب"}
+                                    label={t("website.register.specialization_needed")}
                                     disabled={!!watch('specialization')}
                                     onChange={() => {
                                         clearErrors('specialization')
                                     }}
                                     InputProps={{
                                         endAdornment: (
-                                            <Tooltip title={"إذا لم تجد تخصصك، يمكنك كتابته وسنقوم بإضافته لاحقًا."}>
+                                            <Tooltip title={t("website.register.specialization_needed_tooltip")}>
                                                 <Info />
                                             </Tooltip>
                                         ),
@@ -196,20 +196,20 @@ const Register = () => {
                                 <ControlMUITextField
                                     control={control}
                                     name='email'
-                                    label={"البريد الإلكتروني"}
+                                    label={t("website.register.email")}
                                     rules={{
-                                        required: "هذا الحقل مطلوب",
+                                        required: t("common.required")
                                     }}
                                 />
                             </Grid>
                             <Grid size={{ xs: 12 }}>
                                 <ControlMUITextField
                                     name='password'
-                                    label={"كلمة المرور"}
+                                    label={t("website.register.password")}
                                     type={passType}
                                     control={control}
                                     rules={{
-                                        required: "هذا الحقل مطلوب",
+                                        required: t("common.required")
                                     }}
                                     slotProps={{
                                         input: {
@@ -240,33 +240,33 @@ const Register = () => {
                                     setValue={setValue}
                                     name="image"
                                     icon={"add_photo_alternate"}
-                                    label={"الكارنية"}
+                                    label={t("website.register.specializationCard")}
                                     accept=".png,.jpg,.svg,.jpeg,.webp,.avif"
-                                    maxSize={900 * 1024}
+                                    maxSize={1 * 1024 * 1024}
                                     rules={{
-                                        required: "هذا الحقل مطلوب",
+                                        required: t("common.required")
                                     }}
                                 />
                             </Grid>
                         </Grid>
                         <Stack width={"100%"} spacing={1}>
                             <Alert severity="warning">
-                                يرجى إرفاق كارنية التخصص أو أي إثبات للتخصص
+                                {t("website.register.specializationCardWarning")}
                             </Alert>
                             <Alert severity="info">
-                                بعد إنشاء الحساب، سيتم إرسال رمز التحقق إلى بريدك الإلكتروني. يرجى التحقق من بريدك الإلكتروني لإكمال عملية التسجيل.
+                                {t("website.register.emailWarning")}
                             </Alert>
                         </Stack>
                         <Button variant='contained' type='submit' fullWidth loading={registerLoading}>
-                            إنشاء حساب
+                            {t("website.register.submit")}
                         </Button>
                         {/* divider in middle word or */}
                         <Divider sx={{ margin: theme => theme.spacing(2, 0) }} variant="middle" flexItem>
-                            أو
+                            {t("common.or")}
                         </Divider>
                         <Link href="/login" style={{ display: "inline-block", width: "100%" }}>
                             <Button variant='outlined' fullWidth>
-                                تسجيل الدخول
+                                {t("website.login.title")}
                             </Button>
                         </Link>
                     </Stack>

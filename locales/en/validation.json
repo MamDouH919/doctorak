@@ -1,0 +1,11 @@
+{
+    "required": "This field is required",
+    "invalidEmail": "Invalid email",
+    "invalidPassword": "Invalid password",
+    "invalidImageSize1mb": "Image must be smaller than 1 MB",
+    "emailAlreadyExists": "Email already exists",
+    "incorrectEmail": "Incorrect email",
+    "incorrectPassword": "Incorrect password",
+    "emailNotVerified": "Email not verified",
+    "accountNotActive": "Account not active"
+}

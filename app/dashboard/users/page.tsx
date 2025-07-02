@@ -8,17 +8,21 @@ import { Button, Stack, Typography } from '@mui/material';
 import CustomDialog from '@/components/MUI/CustomDialog';
 import axios from 'axios';
 import { toast } from 'sonner';
+import useDashboard from '@/hooks/useDashboard';
+import { useTranslation } from 'react-i18next';
 
 export default function ListUsers() {
-    const { data, isLoading } = useQuery({
+    const { data, isLoading, isFetching } = useQuery({
         queryKey: ['accounts'],
         queryFn: () => fetchListUsers(),
     });
 
+    const { t, i18n } = useTranslation()
+    const context = useDashboard()
+
     // mutation for activating user account react-query
     const [userId, setUserId] = React.useState<string | null>(null);
     const [open, setOpen] = React.useState(false);
-    const [loading, setLoading] = React.useState(false);
     const { mutate: toggleUserMutation, isPending: toggleUserLoading } = useMutation({
         mutationFn: (data: { id: string }) =>
             toggleUser(data),
@@ -33,24 +37,33 @@ export default function ListUsers() {
         setOpen(true);
     };
 
+    React.useEffect(() => {
+        context?.dispatch({
+            type: "SET_BREADCRUMB_LINKS",
+            payload: [
+                { label: t("breadCrumb.users") },
+            ],
+        });
+        return () => { context?.dispatch({ type: "RESET_STATE" }) }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [t])
+
     const queryClient = useQueryClient(); // Use this to access queryClient
 
     const handleActiveUser = async () => {
-        setLoading(true);
         toggleUserMutation({
             id: userId!
         }, {
             onSuccess: async () => {
-                setLoading(false);
                 handleClose();
-                toast.success("تم الحفظ بنجاح");
+                toast.success(t("common.saveSuccess"));
                 queryClient.invalidateQueries({
                     queryKey: ['accounts'],
                 });
             },
             onError: async (error) => {
-                setLoading(false);
-                toast.error("حدث خطأ أثناء تفعيل الحساب، يرجى المحاولة مرة أخرى.");
+                toast.error(t("common.errorMessage"));
                 console.log(error)
             }
         })
@@ -60,25 +73,25 @@ export default function ListUsers() {
     const columns = [
         {
             accessorKey: "name",
-            header: "اسم المستخدم",
-            // cell: ({ row }: { row: any }) => (
-            //     <CellLink to={`/dashboard/accounts/${row?.original?._id}`}>
-            //         {row?.original?.name}
-            //     </CellLink>
-            // ),
+            header: t("adminPages.userName"),
+            cell: ({ row }: { row: any }) => (
+                <Typography>
+                    {row?.original?.name?.[i18n.language as "ar" | "en"]}
+                </Typography>
+            ),
         },
         {
             accessorKey: "email",
-            header: "البريد الإلكتروني",
+            header: t("adminPages.email"),
         },
         {
             accessorKey: "image",
-            header: "الصورة",
+            header: t("adminPages.image"),
             cell: ({ row }: { row: any }) => (
                 <a href={row?.original?.image} target="_blank" rel="noreferrer">
                     <img
                         src={row?.original?.image ?? "/images/avatar.png"}
-                        alt={row?.original?.name}
+                        alt={row?.original?.name?.en}
                         style={{ width: 50, height: 50, borderRadius: '50%' }}
                     />
                 </a>
@@ -86,7 +99,7 @@ export default function ListUsers() {
         },
         {
             accessorKey: "active",
-            header: "مفعل",
+            header: t("adminPages.active"),
             cell: ({ row }: { row: any }) => (
                 <Button
                     onClick={() => {
@@ -96,7 +109,7 @@ export default function ListUsers() {
                     variant="contained"
                     color={row?.original?.active ? "error" : "success"}
                 >
-                    {row?.original?.active ? "تعطيل" : "تفعيل"}
+                    {row?.original?.active ? t("adminPages.disable") : t("adminPages.enable")}
                 </Button>
             ),
         }
@@ -111,22 +124,22 @@ export default function ListUsers() {
                 handleClose={handleClose}
                 title={
                     <Stack direction={"row"} alignItems={"center"} spacing={1}>
-                        <Typography variant='body1'>{"تفعيل الحساب"}</Typography>
+                        <Typography variant='body1'>{t("adminPages.enableUser")}</Typography>
                     </Stack>
                 }
                 content={
-                    <Stack spacing={1} mt={2}>
-                        <Typography variant='body1'>{"هل تريد تفعيل الحساب ؟"}</Typography>
+                    <Stack>
+                        <Typography variant='body1'>{t("adminPages.confirmMessage")}</Typography>
                     </Stack>
                 }
                 buttonAction={
                     <Button
-                        loading={loading}
+                        loading={toggleUserLoading}
                         onClick={handleActiveUser}
                         variant='contained'
 
                     >
-                        {"تأكيد"}
+                        {t("common.submit")}
                     </Button>
                 }
             />
@@ -134,7 +147,7 @@ export default function ListUsers() {
                 columns={columns}
                 data={data?.data ?? [] as any}
                 // paginatorInfo={paginatorInfo as PaginatorInfo}
-                loading={isLoading}
+                loading={isFetching}
             />
         </>
     );

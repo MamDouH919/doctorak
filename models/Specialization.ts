@@ -1,16 +1,20 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
 export interface ISpecialization extends Document {
-    name: string;
+    name: {
+        ar: string;
+        en: string;
+    };
     slug?: string;
-    name_en?: string;
 }
 
 const SpecializationSchema = new Schema<ISpecialization>(
     {
-        name: { type: String, required: true, unique: true },
+        name: {
+            en: { type: String, required: true },
+            ar: { type: String, required: true }
+        },
         slug: { type: String },
-        name_en: { type: String }
     },
     {
         timestamps: true,

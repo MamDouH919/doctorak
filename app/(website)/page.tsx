@@ -1,6 +1,7 @@
 "use client"
 import Banner from '@/sections/banner'
 import FeaturedDoctorsSection from '@/sections/doctors'
+import ProfileTemplate from '@/sections/profileTemplate'
 import SpecialtiesSection from '@/sections/specialties'
 import StatisticsSection from '@/sections/statistics'
 
@@ -11,6 +12,7 @@ const Page = () => {
         <>
             <Banner />
             <FeaturedDoctorsSection showInHomePage={false} />
+            {/* <ProfileTemplate /> */}
             <SpecialtiesSection limit={9} />
             <StatisticsSection />
         </>

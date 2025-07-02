@@ -15,11 +15,17 @@ import { PaginatorInfo } from "@/types";
 
 
 const PREFIX = "Paginator";
-const classes = { icon: `${PREFIX}-icon` };
+const classes = {
+  icon: `${PREFIX}-icon`,
+  iconRtl: `${PREFIX}-icon-rtl`,
+};
 
 const Root = styled(Stack)(({ theme }) => ({
+  [`& .${classes.iconRtl}`]: {
+    transform: `rotate(180deg)`,
+  },
   [`& .${classes.icon}`]: {
-    transform: `rotate(${theme.direction === "rtl" ? 180 : 0}deg)`,
+    transform: `rotate(0deg)`,
   },
 }));
 
@@ -77,7 +83,7 @@ export const TablePaginationComponent = ({
         i18n.language === "en"
           ? undefined
           : ({ from, to, count }) =>
-              `${from}-${to} من ${count !== -1 ? count : `أكثر من ${to}`}`
+            `${from}-${to} من ${count !== -1 ? count : `أكثر من ${to}`}`
       }
       sx={{
         borderRadius: "0 0 16px 16px",
@@ -88,7 +94,8 @@ export const TablePaginationComponent = ({
 
 const PaginationActions = ({ count, page, rowsPerPage, onPageChange }: any) => {
   const lastPageIndex = Math.max(0, Math.ceil(count / rowsPerPage) - 1);
-
+  const { i18n } = useTranslation();
+  const isRtl = i18n.dir() === "rtl";
   return (
     <Root direction={"row"} spacing={0.2} alignItems={"center"}>
       <IconButton
@@ -96,28 +103,28 @@ const PaginationActions = ({ count, page, rowsPerPage, onPageChange }: any) => {
         disabled={page === 0}
         aria-label="first page"
       >
-        <FirstPage className={classes.icon} />
+        <FirstPage className={isRtl ? classes.iconRtl : classes.icon} />
       </IconButton>
       <IconButton
         onClick={(e) => onPageChange(e, page - 1)}
         disabled={page === 0}
         aria-label="previous page"
       >
-        <KeyboardArrowLeft className={classes.icon} />
+        <KeyboardArrowLeft className={isRtl ? classes.iconRtl : classes.icon} />
       </IconButton>
       <IconButton
         onClick={(e) => onPageChange(e, page + 1)}
         disabled={page >= lastPageIndex}
         aria-label="next page"
       >
-        <KeyboardArrowRight className={classes.icon} />
+        <KeyboardArrowRight className={isRtl ? classes.iconRtl : classes.icon} />
       </IconButton>
       <IconButton
         onClick={(e) => onPageChange(e, lastPageIndex)}
         disabled={page >= lastPageIndex}
         aria-label="last page"
       >
-        <LastPage className={classes.icon} />
+        <LastPage className={isRtl ? classes.iconRtl : classes.icon} />
       </IconButton>
     </Root>
   );

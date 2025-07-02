@@ -15,14 +15,15 @@ export default function ThemeRegistry({
   children: React.ReactNode;
 }) {
   const { i18n } = useTranslation();
-  const cache = useMemo(() => createEmotionCache(), []);
+  const isRtl = i18n.dir() === 'rtl';
+  const cache = useMemo(() => createEmotionCache(isRtl), [isRtl]);
 
   const theme = useMemo(() => getTheme({
     primary: "#880808",
     secondary: "#87af2a",
-    dir: "rtl"
+    dir: isRtl ? "rtl" : "ltr"
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }), []);
+  }), [i18n]);
 
   return (
     <CacheProvider value={cache}>

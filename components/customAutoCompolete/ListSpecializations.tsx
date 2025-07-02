@@ -1,8 +1,8 @@
 import { FieldValues } from "react-hook-form";
 import AutoCompleteComponent, { IProps as AutoCompleteComponentIProps } from "../MUI/AutoCompleteComponent";
-import { listServicesDropDown } from "@/lib/api/accounts";
 import { useQuery } from "@tanstack/react-query";
 import { getSpecializations } from "@/lib/api/website";
+import { useTranslation } from "react-i18next";
 
 const ListSpecializations = <T extends FieldValues>({
   name,
@@ -17,7 +17,7 @@ const ListSpecializations = <T extends FieldValues>({
   disabled?: boolean;
   rules?: any;
 }) => {
-
+  const { i18n } = useTranslation();
   const { data, isLoading } = useQuery({
     queryKey: ["specializations"],
     queryFn: () => getSpecializations(),
@@ -35,11 +35,11 @@ const ListSpecializations = <T extends FieldValues>({
       options={
         (data?.data.map((item) => ({
           id: item._id,
-          name: item.name,
+          name: item.name[i18n.language as "ar" | "en"],
         })) ?? []) as any
       }
       renderOption={(props, option) => (
-        <li {...props} key={option.id}>
+        <li {...props} key={option.id} dir={i18n.dir()}>
           <span>{option?.name}</span>
           {/* <ColorSpan>{option?.code}</ColorSpan> */}
         </li>

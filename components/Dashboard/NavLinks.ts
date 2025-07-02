@@ -6,6 +6,7 @@ import {
     Settings,
     ThumbUp
 } from "@mui/icons-material";
+import { useTranslation } from "react-i18next";
 interface LinkItem {
     pathname?: string;
     primary: string;
@@ -23,50 +24,51 @@ interface LinkItem {
 }
 
 export const useLinksList = () => {
+    const { t } = useTranslation()
     // ✅ Correct usage: Only select the auth slice
-    const auth = useAppSelector((state) => state.auth);    
+    const auth = useAppSelector((state) => state.auth);
 
     const linksList: LinkItem[] = [
         ...(auth?.user?.role === 'admin' ? [
             {
                 pathname: "/dashboard/users",
-                primary: "المستخدمين",
+                primary: t("navDrawer.users"),
                 icon: PeopleOutlineOutlined,
                 regex: /\/users(\/|$)/,
             },
             {
                 pathname: "/dashboard/accounts",
-                primary: "حسابات المستخدمين",
+                primary: t("navDrawer.usersAccounts"),
                 icon: PeopleOutlineOutlined,
                 regex: /\/accounts(\/|$)/,
             }
         ] : [
             {
                 pathname: "/dashboard/account",
-                primary: "حسابك",
+                primary: t("navDrawer.account"),
                 icon: PeopleOutlineOutlined,
                 regex: /\/account(\/|$)/,
             },
         ]),
         {
-            primary: "البيانات",
+            primary: t("navDrawer.information"),
             collapse: "data",
             children: [
                 {
                     pathname: "/dashboard/faqs",
-                    primary: "الأسئلة الشائعة",
+                    primary: t("navDrawer.faq"),
                     icon: Inventory2Outlined,
                     regex: /\/faqs(\/|$)/,
                 },
                 {
                     pathname: "/dashboard/articles",
-                    primary: "المقالات",
+                    primary: t("navDrawer.articles"),
                     icon: Inventory2Outlined,
                     regex: /\/articles(\/|$)/,
                 },
                 {
                     pathname: "/dashboard/clinics",
-                    primary: "العيادات والمستشفيات",
+                    primary: t("navDrawer.clinics"),
                     icon: Inventory2Outlined,
                     regex: /\/clinics(\/|$)/,
                 },
@@ -74,14 +76,14 @@ export const useLinksList = () => {
         },
         {
             pathname: "/dashboard/testimonials",
-            primary: "التقيمات",
+            primary: t("navDrawer.testimonials"),
             icon: ThumbUp,
             soon: true,
             // isPremium: auth.user?.isPremium,
         },
         {
-            pathname: "/dashboard/testimonials",
-            primary: "الحجوزات",
+            pathname: "/dashboard/reservations",
+            primary: t("navDrawer.reservations"),
             icon: BookmarkAdded,
             soon: true,
             // isPremium: auth.user?.isPremium,
