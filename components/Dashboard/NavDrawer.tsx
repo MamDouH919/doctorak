@@ -24,6 +24,7 @@ import { useTranslation } from "react-i18next";
 import { useLinksList } from "./NavLinks";
 import { DashboardContext } from "@/context/Contexts";
 import { DRAWER_WIDTH } from "@/lib/constant";
+import { useLocalizedRouter } from "@/hooks/useLocalizedRouter";
 
 interface LinkItem {
     pathname: string;
@@ -140,6 +141,7 @@ const NavDrawer: React.FC = () => {
     const { t } = useTranslation()
     const linksList = useLinksList()
     const pathname = usePathname();
+    const { getLocalizedPath } = useLocalizedRouter();
 
     const [nestedList, setNestedList] = useState<string[]>(() => {
         const saved = localStorage.getItem("dashboard-nav-drawer");
@@ -181,7 +183,7 @@ const NavDrawer: React.FC = () => {
             <Divider />
             <ListStyle>
                 <Link
-                    href={"/dashboard"}
+                    href={getLocalizedPath('dashboard')}
                     className={clsx(classes.navLink)}
                 >
                     <ItemButtonStyle
@@ -223,7 +225,7 @@ const NavDrawer: React.FC = () => {
                                             {e.children?.map((child) => (
                                                 <Link
                                                     key={child.primary}
-                                                    href={child.pathname || ""}
+                                                    href={getLocalizedPath(child.pathname || "")}
                                                     className={clsx(classes.navLink)}
                                                     onClick={() => isScreenSmall && context?.dispatch({ type: "SET_OPEN", payload: false })}
                                                 >
@@ -250,7 +252,7 @@ const NavDrawer: React.FC = () => {
                             const isSoon = e.soon
                             if (isPremium && !isSoon) {
                                 return <Link
-                                    href={e.pathname || ""}
+                                    href={getLocalizedPath(e.pathname || "")}
                                     className={clsx(classes.navLink)}
                                     key={e.primary}
                                     onClick={() => isScreenSmall && context?.dispatch({ type: "SET_OPEN", payload: false })}

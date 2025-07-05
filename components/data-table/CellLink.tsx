@@ -1,3 +1,4 @@
+import { useLocalizedRouter } from "@/hooks/useLocalizedRouter";
 import { styled } from "@mui/material/styles";
 import Link from "next/link";
 
@@ -19,9 +20,10 @@ export const CellLink = ({ to, children, target }: {
     children: React.ReactNode,
     target?: "_blank" | "_parent" | "_self" | "_top"
 }) => {
+    const { getLocalizedPath } = useLocalizedRouter();
     return (
         <Root>
-            {children ? <Link href={to} target={target ?? "_self"} rel="noopener noreferrer">
+            {children ? <Link href={getLocalizedPath(to)} target={target ?? "_self"} rel="noopener noreferrer">
                 {children}
             </Link> : "ــــ"}
         </Root>

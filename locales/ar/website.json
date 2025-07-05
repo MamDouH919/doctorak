@@ -9,7 +9,18 @@
         "soon": "* الحجز قريبا *",
         "noResults": "لا يوجد دكاترة مطابقة للبحث المحدد",
         "viewAll": "عرض جميع الدكاترة",
-        "visits": "{{count}} زيارة"
+        "visits": "{{count}} زيارة",
+        "social": "التواصل الاجتماعي",
+        "videos": "الفديوهات",
+        "articles": "المقالات",
+        "faqs": "الأسئلة الشائعة",
+        "contact": "اتصل بنا",
+        "callNow": "اتصل الآن",
+        "whatsApp": "الواتس اب",
+        "aboutDoctor": "عن الدكتور",
+        "doctorServices": "خدمات الدكتور",
+        "clinics": "العيادات",
+        "appointmentsSchedule": "جدول المواعيد"
     },
     "register": {
         "title": "التسجيل",
@@ -72,5 +83,11 @@
         "specialty": "التخصص",
         "governorate": "المحافظة",
         "city": "المدينة"
+    },
+    "logout": {
+        "confirm": "هل أنت متأكد من أنك تريد تسجيل الخروج؟",
+        "logout": "تسجيل الخروج",
+        "success": "تم تسجيل الخروج بنجاح",
+        "error": "حدث خطأ ما"
     }
 }

@@ -42,8 +42,14 @@ const handler = async (req: NextRequest) => {
     }
 
     const article = await ARTICLES.create({
-        title,
-        content,
+        title: {
+            ar: title,
+            en: title,
+        },
+        content: {
+            ar: content,
+            en: content,
+        },
         account,
     });
 

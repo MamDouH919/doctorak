@@ -18,6 +18,7 @@ import ListSpecializations from '@/components/customAutoCompolete/ListSpecializa
 import ListGovernorate from '@/components/customAutoCompolete/ListGovernorate';
 import ListCities from '@/components/customAutoCompolete/ListCities';
 import { useTranslation } from 'react-i18next';
+import { useLocalizedRouter } from '@/hooks/useLocalizedRouter';
 
 
 const StyledPaper = styled(Paper)`
@@ -40,7 +41,7 @@ const SearchForDoctors = ({
     const specialty = searchParams.get('specialty')
     const governorate = searchParams.get('governorate')
     const city = searchParams.get('city')
-
+    const { push } = useLocalizedRouter();
 
     const { control, handleSubmit, watch } = useForm({
         defaultValues: {
@@ -65,7 +66,7 @@ const SearchForDoctors = ({
         if (searchInSamePage) {
             router.push(`?${params.toString()}`);
         } else {
-            router.push(`/doctors?${params}`);
+            push(`doctors?${params}`);
         }
     }
     return (

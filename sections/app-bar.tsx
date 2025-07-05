@@ -10,6 +10,7 @@ import SiteLogo from '@/components/SiteLogo';
 import LogoutDialog from '@/components/dialogs/LogoutDialog';
 import LanguageMenu from '@/components/Language';
 import { useTranslation } from 'react-i18next';
+import { useLocalizedRouter } from '@/hooks/useLocalizedRouter';
 
 const AppBarStyle = styled(AppBar)(({ theme }) => ({
     position: 'sticky',
@@ -43,19 +44,21 @@ const AppBarComponent = () => {
         setAnchorElNav(null);
     };
 
-    const scrollToSection = (id: string) => {
-        const element = document.getElementById(id);
-        if (!element) {
-            return
-        }
-        if (element) {
-            element.scrollIntoView({ behavior: 'smooth', block: "center" });
-        }
+    // const scrollToSection = (id: string) => {
+    //     const element = document.getElementById(id);
+    //     if (!element) {
+    //         return
+    //     }
+    //     if (element) {
+    //         element.scrollIntoView({ behavior: 'smooth', block: "center" });
+    //     }
 
-        setTimeout(() => {
-            handleCloseNavMenu()
-        }, 800);
-    };
+    //     setTimeout(() => {
+    //         handleCloseNavMenu()
+    //     }, 800);
+    // };
+
+    const { getLocalizedPath } = useLocalizedRouter();
 
     return (
         <AppBarStyle position="sticky" color="inherit" elevation={1}>
@@ -63,32 +66,35 @@ const AppBarComponent = () => {
             <Toolbar className='app-bar'>
                 <Container>
                     <Stack direction="row" alignItems="center" spacing={1} justifyContent={"space-between"}>
-                        <Stack component={Link} href={"/"} mx={2} sx={{ textDecoration: 'none' }}>
-                            <SiteLogo />
+                        <Stack direction={"row"} spacing={5} alignItems={"center"}>
+                            <Stack component={Link} href={getLocalizedPath("/")} mx={2} sx={{ textDecoration: 'none' }}>
+                                <SiteLogo />
+                            </Stack>
+                            <Box sx={{ display: { xs: "none", md: "flex" }, gap: 2 }} justifyContent={"center"}>
+                                <HeaderLink href="/doctors" regex={/\/doctors(\/|$)/}>
+                                    {t("website.appBar.doctors")}
+                                </HeaderLink>
+                                <HeaderLink href="/specialties" regex={/\/specialties(\/|$)/}>
+                                    {t("website.appBar.specialties")}
+                                </HeaderLink>
+                            </Box>
                         </Stack>
-                        <Box sx={{ display: { xs: "none", md: "flex" }, gap: 2 }} justifyContent={"center"}>
-                            <HeaderLink href="/doctors">
-                                {t("website.appBar.doctors")}
-                            </HeaderLink>
-                            <HeaderLink href="/specialties">
-                                {t("website.appBar.specialties")}
-                            </HeaderLink>
-                        </Box>
                         <Stack direction={"row"} spacing={1} alignItems={"center"}>
-                            <LanguageMenu />
                             {auth.user ?
                                 <Button color="primary" variant="outlined" sx={{ ml: 2 }}
                                     onClick={() => setLogoutDialog(true)}
                                 >
                                     {t("website.appBar.logout")}
                                 </Button> :
-                                <Link href="/login" passHref>
+                                <Link href={getLocalizedPath("login")} passHref>
                                     <Button color="primary" variant="outlined" sx={{ ml: 2 }}>
                                         {t("website.appBar.login")}
                                     </Button>
-                                </Link>}
+                                </Link>
+                            }
+                            <LanguageMenu />
                             {auth.user &&
-                                <Link href="/dashboard" passHref>
+                                <Link href={getLocalizedPath("dashboard")} passHref>
                                     <IconButton size="small">
                                         <Dashboard />
                                     </IconButton>
@@ -122,12 +128,12 @@ const AppBarComponent = () => {
                                     sx={{ display: { xs: 'block', md: 'none' } }}
                                 >
                                     <MenuItem>
-                                        <HeaderLink href="/doctors">
+                                        <HeaderLink href="/doctors" regex={/\/doctors(\/|$)/}>
                                             {t("website.appBar.doctors")}
                                         </HeaderLink>
                                     </MenuItem>
-                                    <MenuItem onClick={() => { scrollToSection("faq") }}>
-                                        <HeaderLink href="/specialties">
+                                    <MenuItem>
+                                        <HeaderLink href="/specialties" regex={/\/specialties(\/|$)/}>
                                             {t("website.appBar.specialties")}
                                         </HeaderLink>
                                     </MenuItem>

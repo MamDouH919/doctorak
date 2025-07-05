@@ -9,7 +9,18 @@
         "soon": "* Soon *",
         "noResults": "No doctors found that match the search",
         "viewAll": "View all doctors",
-        "visits": "{{count}} visits"
+        "visits": "{{count}} visits",
+        "social": "Social",
+        "videos": "Videos",
+        "articles": "Medical Articles",
+        "faqs": "FAQs",
+        "contact": "Contact",
+        "callNow": "Call Now",
+        "whatsApp": "WhatsApp",
+        "aboutDoctor": "About Doctor",
+        "doctorServices": "Doctor Services",
+        "clinics": "Clinics",
+        "appointmentsSchedule": "Appointments Schedule"
     },
     "register": {
         "title": "Register",
@@ -72,5 +83,11 @@
         "specialty": "Specialty",
         "governorate": "Governorate",
         "city": "City"
+    },
+    "logout": {
+        "confirm": "Are you sure you want to log out?",
+        "logout": "Logout",
+        "success": "Logout successful",
+        "error": "An error occurred"
     }
 }

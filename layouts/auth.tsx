@@ -4,6 +4,7 @@ import { Grid } from '@mui/material'
 
 import Link from 'next/link'
 import { styled } from '@mui/material/styles';
+import { useLocalizedRouter } from '@/hooks/useLocalizedRouter';
 
 const ImageComponent = styled('img')(({ theme }) => ({
     objectFit: "cover",
@@ -28,9 +29,10 @@ const AuthLayout = ({
 }: {
     children: React.ReactNode,
 }) => {
+    const { getLocalizedPath } = useLocalizedRouter();
     return (
         <Grid container spacing={2} height={"100vh"} justifyContent={"center"} alignItems={"center"} position={"relative"}>
-            <BoxLink href={"/"}  >
+            <BoxLink href={getLocalizedPath("/")}>
                 <SiteLogo />
             </BoxLink>
             <Grid size={{ xs: 12, sm: 6, }}

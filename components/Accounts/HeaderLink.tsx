@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { styled } from "@mui/material/styles";
 import { Typography } from "@mui/material";
+import { useLocalizedRouter } from "@/hooks/useLocalizedRouter";
 
 const StyledLink = styled(Typography, {
     shouldForwardProp: (prop) => prop !== "active",
@@ -42,12 +43,14 @@ const LinkStyle = styled(Link)(({ theme }) => ({
     transition: "color 0.3s ease",
 }));
 
-export default function HeaderLink({ href, children }: { href: string; children: React.ReactNode }) {
+export default function HeaderLink({ href, regex, children }: { href: string; regex?: RegExp; children: React.ReactNode }) {
     const pathname = usePathname();
-    const isActive = pathname === href;
+    const { getLocalizedPath } = useLocalizedRouter();
+
+    const isActive = regex?.test(pathname)
 
     return (
-        <LinkStyle href={href} passHref>
+        <LinkStyle href={getLocalizedPath(href)} passHref>
             <StyledLink active={isActive} variant="body1">
                 {children}
             </StyledLink>

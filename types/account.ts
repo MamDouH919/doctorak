@@ -34,4 +34,5 @@ export interface CreateAccount {
         timeTo: string | Date,
         checked?: boolean
     }[]
+    services: string[]
 }

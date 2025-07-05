@@ -8,6 +8,7 @@ import { TbWorld } from 'react-icons/tb';
 import DoctorCardSkeleton from '@/loading/DoctorCard';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
+import { useLocalizedRouter } from '@/hooks/useLocalizedRouter';
 
 const GradientSection = styled(Box)(({ theme }) => ({
     padding: theme.spacing(8, 2),
@@ -64,6 +65,10 @@ const AvailabilityBadge = styled(Box)(({ theme }) => ({
     borderRadius: theme.shape.borderRadius,
     fontSize: 10,
     fontWeight: 600,
+}));
+
+const LinkStyle = styled(Link)(({ theme }) => ({
+    textDecoration: "none",
 }));
 
 interface IconLabelProps {
@@ -150,6 +155,7 @@ const FeaturedDoctorsSection = ({
     city?: string | null
 }) => {
     const { t, i18n } = useTranslation()
+    const { getLocalizedPath } = useLocalizedRouter();
     const { data: doctors, isLoading } = useQuery({
         queryKey: ['doctors', name, specialty, governorate, city],
         queryFn: () => getDoctors({
@@ -181,78 +187,80 @@ const FeaturedDoctorsSection = ({
                     )}
                     {doctors?.data.map((doctor) => (
                         <Grid size={{ xs: 12, sm: 6, md: 4 }} key={doctor._id} display={"flex"}>
-                            <DoctorCard className='doctor-card'>
-                                <Box position="relative" display="flex" alignItems="center" justifyContent="center" height={200} bgcolor="#dbeafe">
-                                    <AvatarStyle
-                                        src={doctor.image?.url || "/doctor-not-found.png"}
-                                        alt={doctor.image?.alt || doctor.user.name[i18n.language as "ar" | "en"]}
+                            <LinkStyle href={getLocalizedPath("doctors/" + doctor._id)} passHref>
+                                <DoctorCard className='doctor-card'>
+                                    <Box position="relative" display="flex" alignItems="center" justifyContent="center" height={200} bgcolor="#dbeafe">
+                                        <AvatarStyle
+                                            src={doctor.image?.url || "/doctor-not-found.png"}
+                                            alt={doctor.image?.alt || doctor.user.name[i18n.language as "ar" | "en"]}
 
-                                    />
-                                    {<AvailabilityBadge>
-                                        {t("website.doctor.visits", { count: doctor.visitors })}
-                                    </AvailabilityBadge>}
-                                </Box>
+                                        />
+                                        {<AvailabilityBadge>
+                                            {t("website.doctor.visits", { count: doctor.visitors })}
+                                        </AvailabilityBadge>}
+                                    </Box>
 
-                                <CardContent>
-                                    <Stack spacing={2}>
-                                        <Typography variant="h3" fontWeight={700} fontSize={20} textAlign="center">
-                                            {doctor.user.name[i18n.language as "ar" | "en"]}
-                                        </Typography>
-
-                                        <Box textAlign="center">
-                                            <ChipStyle
-                                                label={doctor.specialization.name[i18n.language as "ar" | "en"]}
-                                                color='primary'
-
-                                            />
-                                        </Box>
-
-
-                                        {doctor.governorates.length > 0 && <Stack>
-                                            <Typography variant="body2" color="textPrimary" textAlign={"center"} fontWeight={"bold"}>
-                                                {t("website.doctor.DoctorsLocations")}
+                                    <CardContent>
+                                        <Stack spacing={2}>
+                                            <Typography variant="h3" fontWeight={700} fontSize={20} textAlign="center">
+                                                {doctor.user.name[i18n.language as "ar" | "en"]}
                                             </Typography>
-                                            {doctor.governorates.map((governorate, index) => (
-                                                <Typography key={index} variant="body2" color="textSecondary" ml={1} textAlign={"center"}>
-                                                    {governorate.name[i18n.language as "ar" | "en"] + " - " + doctor.cities[index].name[i18n.language as "ar" | "en"]}
+
+                                            <Box textAlign="center">
+                                                <ChipStyle
+                                                    label={doctor.specialization.name[i18n.language as "ar" | "en"]}
+                                                    color='primary'
+
+                                                />
+                                            </Box>
+
+
+                                            {doctor.governorates.length > 0 && <Stack>
+                                                <Typography variant="body2" color="textPrimary" textAlign={"center"} fontWeight={"bold"}>
+                                                    {t("website.doctor.DoctorsLocations")}
                                                 </Typography>
-                                            ))}
-                                        </Stack>}
+                                                {doctor.governorates.map((governorate, index) => (
+                                                    <Typography key={index} variant="body2" color="textSecondary" ml={1} textAlign={"center"}>
+                                                        {governorate.name[i18n.language as "ar" | "en"] + " - " + doctor.cities[index].name[i18n.language as "ar" | "en"]}
+                                                    </Typography>
+                                                ))}
+                                            </Stack>}
 
-                                        {/* <IconLabel icon={Room} label={doctor.city} /> */}
+                                            {/* <IconLabel icon={Room} label={doctor.city} /> */}
 
-                                        {/* <Box display="flex" justifyContent="center" alignItems="center" mb={1}>
+                                            {/* <Box display="flex" justifyContent="center" alignItems="center" mb={1}>
                                         {renderStars(doctor.rating)}
                                         <Typography variant="body2" color="textSecondary" ml={1}>
                                             {doctor.rating} ({doctor.reviews} تقييم)
                                         </Typography>
                                     </Box> */}
 
-                                        {/* <IconLabel icon={EmojiEvents} label={doctor.experience} /> */}
+                                            {/* <IconLabel icon={EmojiEvents} label={doctor.experience} /> */}
 
-                                        {/* make it only two lines and over make three dots */}
-                                        <TypographyTwoLine
-                                            align="center"
-                                            color='textSecondary'
-                                            mb={1}
-                                        >
-                                            {doctor.description[i18n.language as "ar" | "en"]}
-                                        </TypographyTwoLine>
+                                            {/* make it only two lines and over make three dots */}
+                                            <TypographyTwoLine
+                                                align="center"
+                                                color='textSecondary'
+                                                mb={1}
+                                            >
+                                                {doctor.description[i18n.language as "ar" | "en"]}
+                                            </TypographyTwoLine>
 
-                                        {/* {doctor.available && (
+                                            {/* {doctor.available && (
                                         <IconLabel icon={AccessTime} label={`متاح ${doctor.nextAvailable}`} />
                                     )} */}
-                                        <Link href={"https://" + doctor.domain} passHref target='_blank' rel="noreferrer">
-                                            <Button variant='outlined' color='primary' fullWidth endIcon={<TbWorld />}>
-                                                {t("website.doctor.moreInfo")}
-                                            </Button>
-                                        </Link>
-                                        <Typography variant="body2" color="error" textAlign={"center"} fontStyle={"italic"} fontWeight={"bold"}>
-                                            {t("website.doctor.soon")}
-                                        </Typography>
-                                    </Stack>
-                                </CardContent>
-                            </DoctorCard>
+                                            {/* <Link href={"https://" + doctor.domain} passHref target='_blank' rel="noreferrer">
+                                                <Button variant='outlined' color='primary' fullWidth endIcon={<TbWorld />}>
+                                                    {t("website.doctor.moreInfo")}
+                                                </Button>
+                                            </Link> */}
+                                            <Typography variant="body2" color="error" textAlign={"center"} fontStyle={"italic"} fontWeight={"bold"}>
+                                                {t("website.doctor.soon")}
+                                            </Typography>
+                                        </Stack>
+                                    </CardContent>
+                                </DoctorCard>
+                            </LinkStyle>
                         </Grid>
                     ))}
                     {!isLoading && doctors?.data.length === 0 &&
@@ -264,9 +272,12 @@ const FeaturedDoctorsSection = ({
                 </Grid>
 
                 {!fromPage && <Box textAlign="center" mt={8}>
-                    <Button variant="contained" color="primary" size="large">
-                        {t("website.doctor.viewAll")}
-                    </Button>
+                    <Link href={getLocalizedPath("doctors")} passHref>
+                        <Button variant="contained" color="primary" size="large">
+                            {t("website.doctor.viewAll")}
+                        </Button>
+                    </Link>
+
                 </Box>}
             </Box>
         </GradientSection>

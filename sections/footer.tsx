@@ -1,5 +1,6 @@
 "use client"
 import SiteLogo from '@/components/SiteLogo';
+import { useLocalizedRouter } from '@/hooks/useLocalizedRouter';
 import { useAppSelector } from '@/Store/store';
 import {
     Box,
@@ -17,6 +18,7 @@ import { useTranslation } from 'react-i18next';
 export default function Footer() {
     const { t } = useTranslation()
     const auth = useAppSelector((state) => state.auth)
+    const { getLocalizedPath } = useLocalizedRouter();
 
     const FooterLinks = [
         {
@@ -62,7 +64,7 @@ export default function Footer() {
                             {FooterLinks.map((text, i) => (
                                 <Link
                                     key={i}
-                                    href={text.link}
+                                    href={getLocalizedPath(text.link)}
                                     underline="hover"
                                     color="grey.500"
                                     sx={{ '&:hover': { color: 'common.white' } }}

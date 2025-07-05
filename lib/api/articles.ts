@@ -1,6 +1,7 @@
 import { getToken } from "@/action/token";
 import api from "../api";
 import { PaginatorInfo } from "@/types";
+import { getLang } from "@/action/lang";
 
 interface FetchParams {
     page?: number;
@@ -41,6 +42,7 @@ export const createArticles = async (data: {
     const response = await api.post('/api/articles/create', data, {
         headers: {
             'Authorization': `Bearer ${token}`,
+
         },
     })
 
@@ -54,10 +56,12 @@ export const updateArticles = async (data: {
     account: string
 }) => {
     const token = await getToken();
+    const lang = await getLang();
 
     const response = await api.put('/api/articles/update', data, {
         headers: {
             'Authorization': `Bearer ${token}`,
+            'Language': lang,
         },
     })
 

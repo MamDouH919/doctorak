@@ -10,17 +10,23 @@ const VideosSchema = new mongoose.Schema({
   type: { type: String, required: true, enum: ["facebook", "instagram", "tikTok", "youtube"] },
 });
 
-// const AppointmentSchema = new mongoose.Schema({
-//   day: { type: String, required: true },
-//   timeFrom: { type: String, required: true },
-//   timeTo: { type: String, required: true },
-// });
+const ServicesSchema = new mongoose.Schema(
+  {
+    ar: {
+      type: [String],
+    },
+    en: {
+      type: [String],
+    }
+  },
+  { _id: false } // optional: disables _id creation for subdocument
+);
 
 const AccountsSchema = new mongoose.Schema({
-  siteName: { 
-      ar: { type: String, },
-      en: { type: String, },
-   },
+  siteName: {
+    ar: { type: String, },
+    en: { type: String, },
+  },
   title: {
     ar: { type: String, },
     en: { type: String, },
@@ -28,14 +34,14 @@ const AccountsSchema = new mongoose.Schema({
   phone: { type: String, },
   whatsApp: { type: String, },
   description: {
-      ar: { type: String, },
-      en: { type: String, },
+    ar: { type: String, },
+    en: { type: String, },
   },
   color: { type: String, },
   // lang: { type: String, enum: ["ar", "en"] },
   about: {
-      ar: { type: String, },
-      en: { type: String, },
+    ar: { type: String, },
+    en: { type: String, },
   },
   domain: { type: String, unique: true },
   active: { type: Boolean, default: false },
@@ -59,6 +65,8 @@ const AccountsSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'Users', required: true, },
   specialization: { type: mongoose.Schema.Types.ObjectId, ref: 'Specialization', },
   image: { type: mongoose.Schema.Types.ObjectId, ref: "Image" }, // One-to-One reference
+
+  services: ServicesSchema
 }, {
   timestamps: true,
   versionKey: false,

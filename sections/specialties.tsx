@@ -7,6 +7,7 @@ import { getIcon } from './getIcon';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
+import { useLocalizedRouter } from '@/hooks/useLocalizedRouter';
 
 
 const Section = styled(Box)(({ theme }) => ({
@@ -55,6 +56,7 @@ export default function SpecialtiesSection({
 }) {
     const { t, i18n } = useTranslation()
     const router = useRouter()
+    const { getLocalizedPath } = useLocalizedRouter();
     const { data: specializations, isLoading } = useQuery({
         queryKey: ['specializations', limit],
         queryFn: () => getSpecializations({
@@ -65,6 +67,7 @@ export default function SpecialtiesSection({
     const handleClick = (id: string) => {
         router.push(`/doctors?specialty=${id}`)
     }
+
 
     return (
         <Section paddingTop={{
@@ -114,7 +117,7 @@ export default function SpecialtiesSection({
                 </Grid>
 
                 {!fromPage && <Box textAlign="center" mt={8}>
-                    <Link href="/specialties" passHref>
+                    <Link href={getLocalizedPath("specialties")} passHref>
                         <Button variant="contained" color="primary" size="large">
                             {t("website.specialties.viewAll")}
                         </Button>

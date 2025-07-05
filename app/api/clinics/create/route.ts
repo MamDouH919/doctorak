@@ -11,21 +11,6 @@ import { success } from '@/lib/api/response';
 import { ValidationError, AppError } from '@/lib/api/errors';
 import { syncRelation } from '@/lib/relationManager';
 
-
-// name: string,
-//     phone: string,
-//     address: string,
-//     mobile: string,
-//     governorate: string,
-//     city: string,
-
-//     appointments: {
-//         day: string,
-//         start_time: string,
-//         end_time: string
-//     }[],
-//     account: string
-// ✅ Zod validation schema
 const ClinicSchema = z.object({
     name: z.string().min(1, 'Name is required'),
     phone: z.string().min(1, 'Phone is required'),
@@ -66,9 +51,15 @@ const handler = async (req: NextRequest) => {
     }
 
     const clinic = await Clinics.create({
-        name,
+        name:{
+            ar: name,
+            en: name,
+        },
         phone,
-        address,
+        address:{
+            ar: address,
+            en: address,
+        },
         mobile,
         governorate,
         city,

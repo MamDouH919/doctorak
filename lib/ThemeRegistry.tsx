@@ -3,19 +3,23 @@
 import { CacheProvider } from '@emotion/react';
 import { ThemeProvider, CssBaseline } from '@mui/material';
 
-import { useMemo } from 'react';
-import createEmotionCache from '@/app/createEmotionCache';
+import { memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import getTheme from '@/app/theme';
 import { Toaster } from 'sonner';
+import createEmotionCache from '@/app/[locale]/createEmotionCache';
 
-export default function ThemeRegistry({
+function ThemeRegistry({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const { i18n } = useTranslation();
+  console.log(i18n.language);
+
   const isRtl = i18n.dir() === 'rtl';
+  console.log(isRtl);
+
   const cache = useMemo(() => createEmotionCache(isRtl), [isRtl]);
 
   const theme = useMemo(() => getTheme({
@@ -23,7 +27,8 @@ export default function ThemeRegistry({
     secondary: "#87af2a",
     dir: isRtl ? "rtl" : "ltr"
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }), [i18n]);
+  }), [isRtl]);
+
 
   return (
     <CacheProvider value={cache}>
@@ -41,3 +46,5 @@ export default function ThemeRegistry({
     </CacheProvider>
   );
 }
+
+export default memo(ThemeRegistry);

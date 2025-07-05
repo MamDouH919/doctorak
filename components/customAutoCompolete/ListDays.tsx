@@ -1,7 +1,8 @@
 import { FieldValues } from "react-hook-form";
 import AutoCompleteComponent, { IProps as AutoCompleteComponentIProps } from "../MUI/AutoCompleteComponent";
+import { useTranslation } from "react-i18next";
 
-const data = [
+export const Days = [
   {
     _id: "1",
     slug: "sunday",
@@ -72,7 +73,7 @@ const ListDays = <T extends FieldValues>({
   disabled?: boolean;
   rules?: any;
 }) => {
-
+  const { i18n } = useTranslation();
   return (
     <AutoCompleteComponent
       control={control}
@@ -81,13 +82,13 @@ const ListDays = <T extends FieldValues>({
       name={name}
       disabled={disabled}
       options={
-        (data.map((item) => ({
+        (Days.map((item) => ({
           id: item.slug,
-          name: item.name.ar,
+          name: item.name[i18n.language as "ar" | "en"],
         })) ?? []) as any
       }
       renderOption={(props, option) => (
-        <li {...props} key={option.id}>
+        <li {...props} key={option.id} dir={i18n.dir()}>
           <span>{option?.name}</span>
           {/* <ColorSpan>{option?.code}</ColorSpan> */}
         </li>

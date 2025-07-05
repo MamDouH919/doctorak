@@ -2,6 +2,8 @@ import { getToken } from "@/action/token";
 import api from "../api";
 import { PaginatorInfo } from "@/types";
 import { CreateAccount } from "@/types/account";
+import { AxiosProgressEvent } from 'axios';
+import { getLang } from "@/action/lang";
 
 interface FetchAccountsParams {
     page?: number;
@@ -70,8 +72,57 @@ export const updateAccount = async (id: string, data: CreateAccount) => {
     return response.data;
 };
 
-import { AxiosProgressEvent } from 'axios';
-import { getLang } from "@/action/lang";
+export type UpdateDoctorData = Pick<CreateAccount,
+    'title' | 'phone' | 'whatsApp' | 'description' | 'about' | 'siteName' | 'services' | 'color'
+>;
+
+export type UpdateVideosAndSocial = Pick<CreateAccount,
+    'social' | 'videos'
+>;
+export type UpdateAdminData = Pick<CreateAccount,
+    'isPremium' | 'active' | 'showInHomePage' | 'specialization' | 'specialization_needed' | 'domain'
+>;
+
+export const updateDoctorData = async (id: string, data: UpdateDoctorData) => {
+    const token = await getToken();
+    const lang = await getLang();
+
+    const response = await api.put('/api/accounts/update/' + id + '/doctor-data', data, {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Language': lang,
+        },
+    })
+
+    return response.data;
+};
+export const updateVideosAndSocial = async (id: string, data: UpdateVideosAndSocial) => {
+    const token = await getToken();
+    const lang = await getLang();
+
+    const response = await api.put('/api/accounts/update/' + id + '/doctor-social-videos', data, {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Language': lang,
+        },
+    })
+
+    return response.data;
+};
+
+export const updateAccountAdmin = async (id: string, data: UpdateAdminData) => {    
+    const token = await getToken();
+    const lang = await getLang();
+
+    const response = await api.put('/api/accounts/update/' + id + '/doctor-admin', data, {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Language': lang,
+        },
+    })
+
+    return response.data;
+};
 
 interface UploadOptions {
     onUploadProgress?: (progressEvent: AxiosProgressEvent) => void;

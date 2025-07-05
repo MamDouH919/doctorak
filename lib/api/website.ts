@@ -1,5 +1,60 @@
 import api from "../api";
 
+interface DoctorData {
+    doctor: {
+        siteName: { ar: string; en: string };
+        title: { ar: string; en: string };
+        description: { ar: string; en: string };
+        about: { ar: string; en: string };
+        specialization: {
+            name: { en: string; ar: string };
+        };
+        user: {
+            name: { ar: string; en: string };
+        };
+        clinics: Array<{
+            name: { ar: string; en: string };
+            address: { ar: string; en: string };
+            phone: string;
+            mobile: string;
+            governorate: { name: { en: string; ar: string } };
+            city: { name: { en: string; ar: string } };
+            appointments: Array<{
+                day: string;
+                timeFrom: string;
+                timeTo: string;
+            }>;
+        }>;
+        faqs: Array<{
+            question: { ar: string; en: string };
+            answer: { ar: string; en: string };
+        }>;
+        articles: Array<{
+            title: { ar: string; en: string };
+            content: { ar: string; en: string };
+        }>;
+        videos: Array<{
+            link: string;
+            type: string;
+        }>;
+        social: Array<{
+            type: string;
+            link: string;
+        }>;
+        color: string;
+        phone: string;
+        whatsApp: string;
+        services: {
+            ar: string[];
+            en: string[];
+        };
+        image: {
+            url: string;
+            alt: string;
+        }
+    };
+}
+
 //  get specializations
 export interface Specialization {
     _id: string;
@@ -105,6 +160,16 @@ export const getDoctors = async (
     if (params.city) queryParams.append('city', params.city);
 
     const response = await api.get(`/api/website/doctors?${queryParams.toString()}`);
+
+    return response.data;
+};
+
+export const getDoctorById = async (
+    id: string
+): Promise<{
+    data: DoctorData;
+}> => {
+    const response = await api.get(`/api/website/doctors/${id}`);
 
     return response.data;
 };

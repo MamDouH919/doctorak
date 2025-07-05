@@ -1,6 +1,7 @@
 import { getToken } from "@/action/token";
 import api from "../api";
 import { PaginatorInfo } from "@/types";
+import { getLang } from "@/action/lang";
 
 interface FetchParams {
     page?: number;
@@ -61,10 +62,12 @@ export const createClinic = async (data: createClinic) => {
 
 export const updateClinic = async (data: createClinic & { id: string }) => {
     const token = await getToken();
+    const lang = await getLang(); 
 
     const response = await api.put('/api/clinics/update', data, {
         headers: {
             'Authorization': `Bearer ${token}`,
+            'Language': lang,
         },
     })
 

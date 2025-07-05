@@ -42,16 +42,16 @@ const LogoutDialog = ({
             .then(response => {
                 setLoading(false)
                 if (response.ok) {
-                    toast.success("تم تسجيل الخروج بنجاح")
+                    toast.success(t("website.logout.success"))
                     dispatch(resetAuthData())
                     router.push('/')
                 } else {
-                    toast.error("حدث خطأ ما")
+                    toast.error(t("website.logout.error"))
                 }
             })
             .catch(error => {
                 setLoading(false)
-                toast.error("حدث خطأ ما")
+                toast.error(t("website.logout.error"))
             }).finally(() => {
                 handleClose()
                 setLoading(false)
@@ -69,12 +69,14 @@ const LogoutDialog = ({
             content={
                 <Stack py={2}>
                     <Typography textAlign={"center"}>
-                        هل أنت متأكد من أنك تريد تسجيل الخروج؟
+                        {t("website.logout.confirm")}
                     </Typography>
                 </Stack>
             }
             buttonAction={
-                <Button loading={loading} type='submit' variant='contained'>{"تسجيل الخروج"}</Button>
+                <Button loading={loading} type='submit' variant='contained'>
+                    {t("website.logout.logout")}
+                </Button>
             }
         />
     )

@@ -9,6 +9,7 @@ import useDashboard from '@/hooks/useDashboard';
 import LogoutDialog from '../dialogs/LogoutDialog';
 import SiteLogo from '../SiteLogo';
 import LanguageMenu from '../Language';
+import { useLocalizedRouter } from '@/hooks/useLocalizedRouter';
 // import LogoutDialog from '../dialogs/LogoutDialog';
 // import SiteLogo from '../SiteLogo';
 
@@ -33,6 +34,7 @@ const AppBar = styled(MuiAppBar, {
 const Header = () => {
     const context = useDashboard();
     const [logoutDialog, setLogoutDialog] = useState(false)
+    const { getLocalizedPath } = useLocalizedRouter();
     const handleCloseLogoutDialog = () => {
         setLogoutDialog(false)
     }
@@ -50,7 +52,7 @@ const Header = () => {
                     <Menu />
                 </IconButton>
                 <Stack direction={"row"} justifyContent={"space-between"} alignItems={"center"} width={"100%"}>
-                    <Stack component={Link} href={"/"} mx={2} sx={{ textDecoration: 'none' }}>
+                    <Stack component={Link} href={getLocalizedPath("/")} mx={2} sx={{ textDecoration: 'none' }}>
                         <SiteLogo />
                     </Stack>
                     <Stack direction={"row"} alignItems={"center"}>

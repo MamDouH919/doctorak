@@ -51,5 +51,12 @@
     "toTime": "To Time",
     "day": "Day",
     "addClinic": "Add Clinic",
-    "editClinic": "Edit Clinic"
+    "editClinic": "Edit Clinic",
+    "doctorTitle": "title",
+    "videosAndSocial": "Videos and Social",
+    "doctorData": "Doctor Data",
+    "websiteStyle": "Website",
+    "serviceName": "Service Name",
+    "services": "Services",
+    "admin": "Admin"
 }

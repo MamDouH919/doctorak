@@ -6,6 +6,7 @@ import { Box, Stack } from "@mui/material";
 import Link from "next/link";
 import { DashboardContext } from "@/context/Contexts";
 import { useTranslation } from "react-i18next";
+import { useLocalizedRouter } from "@/hooks/useLocalizedRouter";
 
 
 const LinkStyle = styled(Link)(({ theme }) => ({
@@ -21,6 +22,8 @@ const LinkStyle = styled(Link)(({ theme }) => ({
 const Breadcrumb = () => {
     const context = React.useContext(DashboardContext);
     const { t } = useTranslation()
+    const { getLocalizedPath } = useLocalizedRouter();
+
     return (
         <Stack
             direction={"row"}
@@ -41,7 +44,7 @@ const Breadcrumb = () => {
 
                 <LinkStyle
                     color="inherit"
-                    href="/dashboard"
+                    href={getLocalizedPath("dashboard")}
                 >
                     {t("breadCrumb.dashboard")}
                 </LinkStyle>
@@ -65,7 +68,7 @@ const Breadcrumb = () => {
                         <LinkStyle
                             key={index}
                             color="inherit"
-                            href={value.link!}
+                            href={getLocalizedPath(value.link!)}
                         >
                             {value.label}
                         </LinkStyle>

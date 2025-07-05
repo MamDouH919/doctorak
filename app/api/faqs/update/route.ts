@@ -21,6 +21,7 @@ const FAQUpdateSchema = z.object({
 const handler = async (req: NextRequest) => {
     const body = await req.json();
     const parsed = FAQUpdateSchema.safeParse(body);
+    const requestLang = req.headers.get('Language') || 'en';
 
     if (!parsed.success) {
         const errors = parsed.error.issues.map(issue => ({
@@ -40,8 +41,8 @@ const handler = async (req: NextRequest) => {
         throw new AppError('FAQ not found or unauthorized', 404, 'custom');
     }
 
-    faq.question = question;
-    faq.answer = answer;
+    faq.question[requestLang] = question;
+    faq.answer[requestLang] = answer;
     await faq.save();
 
     return success({

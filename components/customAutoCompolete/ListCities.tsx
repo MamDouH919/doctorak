@@ -2,6 +2,7 @@ import { FieldValues } from "react-hook-form";
 import AutoCompleteComponent, { IProps as AutoCompleteComponentIProps } from "../MUI/AutoCompleteComponent";
 import { useQuery } from "@tanstack/react-query";
 import { getCities } from "@/lib/api/dropdown";
+import { useTranslation } from "react-i18next";
 
 const ListCities = <T extends FieldValues>({
   name,
@@ -17,7 +18,7 @@ const ListCities = <T extends FieldValues>({
   rules?: any;
   governorateId?: string;
 }) => {
-
+  const { i18n } = useTranslation();
   const { data, isLoading } = useQuery({
     queryKey: ["cities", governorateId],
     queryFn: () => getCities(governorateId!),
@@ -34,7 +35,7 @@ const ListCities = <T extends FieldValues>({
       options={
         (data?.data.cities.map((item) => ({
           id: item._id,
-          name: item.name.ar,
+          name: item.name[i18n.language as "ar" | "en"],
         })) ?? []) as any
       }
       renderOption={(props, option) => (

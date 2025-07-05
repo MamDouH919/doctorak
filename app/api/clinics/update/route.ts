@@ -36,6 +36,8 @@ const handler = async (req: NextRequest) => {
     const body = await req.json();
     const parsed = ClinicUpdateSchema.safeParse(body);
 
+    const requestLang = req.headers.get('Language') || 'en';
+
     if (!parsed.success) {
         const errors = parsed.error.issues.map(issue => ({
             field: issue.path.join('.'),
@@ -66,9 +68,9 @@ const handler = async (req: NextRequest) => {
     const oldGovernorate = clinics.governorate._id;
     const oldCity = clinics.city._id;
 
-    clinics.name = name;
+    clinics.name[requestLang] = name;
     clinics.phone = phone;
-    clinics.address = address;
+    clinics.address[requestLang] = address;
     clinics.mobile = mobile;
     clinics.governorate = governorate;
     clinics.city = city;
@@ -77,9 +79,6 @@ const handler = async (req: NextRequest) => {
     await clinics.save();
 
     if (governorate !== oldGovernorate) {
-        console.log(governorate);
-        console.log(oldGovernorate);
-        
         await syncRelation({
             model: Accounts,
             docId: clinics.account,

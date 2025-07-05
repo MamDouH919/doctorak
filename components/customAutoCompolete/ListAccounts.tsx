@@ -2,6 +2,7 @@ import { FieldValues } from "react-hook-form";
 import AutoCompleteComponent, { IProps as AutoCompleteComponentIProps } from "../MUI/AutoCompleteComponent";
 import { listServicesDropDown } from "@/lib/api/accounts";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 
 const ListAccounts = <T extends FieldValues>({
   name,
@@ -15,6 +16,7 @@ const ListAccounts = <T extends FieldValues>({
   disabled?: boolean;
   rules?: any;
 }) => {
+  const { i18n } = useTranslation();
   const { data, isLoading } = useQuery({
     queryKey: ["listServicesDropDown"],
     queryFn: () => listServicesDropDown(),
@@ -31,11 +33,11 @@ const ListAccounts = <T extends FieldValues>({
       options={
         (data?.data.map((item: any) => ({
           id: item._id,
-          name: item.user?.name,
+          name: item.user?.name[i18n.language as "ar" | "en"],
         })) ?? []) as any
       }
       renderOption={(props, option) => (
-        <li {...props} key={option.id}>
+        <li {...props} key={option.id} dir={i18n.dir()}>
           <span>{option?.name}</span>
           {/* <ColorSpan>{option?.code}</ColorSpan> */}
         </li>

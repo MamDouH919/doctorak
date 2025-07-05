@@ -20,6 +20,7 @@ const ArticlesUpdateSchema = z.object({
 const handler = async (req: NextRequest) => {
     const body = await req.json();
     const parsed = ArticlesUpdateSchema.safeParse(body);
+    const requestLang = req.headers.get('Language') || 'en';
 
     if (!parsed.success) {
         const errors = parsed.error.issues.map(issue => ({
@@ -39,8 +40,8 @@ const handler = async (req: NextRequest) => {
         throw new AppError('Article not found or unauthorized', 404, 'custom');
     }
 
-    articles.title = title;
-    articles.content = content;
+    articles.title[requestLang] = title;
+    articles.content[requestLang] = content;
     await articles.save();
 
     return success({

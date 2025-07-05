@@ -42,8 +42,14 @@ const handler = async (req: NextRequest) => {
     }
 
     const faq = await FAQ.create({
-        question,
-        answer,
+        question:{
+            ar: question,
+            en: question,
+        },
+        answer:{
+            ar: answer,
+            en: answer,
+        },
         account,
     });
 

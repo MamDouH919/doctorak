@@ -2,6 +2,7 @@ import { FieldValues } from "react-hook-form";
 import AutoCompleteComponent, { IProps as AutoCompleteComponentIProps } from "../MUI/AutoCompleteComponent";
 import { useQuery } from "@tanstack/react-query";
 import { getGovernorate } from "@/lib/api/dropdown";
+import { useTranslation } from "react-i18next";
 
 const ListGovernorate = <T extends FieldValues>({
   name,
@@ -15,7 +16,7 @@ const ListGovernorate = <T extends FieldValues>({
   disabled?: boolean;
   rules?: any;
 }) => {
-
+  const { i18n } = useTranslation();
   const { data, isLoading } = useQuery({
     queryKey: ["governorate"],
     queryFn: () => getGovernorate(),
@@ -32,11 +33,11 @@ const ListGovernorate = <T extends FieldValues>({
       options={
         (data?.data.governorates.map((item) => ({
           id: item._id,
-          name: item.name.ar,
+          name: item.name[i18n.language as "ar" | "en"],
         })) ?? []) as any
       }
       renderOption={(props, option) => (
-        <li {...props} key={option.id}>
+        <li {...props} key={option.id} dir={i18n.dir()}>
           <span>{option?.name}</span>
           {/* <ColorSpan>{option?.code}</ColorSpan> */}
         </li>

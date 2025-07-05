@@ -51,5 +51,12 @@
     "toTime": "إلى الساعة",
     "day": "اليوم",
     "addClinic": "إضافة عيادة",
-    "editClinic": "تعديل العيادة"
+    "editClinic": "تعديل العيادة",
+    "doctorTitle": "اللقب",
+    "videosAndSocial": "الفيديو والتواصل الاجتماعي",
+    "doctorData": "بيانات الدكتور",
+    "websiteStyle": "الويبسايت",
+    "serviceName": "اسم الخدمة",
+    "services": "الخدمات",
+    "admin": "المشرف"
 }
