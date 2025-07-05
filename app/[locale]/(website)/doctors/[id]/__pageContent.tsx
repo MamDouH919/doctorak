@@ -51,6 +51,7 @@ import {
     Chip,
     Paper,
     Icon,
+    CircularProgress,
 } from '@mui/material';
 import { getDoctorById } from '@/lib/api/website';
 import { useQuery } from '@tanstack/react-query';
@@ -140,10 +141,25 @@ const DoctorProfile: React.FC<{ id: string }> = ({ id }) => {
     const doctor = doctorData?.data.doctor;
 
     if (isLoading) {
-        return <></>
+        return <Stack
+            height={"400px"}
+            width={"100%"}
+            justifyContent={"center"}
+            alignItems={"center"}
+        >
+            <CircularProgress />
+        </Stack>
     }
+
     if (!doctor) {
-        return <></>
+        return <Stack
+            height={"400px"}
+            width={"100%"}
+            justifyContent={"center"}
+            alignItems={"center"}
+        >
+            <Typography variant="h6">Doctor not found</Typography>
+        </Stack>
     }
 
     return (
