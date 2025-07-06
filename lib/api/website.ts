@@ -2,6 +2,7 @@ import api from "../api";
 
 interface DoctorData {
     doctor: {
+        _id: string;
         siteName: { ar: string; en: string };
         title: { ar: string; en: string };
         description: { ar: string; en: string };
@@ -51,7 +52,8 @@ interface DoctorData {
         image: {
             url: string;
             alt: string;
-        }
+        },
+        domain: string
     };
 }
 
@@ -170,6 +172,16 @@ export const getDoctorById = async (
     data: DoctorData;
 }> => {
     const response = await api.get(`/api/website/doctors/${id}`);
+
+    return response.data;
+};
+
+export const getDoctorSEOById = async (
+    id: string
+): Promise<{
+    data: DoctorData;
+}> => {
+    const response = await api.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/website/doctors/${id}`);
 
     return response.data;
 };
