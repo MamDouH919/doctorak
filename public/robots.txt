@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://test.3n-dev.com/sitemap.xml

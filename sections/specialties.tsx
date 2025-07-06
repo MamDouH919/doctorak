@@ -56,7 +56,7 @@ export default function SpecialtiesSection({
 }) {
     const { t, i18n } = useTranslation()
     const router = useRouter()
-    const { getLocalizedPath } = useLocalizedRouter();
+    const { getLocalizedPath, push } = useLocalizedRouter();
     const { data: specializations, isLoading } = useQuery({
         queryKey: ['specializations', limit],
         queryFn: () => getSpecializations({
@@ -65,7 +65,7 @@ export default function SpecialtiesSection({
     });
 
     const handleClick = (id: string) => {
-        router.push(`/doctors?specialty=${id}`)
+        push(`doctors?specialty=${id}`)
     }
 
 

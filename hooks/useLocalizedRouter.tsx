@@ -13,6 +13,8 @@ export function useLocalizedRouter() {
     const getLocalizedPath = (path: string) => {
         // Remove any leading slashes just in case
         const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+        console.log(cleanPath);
+        
         return `/${locale}/${cleanPath}`;
     };
 

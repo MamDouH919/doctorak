@@ -15,11 +15,44 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: '
   const { locale } = await params;
   return {
     title: locale === 'ar' ? 'دكاترة' : 'Dakatrh',
-    description:
-      locale === 'ar'
+    description: locale === 'ar'
+      ? 'دكاترة منصة طبية شاملة تجمع أفضل الدكاترة في مكان واحد لتسهيل الوصول إلى الرعاية الصحية المناسبة.'
+      : 'Daktarah is a medical platform that connects you with top doctors in one place.',
+    keywords: locale === 'ar'
+      ? ['دكاترة', 'دكتور', 'منصة طبية', 'الأطباء']
+      : ['Doctors', 'Medical platform', 'Find doctors', 'Healthcare'],
+    authors: [{ name: 'Mamdouh Mohammed' }],
+    robots: {
+      index: true,
+      follow: true,
+    },
+    alternates: {
+      languages: {
+        en: '/en',
+        ar: '/ar',
+      },
+    },
+    metadataBase: new URL('https://test.3n-dev.com'), // ✅ ضع الدومين الفعلي هنا
+    openGraph: {
+      title: locale === 'ar' ? 'دكاترة' : 'Dakatrh',
+      description: locale === 'ar'
         ? 'دكاترة منصة طبية شاملة تجمع أفضل الدكاترة في مكان واحد لتسهيل الوصول إلى الرعاية الصحية المناسبة.'
         : 'Daktarah is a medical platform that connects you with top doctors in one place.',
+      type: 'website',
+      locale: locale === 'ar' ? 'ar_EG' : 'en_US',
+      url: locale === 'ar' ? 'https://test.3n-dev.com/ar' : 'https://test.3n-dev.com/en',
+      siteName: 'دكاترة',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: locale === 'ar' ? 'دكاترة' : 'Dakatrh',
+      description: locale === 'ar'
+        ? 'دكاترة منصة طبية شاملة تجمع أفضل الدكاترة في مكان واحد.'
+        : 'Daktarah is a platform that brings top doctors together.',
+      creator: '@daktarah',
+    },
   };
+
 }
 
 export default async function RootLayout({
@@ -70,14 +103,16 @@ export default async function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Exo+2:wght@100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Rubik+Vinyl&family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap"
           rel="stylesheet"></link>
 
-        <meta name="keywords" content="دكاترة, دكتور, دكاترة منصة طبية شاملة, دكاترة منصة طبية شاملة تجمع أفضل الدكاترة في مكان واحد لتسهيل الوصول إلى الرعاية الصحية المناسبة." />
-        <meta name="author" content="Mamdouh Mohammed" />
-        <meta name="robots" content="index, follow" />
         <meta name="revisit-after" content="7 days" />
         <meta name="language" content="ar" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
         <link rel="icon" type="image/webp" href="/logo.webp" />
+
+        <link
+          rel="canonical"
+          href={`https://test.3n-dev.com/${locale}`}
+        />
         {/* <link rel="icon" type="image/svg+xml" href={FAVICON} /> */}
       </head>
       <body>

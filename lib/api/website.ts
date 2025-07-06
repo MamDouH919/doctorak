@@ -185,3 +185,9 @@ export const getDoctorSEOById = async (
 
     return response.data;
 };
+
+
+export const getAllDoctorsIds = async (): Promise<{ id: string }[]> => {
+    const response = await api.get('/api/website/doctors/all-ids');
+    return response.data;
+};
