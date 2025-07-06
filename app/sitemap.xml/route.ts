@@ -8,8 +8,7 @@ export async function GET() {
 
     const routes = [
         '',
-        '/about',
-        '/contact',
+        '/specialties',
         '/doctors', // صفحة كل الأطباء
     ];
 
