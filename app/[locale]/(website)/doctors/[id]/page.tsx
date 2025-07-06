@@ -66,8 +66,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 // Page Component
-const Page = async ({ params }: { params: { id: string } }) => {
-    const { id } = params;
+const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
+    const { id } = await params;
     return <Doctor id={id} />;
 };
 
