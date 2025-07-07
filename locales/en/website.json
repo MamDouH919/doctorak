@@ -6,7 +6,7 @@
     "doctor": {
         "DoctorsLocations": "Doctor's locations",
         "moreInfo": "More information",
-        "soon": "* Soon *",
+        "soon": "* Booking soon *",
         "noResults": "No doctors found that match the search",
         "viewAll": "View all doctors",
         "visits": "{{count}} visits",
@@ -20,7 +20,8 @@
         "aboutDoctor": "About Doctor",
         "doctorServices": "Doctor Services",
         "clinics": "Clinics",
-        "appointmentsSchedule": "Appointments Schedule"
+        "appointmentsSchedule": "Appointments Schedule",
+        "dr": "Dr."
     },
     "register": {
         "title": "Register",

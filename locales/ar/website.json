@@ -20,7 +20,8 @@
         "aboutDoctor": "عن الدكتور",
         "doctorServices": "خدمات الدكتور",
         "clinics": "العيادات",
-        "appointmentsSchedule": "جدول المواعيد"
+        "appointmentsSchedule": "جدول المواعيد",
+        "dr": "د."
     },
     "register": {
         "title": "التسجيل",

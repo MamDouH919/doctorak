@@ -1,10 +1,8 @@
 "use client"
 import React from 'react';
-import { Box, Typography, Grid, Card, CardContent, Avatar, Button, styled, Chip, Tooltip, Stack } from '@mui/material';
-import { Phone, Message, CalendarToday, Star, Room, AccessTime, EmojiEvents } from '@mui/icons-material';
+import { Box, Typography, Grid, Card, CardContent, Avatar, Button, styled, Chip, Stack } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { getDoctors } from '@/lib/api/website';
-import { TbWorld } from 'react-icons/tb';
 import DoctorCardSkeleton from '@/loading/DoctorCard';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
@@ -55,47 +53,48 @@ export const DoctorCard = styled(Card)(({ theme }) => ({
     },
 }));
 
-const AvailabilityBadge = styled(Box)(({ theme }) => ({
-    position: 'absolute',
-    top: theme.spacing(1),
-    right: theme.spacing(1),
-    backgroundColor: theme.palette.success.main,
-    color: '#fff',
-    padding: theme.spacing(0.5, 1),
-    borderRadius: theme.shape.borderRadius,
-    fontSize: 10,
-    fontWeight: 600,
-}));
+// const AvailabilityBadge = styled(Box)(({ theme }) => ({
+//     position: 'absolute',
+//     top: theme.spacing(1),
+//     right: theme.spacing(1),
+//     backgroundColor: theme.palette.success.main,
+//     color: '#fff',
+//     padding: theme.spacing(0.5, 1),
+//     borderRadius: theme.shape.borderRadius,
+//     fontSize: 10,
+//     fontWeight: 600,
+// }));
 
 const LinkStyle = styled(Link)(({ theme }) => ({
     textDecoration: "none",
+    width: "100%",
 }));
 
-interface IconLabelProps {
-    icon: React.ElementType;
-    label: React.ReactNode;
-}
+// interface IconLabelProps {
+//     icon: React.ElementType;
+//     label: React.ReactNode;
+// }
 
-const IconLabel: React.FC<IconLabelProps> = ({ icon: Icon, label }) => (
-    <Box display="flex" alignItems="center" justifyContent="center" mb={1}>
-        <Icon fontSize="small" style={{ marginLeft: 4 }} />
-        <Typography variant="body2" color="textSecondary">
-            {label}
-        </Typography>
-    </Box>
-);
+// const IconLabel: React.FC<IconLabelProps> = ({ icon: Icon, label }) => (
+//     <Box display="flex" alignItems="center" justifyContent="center" mb={1}>
+//         <Icon fontSize="small" style={{ marginLeft: 4 }} />
+//         <Typography variant="body2" color="textSecondary">
+//             {label}
+//         </Typography>
+//     </Box>
+// );
 
-interface RenderStarsProps {
-    rating: number;
-}
+// interface RenderStarsProps {
+//     rating: number;
+// }
 
-const renderStars = (rating: number): React.ReactNode[] => {
-    const stars: React.ReactNode[] = [];
-    for (let i = 0; i < Math.floor(rating); i++) {
-        stars.push(<Star key={i} fontSize="small" color="warning" />);
-    }
-    return stars;
-};
+// const renderStars = (rating: number): React.ReactNode[] => {
+//     const stars: React.ReactNode[] = [];
+//     for (let i = 0; i < Math.floor(rating); i++) {
+//         stars.push(<Star key={i} fontSize="small" color="warning" />);
+//     }
+//     return stars;
+// };
 
 // const featuredDoctors = [
 //     {
@@ -192,18 +191,18 @@ const FeaturedDoctorsSection = ({
                                     <Box position="relative" display="flex" alignItems="center" justifyContent="center" height={200} bgcolor="#dbeafe">
                                         <AvatarStyle
                                             src={doctor.image?.url || "/doctor-not-found.png"}
-                                            alt={doctor.image?.alt || doctor.user.name[i18n.language as "ar" | "en"]}
+                                            alt={doctor.image?.alt || doctor.siteName[i18n.language as "ar" | "en"]}
 
                                         />
-                                        {<AvailabilityBadge>
+                                        {/* {<AvailabilityBadge>
                                             {t("website.doctor.visits", { count: doctor.visitors })}
-                                        </AvailabilityBadge>}
+                                        </AvailabilityBadge>} */}
                                     </Box>
 
                                     <CardContent>
                                         <Stack spacing={2}>
                                             <Typography variant="h3" fontWeight={700} fontSize={20} textAlign="center">
-                                                {doctor.user.name[i18n.language as "ar" | "en"]}
+                                                {t("website.doctor.dr")}{" "}{doctor.siteName[i18n.language as "ar" | "en"]}
                                             </Typography>
 
                                             <Box textAlign="center">

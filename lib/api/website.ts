@@ -10,9 +10,6 @@ interface DoctorData {
         specialization: {
             name: { en: string; ar: string };
         };
-        user: {
-            name: { ar: string; en: string };
-        };
         clinics: Array<{
             name: { ar: string; en: string };
             address: { ar: string; en: string };
@@ -87,14 +84,10 @@ export interface Doctors {
         };
         slug: string;
     }
-    siteName: string;
-    user: {
-        _id: string;
-        name: {
-            ar: string;
-            en: string;
-        };
-    }
+    siteName: {
+        ar: string;
+        en: string;
+    };
     governorates: {
         _id: string;
         name: {

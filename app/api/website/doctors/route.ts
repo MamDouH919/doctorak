@@ -3,7 +3,6 @@ import dbConnect from '@/lib/dbConnect';
 import Accounts from '@/models/Accounts';
 import '@/models/Specialization';
 import '@/models/Images';
-import '@/models/Users';
 import mongoose from 'mongoose';
 
 export async function GET(req: NextRequest) {
@@ -37,26 +36,15 @@ export async function GET(req: NextRequest) {
             match.cities = { $in: [new mongoose.Types.ObjectId(cityId)] };
         }
 
+        if (name) {
+            match.$or = [
+                { 'siteName.ar': { $regex: name, $options: 'i' } },
+                { 'siteName.en': { $regex: name, $options: 'i' } },
+            ];
+        }
+
         const pipeline: any[] = [
             { $match: match },
-
-            {
-                $lookup: {
-                    from: 'users',
-                    localField: 'user',
-                    foreignField: '_id',
-                    as: 'user',
-                },
-            },
-            { $unwind: '$user' },
-
-            ...(name
-                ? [{
-                    $match: {
-                        'user.name': { $regex: name, $options: 'i' },
-                    },
-                }]
-                : []),
 
             {
                 $lookup: {
@@ -113,7 +101,6 @@ export async function GET(req: NextRequest) {
                     visitors: 1,
                     description: 1,
                     image: { _id: 1, url: 1, alt: 1 },
-                    user: { _id: 1, name: 1 },
                     specialization: {
                         _id: 1,
                         name: 1,
