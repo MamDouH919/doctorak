@@ -171,7 +171,7 @@ const DoctorProfile: React.FC<{ id: string }> = ({ id }) => {
                         <Avatar sx={{ width: 200, height: 200, mx: 'auto', bgcolor: 'white' }}>
                             <img
                                 src={doctor.image?.url}
-                                alt={doctor.user.name[i18n.language as "ar" | "en"]}
+                                alt={doctor.siteName[i18n.language as "ar" | "en"]}
                                 width={"100%"}
                                 height={"100%"}
                                 style={{ objectFit: "contain" }}
