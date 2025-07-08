@@ -107,7 +107,7 @@ export default async function RootLayout({
         <meta name="language" content="ar" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        <link rel="icon" type="image/webp" href="/logo.webp" />
+        <link rel="icon" type="image/*" href="/favicon.ico" />
 
         <link
           rel="canonical"

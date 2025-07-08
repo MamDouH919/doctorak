@@ -45,7 +45,7 @@ export default function Footer() {
                     {/* Company Info */}
                     <Grid size={{ xs: 12, md: 6 }} display={"flex"} gap={1} flexDirection={"column"}>
                         <Stack alignItems={"flex-start"}>
-                            <SiteLogo color="#fff" />
+                            <SiteLogo />
                         </Stack>
                         <Typography variant="body2" color="grey.500" mb={2}>
                             {t("website.footer.description")}
