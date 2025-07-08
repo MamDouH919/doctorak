@@ -42,7 +42,7 @@ export async function emailActivation(email: string, active: boolean, lang: 'ar'
   const subjectEn = active ? `Welcome! Your account on ${appName} has been activated successfully` : `Your account on ${appName} has been deactivated`;
 
   await transporter.sendMail({
-    to: "mamdouh.mohammed919@gmail.com",
+    to: email,
     subject: lang === 'ar' ? subjectAr : subjectEn,
     html: active ? htmlActive : htmlDeActive
   });
