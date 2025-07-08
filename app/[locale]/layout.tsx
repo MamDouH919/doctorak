@@ -13,14 +13,19 @@ export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: 'ar' | 'en' }> }) {
   const { locale } = await params;
+  const appName = locale === 'ar' ? process.env.NEXT_PUBLIC_APP_NAME_AR : process.env.NEXT_PUBLIC_APP_NAME_EN;
+  const description = locale === 'ar'
+    ? `${appName} منصة طبية شاملة تجمع أفضل الدكاترة في مكان واحد لتسهيل الوصول إلى الرعاية الصحية المناسبة.`
+    : `${appName} is a medical platform that connects you with top doctors in one place.`;
+
+  const url = `https://test.3n-dev.com/${locale}`;
+
   return {
-    title: locale === 'ar' ? process.env.NEXT_PUBLIC_APP_NAME_AR : process.env.NEXT_PUBLIC_APP_NAME_EN,
-    description: locale === 'ar'
-      ? `${process.env.NEXT_PUBLIC_APP_NAME_AR} منصة طبية شاملة تجمع أفضل الدكاترة في مكان واحد لتسهيل الوصول إلى الرعاية الصحية المناسبة.`
-      : `${process.env.NEXT_PUBLIC_APP_NAME_EN} is a medical platform that connects you with top doctors in one place.`,
+    title: appName,
+    description,
     keywords: locale === 'ar'
-      ? [process.env.NEXT_PUBLIC_APP_NAME_AR, 'دكتور', 'منصة طبية', 'الأطباء']
-      : [process.env.NEXT_PUBLIC_APP_NAME_EN, 'Doctors', 'Medical platform', 'Find doctors', 'Healthcare'],
+      ? [appName, 'دكتور', 'منصة طبية', 'الأطباء']
+      : [appName, 'Doctors', 'Medical platform', 'Find doctors', 'Healthcare'],
     authors: [{ name: 'Mamdouh Mohammed' }],
     robots: {
       index: true,
@@ -32,28 +37,37 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: '
         ar: '/ar',
       },
     },
-    metadataBase: new URL('https://test.3n-dev.com'), // ✅ ضع الدومين الفعلي هنا
+    metadataBase: new URL('https://test.3n-dev.com'),
+
     openGraph: {
-      title: locale === 'ar' ? process.env.NEXT_PUBLIC_APP_NAME_AR : process.env.NEXT_PUBLIC_APP_NAME_EN,
-      description: locale === 'ar'
-        ? `${process.env.NEXT_PUBLIC_APP_NAME_AR} منصة طبية شاملة تجمع أفضل الدكاترة في مكان واحد لتسهيل الوصول إلى الرعاية الصحية المناسبة.`
-        : `${process.env.NEXT_PUBLIC_APP_NAME_EN} is a medical platform that connects you with top doctors in one place.`,
+      title: appName,
+      description,
       type: 'website',
       locale: locale === 'ar' ? 'ar_EG' : 'en_US',
-      url: locale === 'ar' ? 'https://test.3n-dev.com/ar' : 'https://test.3n-dev.com/en',
-      siteName: locale === 'ar' ? process.env.NEXT_PUBLIC_APP_NAME_AR : process.env.NEXT_PUBLIC_APP_NAME_EN,
+      url,
+      siteName: appName,
+      images: [
+        {
+          url: '/logo.webp', // ✅ Path to your logo image
+          width: 800,
+          height: 600,
+          alt: appName,
+        },
+      ],
     },
+
     twitter: {
       card: 'summary_large_image',
-      title: locale === 'ar' ? process.env.NEXT_PUBLIC_APP_NAME_AR : process.env.NEXT_PUBLIC_APP_NAME_EN,
+      title: appName,
       description: locale === 'ar'
-        ? `${process.env.NEXT_PUBLIC_APP_NAME_AR} منصة طبية شاملة تجمع أفضل الدكاترة في مكان واحد.`
-        : `${process.env.NEXT_PUBLIC_APP_NAME_EN} is a platform that brings top doctors together.`,
+        ? `${appName} منصة طبية شاملة تجمع أفضل الدكاترة في مكان واحد.`
+        : `${appName} is a platform that brings top doctors together.`,
       creator: '@daktarah',
+      images: ['/logo.webp'], // ✅ Logo for Twitter preview
     },
   };
-
 }
+
 
 export default async function RootLayout({
   children,
