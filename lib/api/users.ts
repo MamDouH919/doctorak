@@ -1,6 +1,7 @@
 import { getToken } from "@/action/token";
 import api from "../api";
 import { PaginatorInfo } from "@/types";
+import { getLang } from "@/action/lang";
 
 interface FetchUsersParams {
     page?: number;
@@ -36,10 +37,12 @@ export const toggleUser = async (data: {
     id: string,
 }) => {
     const token = await getToken();
+    const lang = await getLang();
 
     const response = await api.post('/api/users/active-user', data, {
         headers: {
             'Authorization': `Bearer ${token}`,
+            'Language': lang,
         },
     })
 

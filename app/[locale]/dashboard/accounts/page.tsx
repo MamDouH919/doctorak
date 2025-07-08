@@ -8,6 +8,7 @@ import { useQuery } from '@tanstack/react-query';
 import useDashboard from '@/hooks/useDashboard';
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@mui/material';
+import BooleanCell from '@/components/MUI/BooleanCell';
 
 export default function ListUsers() {
     const context = useDashboard();
@@ -63,12 +64,13 @@ export default function ListUsers() {
         //         </CellLink>
         //     ),
         // },
-        // {
-        //     header: "المستخدم مفعل",
-        //     cell: ({ row }: { row: any }) => (
-        //         <BooleanCell value={row?.original?.user.active} />
-        //     ),
-        // },
+        {
+            accessorKey: "active",
+            header: t("adminPages.active"),
+            cell: ({ row }: { row: any }) => (
+                <BooleanCell value={row?.original?.active} />
+            ),
+        },
     ];
 
     return (

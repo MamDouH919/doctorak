@@ -4,7 +4,7 @@ import { DeActive } from "@/components/Email/DeActive";
 import { Active } from "@/components/Email/Active";
 import { OtpEmail } from "@/components/Email/OtpEmail";
 
-export async function OTPEmail(email: string, otp: number) {
+export async function OTPEmail(email: string, otp: number, lang: 'ar' | 'en') {
   const transporter = nodemailer.createTransport({
     service: "Gmail",
     auth: {
@@ -12,19 +12,17 @@ export async function OTPEmail(email: string, otp: number) {
       pass: process.env.EMAIL_PASS!,
     },
   });
-  
+
   const htmlOtpEmailPromise = render(<OtpEmail otp={otp} appName="دكاترة" />);
+  const subject = lang === 'ar' ? "دكاترة" + " OTP" : "Doctors" + " OTP";
   await transporter.sendMail({
     to: email,
-    subject: "دكاترة" + " OTP",
+    subject: subject,
     html: await htmlOtpEmailPromise,
   });
 }
 
-const htmlDeActivePromise = render(<DeActive appName="دكاترة" />);
-const htmlActivePromise = render(<Active appName="دكاترة" />);
-
-export async function emailActivation(email: string, active: boolean) {
+export async function emailActivation(email: string, active: boolean, lang: 'ar' | 'en' = 'ar') {
   const transporter = nodemailer.createTransport({
     service: "Gmail",
     auth: {
@@ -33,12 +31,19 @@ export async function emailActivation(email: string, active: boolean) {
     },
   });
 
-  const htmlActive = await htmlActivePromise;
-  const htmlDeActive = await htmlDeActivePromise;
+  const appName = lang === "ar" ? process.env.NEXT_PUBLIC_APP_NAME_AR! : process.env.NEXT_PUBLIC_APP_NAME_EN!;
+
+
+  const htmlDeActive = await render(<DeActive appName={appName} lang={lang} />);
+  const htmlActive = await render(<Active appName={appName} lang={lang} />);
+  // const htmlDeActive = await htmlDeActivePromise;
+
+  const subjectAr = active ? `مرحبًا بك! حسابك على ${appName} تم تفعيله بنجاح` : `حسابك على ${appName} تم تعطيله`;
+  const subjectEn = active ? `Welcome! Your account on ${appName} has been activated successfully` : `Your account on ${appName} has been deactivated`;
 
   await transporter.sendMail({
     to: "mamdouh.mohammed919@gmail.com",
-    subject: active ? "مرحبًا بك! حسابك على دكاترة تم تفعيله بنجاح" : "حسابك على دكاترة تم تعطيله",
+    subject: lang === 'ar' ? subjectAr : subjectEn,
     html: active ? htmlActive : htmlDeActive
   });
 }

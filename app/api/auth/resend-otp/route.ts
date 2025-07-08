@@ -1,16 +1,14 @@
 // handle resend otp
 import { NextResponse } from 'next/server';
-import jwt from 'jsonwebtoken';
-import { cookies } from 'next/headers';
 import Users from '@/models/Users';
 import dbConnect from '@/lib/dbConnect';
-import bcrypt from 'bcryptjs';
 import { OTPEmail } from '@/lib/mail';
-import { hashPassword } from '@/lib/hash-passwords';
 
 export async function POST(req: Request) {
     try {
         const { email } = await req.json();
+        const lang = req.headers.get('Language') as "ar" | "en";
+
 
         await dbConnect();
 
@@ -28,7 +26,7 @@ export async function POST(req: Request) {
         user.otp = otp;
         await user.save();
 
-        await OTPEmail(email, otp);
+        await OTPEmail(email, otp, lang);
 
         return NextResponse.json({ message: "تم إعادة إرسال رمز التحقق", type: "success" });
     } catch (error) {

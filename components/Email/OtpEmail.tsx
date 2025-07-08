@@ -6,13 +6,23 @@ import { Heading } from '@react-email/heading';
 import { Text } from '@react-email/text';
 
 type Props = {
-  otp: number | string; // يمكن أن يكون otp رقمًا أو سلسلة
-  appName?: string; // اختياري، default "دكاترة"
+  otp: number | string;
+  appName?: string;
+  lang?: 'ar' | 'en'; // إضافة اللغة هنا
 };
 
-export const OtpEmail = ({ otp, appName = 'دكاترة' }: Props) => {
+export const OtpEmail = ({ otp, appName = 'دكاترة', lang = 'ar' }: Props) => {
+  const isArabic = lang === 'ar';
+
+  const direction = isArabic ? 'rtl' : 'ltr';
+  const textAlign = isArabic ? 'right' : 'left';
+
+  const title = isArabic ? `${appName} رمز التحقق` : `${appName} Verification Code`;
+  const instruction = isArabic ? 'رمز التحقق الخاص بك هو:' : 'Your verification code is:';
+  const note = isArabic ? 'هذا الرمز صالح لفترة محدودة فقط.' : 'This code is only valid for a limited time.';
+
   return (
-    <Html lang="ar" dir="rtl">
+    <Html lang={lang} dir={direction}>
       <Section style={{ backgroundColor: '#f8f8f8', padding: '20px' }}>
         <Container
           style={{
@@ -23,12 +33,12 @@ export const OtpEmail = ({ otp, appName = 'دكاترة' }: Props) => {
             padding: '30px',
             boxShadow: '0 0 10px rgba(0,0,0,0.1)',
             fontFamily: 'Arial, sans-serif',
-            direction: 'rtl',
-            textAlign: 'right',
+            direction,
+            textAlign,
           }}
         >
-          <Heading style={{ color: '#333' }}>{appName} OTP</Heading>
-          <Text>رمز التحقق الخاص بك هو:</Text>
+          <Heading style={{ color: '#333' }}>{title}</Heading>
+          <Text>{instruction}</Text>
           <Text
             style={{
               fontSize: '24px',
@@ -41,7 +51,7 @@ export const OtpEmail = ({ otp, appName = 'دكاترة' }: Props) => {
             {otp}
           </Text>
           <Text style={{ marginTop: '20px', fontSize: '12px', color: '#888' }}>
-            هذا الرمز صالح لفترة محدودة فقط.
+            {note}
           </Text>
         </Container>
       </Section>

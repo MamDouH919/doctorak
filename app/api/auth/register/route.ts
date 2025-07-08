@@ -24,6 +24,7 @@ export const POST = withErrorHandler(async (req: NextRequest) => {
     try {
         const form = await req.formData();
 
+        const lang = req.headers.get('Language') as "ar" | "en";
         // Extract fields
         const image = form.get('image') as string;
         const name = form.get('name') as string;
@@ -99,7 +100,7 @@ export const POST = withErrorHandler(async (req: NextRequest) => {
             await account.save({ session });
             await user.save({ session });
 
-            await OTPEmail(user.email, otp);
+            await OTPEmail(user.email, otp, lang);
         });
 
         return success({ message: 'تم إنشاء الحساب بنجاح' });

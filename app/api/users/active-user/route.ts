@@ -19,6 +19,7 @@ const ToggleUserSchema = z.object({
 // ✅ Core handler
 const handler = async (req: NextRequest) => {
     const body = await req.json();
+    const lang = req.headers.get('Language') as "ar" | "en";
 
     const parsed = ToggleUserSchema.safeParse(body);
     if (!parsed.success) {
@@ -42,7 +43,7 @@ const handler = async (req: NextRequest) => {
     user.active = !user.active;
     await user.save();
 
-    await emailActivation(user.email, user.active);
+    await emailActivation(user.email, user.active, lang);
 
     return success({ message: 'User updated successfully', user });
 };

@@ -1,6 +1,7 @@
 // api to get me
 import { getToken } from "@/action/token";
 import api from "../api";
+import { getLang } from "@/action/lang";
 
 export interface User {
     _id: number,
@@ -35,7 +36,7 @@ export const register = async (data: {
     specialization_needed?: string,
     image: File,
 }) => {
-    const token = await getToken();
+    const lang = await getLang();
 
     const formData = new FormData();
     formData.append("name", data.name);
@@ -46,7 +47,13 @@ export const register = async (data: {
     if (data.specialization_needed) formData.append("specialization_needed", data.specialization_needed);
     formData.append("image", data.image);
 
-    const response = await api.post('/api/auth/register', formData)
+    const response = await api.post('/api/auth/register', formData,
+        {
+            headers: {
+                'Language': lang,
+            },
+        }
+    )
 
     return response.data;
 };
@@ -87,11 +94,11 @@ export const verifyEmail = async (data: {
 export const resendOtp = async (data: {
     email: string,
 }) => {
-    const token = await getToken();
+    const lang = await getLang();
 
     const response = await api.post('/api/auth/resend-otp', data, {
         headers: {
-            'Authorization': `Bearer ${token}`,
+            'Language': lang,
         },
     })
 

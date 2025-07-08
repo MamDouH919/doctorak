@@ -5,8 +5,8 @@ import { getToken } from "@/action/token";
 // import { getLang } from "@/action/lang";
 // import { seedSpecializations } from "@/scripts/seedSpecializations";
 // import { seedGovernorate } from "@/scripts/seedGovernorates";
-import dbConnect from "@/lib/dbConnect";
-import { seedCities } from "@/scripts/seedCities";
+// import dbConnect from "@/lib/dbConnect";
+// import { seedCities } from "@/scripts/seedCities";
 import { dir } from 'i18next';
 
 export const dynamic = 'force-dynamic';
@@ -14,13 +14,13 @@ export const dynamic = 'force-dynamic';
 export async function generateMetadata({ params }: { params: Promise<{ locale: 'ar' | 'en' }> }) {
   const { locale } = await params;
   return {
-    title: locale === 'ar' ? 'دكاترة' : 'Dakatrh',
+    title: locale === 'ar' ? process.env.NEXT_PUBLIC_APP_NAME_AR : process.env.NEXT_PUBLIC_APP_NAME_EN,
     description: locale === 'ar'
-      ? 'دكاترة منصة طبية شاملة تجمع أفضل الدكاترة في مكان واحد لتسهيل الوصول إلى الرعاية الصحية المناسبة.'
-      : 'Daktarah is a medical platform that connects you with top doctors in one place.',
+      ? `${process.env.NEXT_PUBLIC_APP_NAME_AR} منصة طبية شاملة تجمع أفضل الدكاترة في مكان واحد لتسهيل الوصول إلى الرعاية الصحية المناسبة.`
+      : `${process.env.NEXT_PUBLIC_APP_NAME_EN} is a medical platform that connects you with top doctors in one place.`,
     keywords: locale === 'ar'
-      ? ['دكاترة', 'دكتور', 'منصة طبية', 'الأطباء']
-      : ['Doctors', 'Medical platform', 'Find doctors', 'Healthcare'],
+      ? [process.env.NEXT_PUBLIC_APP_NAME_AR, 'دكتور', 'منصة طبية', 'الأطباء']
+      : [process.env.NEXT_PUBLIC_APP_NAME_EN, 'Doctors', 'Medical platform', 'Find doctors', 'Healthcare'],
     authors: [{ name: 'Mamdouh Mohammed' }],
     robots: {
       index: true,
@@ -34,21 +34,21 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: '
     },
     metadataBase: new URL('https://test.3n-dev.com'), // ✅ ضع الدومين الفعلي هنا
     openGraph: {
-      title: locale === 'ar' ? 'دكاترة' : 'Dakatrh',
+      title: locale === 'ar' ? process.env.NEXT_PUBLIC_APP_NAME_AR : process.env.NEXT_PUBLIC_APP_NAME_EN,
       description: locale === 'ar'
-        ? 'دكاترة منصة طبية شاملة تجمع أفضل الدكاترة في مكان واحد لتسهيل الوصول إلى الرعاية الصحية المناسبة.'
-        : 'Daktarah is a medical platform that connects you with top doctors in one place.',
+        ? `${process.env.NEXT_PUBLIC_APP_NAME_AR} منصة طبية شاملة تجمع أفضل الدكاترة في مكان واحد لتسهيل الوصول إلى الرعاية الصحية المناسبة.`
+        : `${process.env.NEXT_PUBLIC_APP_NAME_EN} is a medical platform that connects you with top doctors in one place.`,
       type: 'website',
       locale: locale === 'ar' ? 'ar_EG' : 'en_US',
       url: locale === 'ar' ? 'https://test.3n-dev.com/ar' : 'https://test.3n-dev.com/en',
-      siteName: 'دكاترة',
+      siteName: locale === 'ar' ? process.env.NEXT_PUBLIC_APP_NAME_AR : process.env.NEXT_PUBLIC_APP_NAME_EN,
     },
     twitter: {
       card: 'summary_large_image',
-      title: locale === 'ar' ? 'دكاترة' : 'Dakatrh',
+      title: locale === 'ar' ? process.env.NEXT_PUBLIC_APP_NAME_AR : process.env.NEXT_PUBLIC_APP_NAME_EN,
       description: locale === 'ar'
-        ? 'دكاترة منصة طبية شاملة تجمع أفضل الدكاترة في مكان واحد.'
-        : 'Daktarah is a platform that brings top doctors together.',
+        ? `${process.env.NEXT_PUBLIC_APP_NAME_AR} منصة طبية شاملة تجمع أفضل الدكاترة في مكان واحد.`
+        : `${process.env.NEXT_PUBLIC_APP_NAME_EN} is a platform that brings top doctors together.`,
       creator: '@daktarah',
     },
   };
