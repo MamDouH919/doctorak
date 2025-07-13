@@ -4,14 +4,12 @@ import { toast } from 'sonner'
 import { Button, Stack, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import CustomDialog from '../MUI/CustomDialog'
-import { useState } from 'react'
-import { getToken } from '@/action/token'
 import ControlMUITextField from '../MUI/ControlMUItextField'
-import { useAppDispatch } from '@/Store/store'
-import { changeUser } from '@/Store/slices/auth'
 import { resendOtp, verifyEmail } from '@/lib/api/auth'
 import { useMutation } from '@tanstack/react-query'
 import axios from 'axios'
+import { useAppDispatch } from '@/Store/store'
+import { changeDialogState } from '@/Store/slices/underChecked'
 
 interface PropsType {
     open: boolean
@@ -25,10 +23,11 @@ const VerifyCode = ({
     email
 }: PropsType) => {
     const router = useRouter()
-    // const dispatch = useAppDispatch()
     const { handleSubmit, control, setError } = useForm()
     const { t } = useTranslation()
-    // mutation for verify email
+
+    const dispatch = useAppDispatch();
+
     const { mutate: verifyEmailMutation, isPending: verifyEmailLoading } = useMutation({
         mutationFn: (data: { email: string, otp: number }) =>
             verifyEmail(data),
@@ -55,16 +54,10 @@ const VerifyCode = ({
                 toast.success(t("website.verifyCode.success"), {
                     duration: 5000,
                 });
-                // dispatch(changeUser({
-                //     id: response.data.user.id,
-                //     name: response.data.user.name,
-                //     email: response.data.user.email,
-                //     role: response.data.user.role,
-                //     ...(response.data.user.role === "user" && { accountId: response.data?.user?.account._id }),
-                //     isPremium: response.data?.user?.account.isPremium
-                // }));
                 handleClose()
-                router.push('/')
+                dispatch(changeDialogState({
+                    state: true
+                }))
             },
             onError: async (error) => {
                 if (axios.isAxiosError(error) && error.response?.data?.type === "validation-server") {
@@ -82,7 +75,7 @@ const VerifyCode = ({
     const onResend = async () => {
         resendOtpMutation({ email: email }, {
             onSuccess: async (response) => {
-                toast.success(response.message);
+                toast.success(t("website." + response.data.message));
             },
             onError: async (error) => {
                 if (axios.isAxiosError(error) && error.response?.data?.type === "validation-server") {

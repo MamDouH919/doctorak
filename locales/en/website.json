@@ -48,11 +48,11 @@
         "error": "An error occurred while logging in"
     },
     "verifyCode": {
-        "success": "We will review your information in as much time as possible, and we will contact you via email to confirm your account.",
         "error": "An error occurred while resending the verification code",
         "title": "Verify Email",
         "otp": "OTP",
-        "resend": "Resend"
+        "resend": "Resend",
+        "success": "We have verified your email successfully"
     },
     "specialties": {
         "title": "Specialties",
@@ -69,7 +69,10 @@
         "doctors": "Doctors",
         "specialties": "Specialties",
         "logout": "Logout",
-        "login": "Login"
+        "login": "Login",
+        "changeLanguage": "Change Language",
+        "menu": "Menu",
+        "dashboard": "Dashboard"
     },
     "footer": {
         "allSpecialties": "All Specialties",
@@ -90,5 +93,9 @@
         "logout": "Logout",
         "success": "Logout successful",
         "error": "An error occurred"
-    }
+    },
+    "emailNotVerified": "Email not verified",
+    "emailNotFound": "Email not found",
+    "emailAlreadyVerified": "Email already verified",
+    "OTPResentSuccessfully": "OTP resent successfully"
 }

@@ -58,5 +58,8 @@
     "websiteStyle": "Website",
     "serviceName": "Service Name",
     "services": "Services",
-    "admin": "Admin"
+    "admin": "Admin",
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    "verified": "Verified"
 }

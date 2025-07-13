@@ -32,7 +32,6 @@ export function SingleImageUploader({
     name,
     control,
     rules,
-    progress = 0,
     accept = { 'image/*': [] },
     maxSize = 1024 * 1024 * 1,
     disabled = false,
@@ -60,7 +59,7 @@ export function SingleImageUploader({
         async (acceptedFiles: File[], rejectedFiles: FileRejection[]) => {
             const image = acceptedFiles[0];
             if (!image) return;
-            
+
             rejectedFiles.forEach(({ file, errors }) => {
                 errors.forEach(err => {
                     if (err.code === 'file-too-large') {
@@ -73,14 +72,13 @@ export function SingleImageUploader({
 
             try {
                 setUploading(true);
-                // setLocalProgress(0);
-
                 // Optional: You can simulate progress here or integrate with real upload progress.
                 const res = await uploadAccountImage(image, accountId, alt);
 
                 toast.success('تم رفع الصورة بنجاح');
-                setPreview(res.data.url);
-                onChange(res.data.url);
+
+                setPreview(res.data.data.url);
+                onChange(res.data.data.url);
                 if (queryKey) {
                     queryClient.invalidateQueries({
                         queryKey: [queryKey],

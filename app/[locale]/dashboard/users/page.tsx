@@ -98,6 +98,13 @@ export default function ListUsers() {
             ),
         },
         {
+            accessorKey: "verified",
+            header: t("adminPages.verified"),
+            cell: ({ row }: { row: any }) => (
+                <BooleanCell value={row?.original?.verified} />
+            ),
+        },
+        {
             accessorKey: "active",
             header: t("adminPages.active"),
             cell: ({ row }: { row: any }) => (
@@ -109,7 +116,7 @@ export default function ListUsers() {
                     variant="contained"
                     color={row?.original?.active ? "error" : "success"}
                 >
-                    {row?.original?.active ? t("adminPages.disable") : t("adminPages.enable")}
+                    {row?.original?.active ? t("adminPages.deactivate") : t("adminPages.activate")}
                 </Button>
             ),
         }

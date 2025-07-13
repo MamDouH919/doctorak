@@ -76,7 +76,7 @@ const DoctorData = ({
         console.log(data);
 
         updateAccountMutation({
-            id: userId! ?? auth.user?.id!,
+            id: userId! ?? auth.user?.accountId!,
             data: {
                 color: data.color,
                 title: data.title,

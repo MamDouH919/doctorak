@@ -53,10 +53,9 @@ const Admin = ({
     }
 
     const onSubmit = async (data: UpdateAdminData) => {
-        console.log(data);
 
         updateAccountMutation({
-            id: userId! ?? auth.user?.id!,
+            id: userId!,
             data: {
                 active: data.active,
                 showInHomePage: data.showInHomePage,

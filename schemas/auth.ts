@@ -8,12 +8,12 @@ const imageSchema = fileSchema.refine(
 export const RegisterUserSchema = z.object({
     name: z.string().min(1, "required"),
     email: z.string().email("invalidEmail"),
-    password: z.string().min(6, "invalidPassword"),
+    password: z.string().min(6, "passwordValidation6"),
     phone: z.string().min(1, "required"),
     specialization: z.string().optional(),
     specialization_needed: z.string().optional(),
     // 1 mg
-    image: imageSchema.refine(file => file.size < 1 * 1024 * 1024 && file.size > 0, "invalidImageSize1mb"),
+    image: imageSchema.refine(file => file.size < 2 * 1024 * 1024 && file.size > 0, "invalidImageSize1mb"),
 }).superRefine((data, ctx) => {
     if (!data.specialization && !data.specialization_needed) {
         ctx.addIssue({

@@ -21,6 +21,7 @@ export async function PUT(req: NextRequest, context: { params: Promise<{ id: str
                 }
 
                 const account = await Accounts.findById(id);
+
                 if (!account) {
                     return NextResponse.json(
                         { message: 'Account not found', type: 'error' },

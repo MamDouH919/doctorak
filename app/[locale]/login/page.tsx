@@ -25,6 +25,7 @@ import { login } from "@/lib/api/auth";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useLocalizedRouter } from "@/hooks/useLocalizedRouter";
+import { changeDialogState } from "@/Store/slices/underChecked";
 
 
 const PREFIX = "Login";
@@ -95,10 +96,13 @@ const Login = () => {
                 }
                 if (axios.isAxiosError(error) && error.response?.data?.type === "custom") {
                     if (error.response.data.errorCode === "account-not-active") {
-                        toast.error(t("website.accountNotActive"));
+                        // toast.error(t("website.accountNotActive"));
+                        dispatch(changeDialogState({
+                            state: true
+                        }))
                         return;
                     }
-                    toast.error(error.response.data.message);
+                    toast.error(t("website." + error.response.data.message));
                     setVerifyCodeOpen(true);
                 }
             }

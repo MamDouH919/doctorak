@@ -58,7 +58,7 @@ export async function PUT(req: NextRequest, context: { params: Promise<{ id: str
             }
         },
         {
-            allowRoles: ['admin', 'user'],
+            allowRoles: ['admin'],
         }
     );
 }

@@ -1,4 +1,4 @@
-import { IconButton, Stack, Toolbar } from '@mui/material'
+import { IconButton, Stack, Toolbar, Tooltip } from '@mui/material'
 import { styled } from '@mui/material/styles';
 import MuiAppBar from '@mui/material/AppBar';
 import type { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
@@ -10,6 +10,7 @@ import LogoutDialog from '../dialogs/LogoutDialog';
 import SiteLogo from '../SiteLogo';
 import LanguageMenu from '../Language';
 import { useLocalizedRouter } from '@/hooks/useLocalizedRouter';
+import { useTranslation } from 'react-i18next';
 // import LogoutDialog from '../dialogs/LogoutDialog';
 // import SiteLogo from '../SiteLogo';
 
@@ -33,6 +34,8 @@ const AppBar = styled(MuiAppBar, {
 
 const Header = () => {
     const context = useDashboard();
+    const { t } = useTranslation()
+
     const [logoutDialog, setLogoutDialog] = useState(false)
     const { getLocalizedPath } = useLocalizedRouter();
     const handleCloseLogoutDialog = () => {
@@ -43,14 +46,16 @@ const Header = () => {
         <AppBar position='fixed' open={context?.state.open}>
             {logoutDialog && <LogoutDialog open={logoutDialog} handleClose={handleCloseLogoutDialog} />}
             <Toolbar>
-                <IconButton
-                    color="primary"
-                    aria-label="open drawer"
-                    onClick={() => context?.dispatch({ type: "SET_OPEN", payload: !context?.state.open })}
-                    edge="start"
-                >
-                    <Menu />
-                </IconButton>
+                <Tooltip title={t("website.appBar.menu")}>
+                    <IconButton
+                        color="primary"
+                        aria-label="open drawer"
+                        onClick={() => context?.dispatch({ type: "SET_OPEN", payload: !context?.state.open })}
+                        edge="start"
+                    >
+                        <Menu />
+                    </IconButton>
+                </Tooltip>
                 <Stack direction={"row"} justifyContent={"space-between"} alignItems={"center"} width={"100%"}>
                     <Stack component={Link} href={getLocalizedPath("/")} mx={2} sx={{ textDecoration: 'none' }}>
                         <SiteLogo />
@@ -63,14 +68,16 @@ const Header = () => {
                             <LanguageMenu />
                         </Stack>
                         <Stack alignItems={"center"}>
-                            <IconButton
-                                aria-label="Profile"
-                                size='medium'
-                                color='primary'
-                                onClick={() => setLogoutDialog(true)}
-                            >
-                                <Logout fontSize='inherit' />
-                            </IconButton>
+                            <Tooltip title={t("website.logout.logout")}>
+                                <IconButton
+                                    aria-label="Profile"
+                                    size='medium'
+                                    color='primary'
+                                    onClick={() => setLogoutDialog(true)}
+                                >
+                                    <Logout fontSize='inherit' />
+                                </IconButton>
+                            </Tooltip>
                         </Stack>
                     </Stack>
                 </Stack>

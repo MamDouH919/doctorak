@@ -13,7 +13,6 @@ export async function withAuth(
     options: AuthOptions = { allowRoles: ['admin'] } // default: only admins allowed
 ) {
     const token = req.cookies.get('token')?.value;
-
     if (!token) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }

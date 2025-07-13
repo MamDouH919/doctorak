@@ -5,6 +5,8 @@ import { Grid } from '@mui/material'
 import Link from 'next/link'
 import { styled } from '@mui/material/styles';
 import { useLocalizedRouter } from '@/hooks/useLocalizedRouter';
+import { useAppSelector } from '@/Store/store';
+import UnderChecked from '@/components/dialogs/UnderChecked';
 
 const ImageComponent = styled('img')(({ theme }) => ({
     objectFit: "cover",
@@ -30,8 +32,11 @@ const AuthLayout = ({
     children: React.ReactNode,
 }) => {
     const { getLocalizedPath } = useLocalizedRouter();
+    const underChecked = useAppSelector((state) => state.underChecked)
+
     return (
         <Grid container spacing={2} height={"100vh"} justifyContent={"center"} alignItems={"center"} position={"relative"}>
+            {underChecked.state && <UnderChecked />}
             <BoxLink href={getLocalizedPath("/")}>
                 <SiteLogo />
             </BoxLink>

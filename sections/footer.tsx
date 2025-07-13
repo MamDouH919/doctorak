@@ -31,7 +31,7 @@ export default function Footer() {
         },
         {
             label: t("website.footer.createNewDoctor"),
-            link: "/doctors"
+            link: "/register"
         }
     ]
 

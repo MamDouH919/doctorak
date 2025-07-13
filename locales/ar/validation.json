@@ -1,6 +1,7 @@
 {
     "required": "هذا الحقل مطلوب",
     "invalidEmail": "البريد الإلكتروني غير صحيح",
+    "passwordValidation6": "كلمة السر يجب أن تتكون من 6 أحرف على الأقل",
     "invalidPassword": "كلمة السر غير صحيحة",    
     "invalidImageSize1mb": "الصورة يجب أن تكون أصغر من 1 ميغابايت",
     "emailAlreadyExists": "البريد الإلكتروني مسجل بالفعل",

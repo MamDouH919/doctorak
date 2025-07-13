@@ -242,7 +242,7 @@ const Register = () => {
                                     icon={"add_photo_alternate"}
                                     label={t("website.register.specializationCard")}
                                     accept=".png,.jpg,.svg,.jpeg,.webp,.avif"
-                                    maxSize={1 * 1024 * 1024}
+                                    maxSize={2 * 1024 * 1024}
                                     rules={{
                                         required: t("common.required")
                                     }}

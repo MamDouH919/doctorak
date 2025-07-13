@@ -1,7 +1,7 @@
 "use client"
 import React, { useState } from 'react'
 import { styled } from "@mui/material/styles";
-import { AppBar, Box, Button, Container, IconButton, Menu, MenuItem, Stack, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Button, Container, IconButton, Menu, MenuItem, Stack, Toolbar, Tooltip, Typography } from '@mui/material';
 import { Dashboard, Menu as MenuIcon } from "@mui/icons-material";
 import Link from 'next/link';
 import { useAppSelector } from '@/Store/store';
@@ -95,9 +95,11 @@ const AppBarComponent = () => {
                             <LanguageMenu />
                             {auth.user &&
                                 <Link href={getLocalizedPath("dashboard")} passHref>
-                                    <IconButton size="small">
-                                        <Dashboard />
-                                    </IconButton>
+                                    <Tooltip title={t("website.appBar.dashboard")}>
+                                        <IconButton size="small">
+                                            <Dashboard />
+                                        </IconButton>
+                                    </Tooltip>
                                 </Link>
                             }
                             <Box sx={{ display: { xs: 'flex', md: 'none' } }}>

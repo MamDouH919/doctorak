@@ -32,7 +32,7 @@ const VideosAndSocial = ({
     userId?: string
 }) => {
     const { t } = useTranslation()
-    const { control, handleSubmit, setError, watch, setValue } = useForm()
+    const { control, handleSubmit, setValue } = useForm()
     const auth = useAppSelector((state) => state.auth)
 
     // mutation
@@ -62,7 +62,7 @@ const VideosAndSocial = ({
 
     const onSubmit = async (data: any) => {
         updateAccountMutation({
-            id: userId! ?? auth.user?.id!,
+            id: userId! ?? auth.user?.accountId!,
             data: {
                 social: data.social,
                 videos: data.videos

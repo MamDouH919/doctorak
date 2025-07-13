@@ -40,7 +40,7 @@ export default function LanguageMenu() {
 
     return (
         <div>
-            <Tooltip title={t("changeLang")}>
+            <Tooltip title={t("website.appBar.changeLanguage")}>
                 <IconButton
                     id="fade-button"
                     aria-controls={open ? 'fade-menu' : undefined}
